@@ -95,7 +95,7 @@ const estilos = StyleSheet.create({
   },
   formulario: {
     padding: 23,
-    paddingTop: 80,
+    paddingTop: 70,
     backgroundColor: "#ff7938",
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,

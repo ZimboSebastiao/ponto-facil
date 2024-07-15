@@ -7,7 +7,7 @@ import {
   View,
   Text,
 } from "react-native";
-import backgroundImage from "../../assets/images/login.png";
+import backgroundImage from "../../assets/images/logi.png";
 import { Image } from "react-native";
 
 // Importando os recursos de autenticação
@@ -52,7 +52,10 @@ export default function Login({ navigation }) {
   return (
     <>
       <View style={estilos.container}>
+        <View style={estilos.estiloImagem}>
+
       <Image source={backgroundImage} style={{ ...estilos.background }} />
+        </View>
         <View style={estilos.formulario}>
           <TextInput
             onChangeText={(valor) => setEmail(valor)}
@@ -84,22 +87,28 @@ export default function Login({ navigation }) {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: "#ff7938",
   },
   background: {
     justifyContent: "center",
     alignContent: "center",
     alignItems: "center",
     width: "auto",
-    height: "18%",
+    height: "30%",
+    marginTop: 60,
+  },
+  estiloImagem: {
+    backgroundColor: "white",
+    height: "26%",
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  
   },
   formulario: {
     padding: 23,
     paddingTop: 70,
     backgroundColor: "#ff7938",
-    borderTopLeftRadius: 50,
-    borderTopRightRadius: 50,
-    height: "100%"
+  
     
   },
   input: {

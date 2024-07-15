@@ -1,36 +1,13 @@
 import * as React from "react";
 import { useRef, useEffect, useState } from "react";
-import { Alert, ScrollView, StatusBar, StyleSheet, View } from "react-native";
-import MapView, { Marker } from "react-native-maps";
+import { Alert, ScrollView, StatusBar, StyleSheet, View, Text, Pressable } from "react-native";
+// import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Calendar from "expo-calendar";
 import { Card, Divider} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
-
-import {
-  GluestackUIProvider,
-  Text,
-  ActionsheetBackdrop,
-  ActionsheetDragIndicatorWrapper,
-  ActionsheetDragIndicator,
-  ActionsheetItem,
-  ActionsheetItemText,
-  Icon,
-  ClockIcon,
-  Avatar,
-  AvatarFallbackText,
-  Heading,
-  AvatarImage,
-} from "@gluestack-ui/themed";
-import { Circle, AlignLeft, MapPin } from "lucide-react-native";
-import { config } from "@gluestack-ui/config";
-import { Actionsheet } from "@gluestack-ui/themed";
-import { ButtonText } from "@gluestack-ui/themed";
-import { Button } from "@gluestack-ui/themed";
-import { ActionsheetContent } from "@gluestack-ui/themed";
 
 export default function Home({ navigation }) {
   const [minhaLocalizacao, setMinhaLocalizacao] = useState(null);
@@ -44,10 +21,7 @@ export default function Home({ navigation }) {
   const [saida, setSaida] = useState("");
   const [endereco, setEndereco] = useState("");
 
-  // console.log(auth.currentUser);
 
-  const { email, displayName: nome } = auth.currentUser;
-  // console.log(email);
 
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const handleClose = () => setShowActionsheet(!showActionsheet);
@@ -320,33 +294,29 @@ export default function Home({ navigation }) {
   return (
     <>
       <StatusBar />
-      <GluestackUIProvider config={config}>
         <ScrollView style={estilos.container}>
           <View style={estilos.viewMenu} >
             <View style={estilos.menu}>
-              <AlignLeft
+              <Text
                 onPress={() => navigation.openDrawer()}
                 m="$3"
                 w="$10"
                 h="$6"
                 color="white"
               />
-              <Text style={estilos.menuTexto}>Olá, {nome || "Visitante"}</Text>
-              <Avatar bgColor="$amber600" size="md" borderRadius="$full">
-                <AvatarFallbackText>{nome || "Visitante"}</AvatarFallbackText>
-                <AvatarImage source={image ? { uri: image } : null} alt="Foto do perfil" />
-              </Avatar>
+              <Text style={estilos.menuTexto}>Olá</Text>
+              
             </View>
 
               <View style={{flexDirection: "row", alignItems: "center", marginTop: 5}}>
 
-                <MapPin 
+                {/* <MapPin 
                   color="white"
                   size={16}
                   padding="20"
                   style={{ marginTop: 23}}
                   
-                  />
+                  /> */}
               <View style={{justifyContent: "space-between", alignItems: "flex-start", padding: 6, margin: 6,}}> 
               <Text style={{ color: "#DEDEBF", fontSize: 13, marginBottom: 10}}>Localização atual</Text>
              
@@ -359,9 +329,9 @@ export default function Home({ navigation }) {
 
           <View style={estilos.viewInfo}>
             <Card style={estilos.cardInfo}>
-              <Heading style={estilos.cardTitulo}>
+              <Text style={estilos.cardTitulo}>
                 Registros de hoje 
-              </Heading>
+              </Text>
               <Card.Content> 
                
               
@@ -371,7 +341,7 @@ export default function Home({ navigation }) {
                     <Text style={estilos.cardTexto} variant="titleMedium">{dataAtualizada}</Text>
                   </View>
                   <View style={estilos.cardIcon}>
-                    <Icon as={ClockIcon} color="#ff7938" m="$0"  h="$6"  />
+                  
                     <Text style={estilos.cardHora} variant="titleMedium"> {hora}</Text>
                   </View>
                 </View>
@@ -433,52 +403,24 @@ export default function Home({ navigation }) {
           </View>
         
           <View>
-            <Button style={estilos.viewBotao} onPress={marcarPonto}>
-              <Circle m="$2" size={19} color="white" />
-              <ButtonText> Marcar Ponto </ButtonText>
-            </Button>
+            <Pressable style={estilos.viewBotao} onPress={marcarPonto}>
+             
+              <Text> Marcar Ponto </Text>
+            </Pressable>
           </View>
           <View>
-            <Button
+            <Pressable
               onPress={handleClose}
               $_text-color="black"
               style={estilos.viewRelatorio}
             >
-              <ButtonText>Requisição Manual</ButtonText>
-            </Button>
+              <Text>Requisição Manual</Text>
+            </Pressable>
           </View>
           <View>
-            <Actionsheet
-              isOpen={showActionsheet}
-              onClose={handleClose}
-              zIndex={999}
-            >
-              <ActionsheetBackdrop />
-              <ActionsheetContent
-                h="$72"
-                zIndex={999}
-                backgroundColor="white"
-              >
-                <ActionsheetDragIndicatorWrapper>
-                  <ActionsheetDragIndicator />
-                </ActionsheetDragIndicatorWrapper>
-                <Text style={estilos.bancoTitulo}>Banco de Horas</Text>
 
-                <ActionsheetItem>
-                  <ActionsheetItemText style={estilos.cardTexto}>
-                    Horas trabalhadas hoje
-                  </ActionsheetItemText>
-                </ActionsheetItem>
-                <ActionsheetItem>
-                  <ActionsheetItemText style={estilos.cardTexto}>
-                    Saldo consolidado
-                  </ActionsheetItemText>
-                </ActionsheetItem>
-              </ActionsheetContent>
-            </Actionsheet>
           </View>
         </ScrollView>
-      </GluestackUIProvider>
     </>
   );
 }

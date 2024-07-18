@@ -6,7 +6,7 @@ import * as Calendar from "expo-calendar";
 import { Card, Divider, Avatar} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MapPin } from 'lucide-react-native';
+import { MapPin, AlignLeft } from 'lucide-react-native';
 
 
 export default function Home({ navigation }) {
@@ -308,7 +308,7 @@ export default function Home({ navigation }) {
         <ScrollView style={estilos.container}>
           <View style={estilos.viewMenu} >
             <View style={estilos.menu}>
-              <Text
+              <AlignLeft
                 onPress={() => navigation.openDrawer()}
                 m="$3"
                 w="$10"

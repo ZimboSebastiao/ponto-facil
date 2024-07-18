@@ -1,12 +1,12 @@
 import * as React from "react";
 import { useRef, useEffect, useState } from "react";
 import { Alert, ScrollView, StatusBar, StyleSheet, View, Text, Pressable } from "react-native";
-// import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import * as Calendar from "expo-calendar";
 import { Card, Divider} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { MapPin } from 'lucide-react-native';
 
 
 export default function Home({ navigation }) {
@@ -20,6 +20,7 @@ export default function Home({ navigation }) {
   const [fimIntervalo, setFimIntervalo] = useState("");
   const [saida, setSaida] = useState("");
   const [endereco, setEndereco] = useState("");
+  const [usuario, setUsuario] = useState(null);
 
 
 
@@ -87,8 +88,18 @@ export default function Home({ navigation }) {
     obterLocalizacao();
   }, []);
   
+  useEffect(() => {
+    const obterUsuario = async () => {
+      const usuarioJSON = await AsyncStorage.getItem('usuario');
+      if (usuarioJSON) {
+        setUsuario(JSON.parse(usuarioJSON));
+      }
+    };
 
-  // console.log(endereco);
+    obterUsuario();
+  }, []);
+
+  // console.log(usuario);
 
   const [localizacao, setLocalizacao] = useState(null);
 
@@ -290,7 +301,7 @@ export default function Home({ navigation }) {
   
     loadProfileImageUri();
   }, []);
-
+ 
   return (
     <>
       <StatusBar />
@@ -304,19 +315,19 @@ export default function Home({ navigation }) {
                 h="$6"
                 color="white"
               />
-              <Text style={estilos.menuTexto}>Olá</Text>
+              <Text style={estilos.menuTexto}>Olá, {usuario ? usuario.nome : 'Visitante'}</Text>
               
             </View>
 
               <View style={{flexDirection: "row", alignItems: "center", marginTop: 5}}>
 
-                {/* <MapPin 
+                <MapPin 
                   color="white"
                   size={16}
                   padding="20"
                   style={{ marginTop: 23}}
                   
-                  /> */}
+                  />
               <View style={{justifyContent: "space-between", alignItems: "flex-start", padding: 6, margin: 6,}}> 
               <Text style={{ color: "#DEDEBF", fontSize: 13, marginBottom: 10}}>Localização atual</Text>
              

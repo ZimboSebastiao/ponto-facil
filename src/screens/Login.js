@@ -1,23 +1,19 @@
 import {
   Alert,
-  Button,
   Pressable,
   StyleSheet,
   TextInput,
   View,
   Text,
+  Image,
 } from "react-native";
-import backgroundImage from "../../assets/images/login.png";
-import { Image } from "react-native";
-
-// Importando os recursos de autenticação
 import axios from 'axios';
-
-
 import { useState } from "react";
+import backgroundImage from "../../assets/images/login.png";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("");   
   const [senha, setSenha] = useState("");
 
   const login = async () => {
@@ -27,13 +23,15 @@ export default function Login({ navigation }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:8080/usuarios', {
+      const response = await axios.post('http://192.168.15.11:8080/login', {
         email: email,
         senha: senha,
       });
 
       if (response.status === 200) {
-        navigation.navigate("Pontos");
+        const usuario = response.data.usuario;
+        await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
+        navigation.navigate("Home");
       } else {
         Alert.alert("Ops!", "Erro ao realizar login, tente novamente.");
       }
@@ -46,19 +44,19 @@ export default function Login({ navigation }) {
         mensagem = "Houve um erro, tente mais tarde!";
       }
       Alert.alert("Ops!", mensagem);
-    }
-  };
+    }}
+
 
   return (
     <>
       <View style={estilos.container}>
         <View style={estilos.estiloImagem}>
-          <Image source={backgroundImage} style={{ ...estilos.background }} />
+          <Image source={backgroundImage} style={estilos.background} />
         </View>
         <View style={estilos.formulario}>
           <TextInput
             onChangeText={(valor) => setEmail(valor)}
-            placeholder="Nº de Utilizador"
+            placeholder="Email"
             style={estilos.input}
           />
           <TextInput
@@ -76,7 +74,6 @@ export default function Login({ navigation }) {
               <Text style={estilos.textoBotao}>Entrar</Text>
             </Pressable>
           </View>
-         
         </View>
       </View>
     </>
@@ -101,8 +98,6 @@ const estilos = StyleSheet.create({
     padding: 23,
     paddingTop: 70,
     backgroundColor: "#ff7938",
-  
-    
   },
   input: {
     borderWidth: 1,

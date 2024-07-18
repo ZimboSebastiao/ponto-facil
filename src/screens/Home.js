@@ -6,7 +6,7 @@ import * as Calendar from "expo-calendar";
 import { Card, Divider, Avatar, Drawer} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MapPin, AlignLeft } from 'lucide-react-native';
+import { MapPin, AlignLeft,  Map } from 'lucide-react-native';
 import axios from 'axios';
 
 
@@ -356,8 +356,9 @@ export default function Home({ navigation }) {
                   style={{ marginTop: 23}}
                   
                   />
+
               <View style={{justifyContent: "space-between", alignItems: "flex-start", padding: 6, margin: 6,}}> 
-              <Text style={{ color: "#DEDEBF", fontSize: 13, marginBottom: 10}}>Localização atual</Text>
+              <Text style={{ color: "#DEDEBF", fontSize: 14, marginBottom: 10}}>Localização atual</Text>
              
                 <Text style={estilos.textoMenu}>{endereco}</Text>
                 

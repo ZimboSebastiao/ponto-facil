@@ -128,15 +128,18 @@ export default function Home({ navigation }) {
     try {
       if (!dataFormatada) {
         // Marcar ponto de entrada
-        await axios.post('http://192.168.15.11:8080/registros', {
+        const response = await axios.post('http://192.168.15.11:8080/registros', {
           usuario_id: usuario.id,
           tipo_registro: 'entrada',
           data_hora: dataLocal,
           localizacao: endereco
         });
-        Alert.alert("Registro", `Ponto de entrada marcado com sucesso: ${horaAtual}`);
-        setDataFormatada(horaAtual);
-        setData(`${agora.getDate().toString().padStart(2, "0")}/${(agora.getMonth() + 1).toString().padStart(2, "0")}/${agora.getFullYear()}`);
+  
+        if (response.status === 201) {
+          Alert.alert("Registro", `Ponto de entrada marcado com sucesso: ${horaAtual}`);
+          setDataFormatada(horaAtual);
+          setData(`${agora.getDate().toString().padStart(2, "0")}/${(agora.getMonth() + 1).toString().padStart(2, "0")}/${agora.getFullYear()}`);
+        }
       } else if (!intervalo) {
         // Marcar ponto de intervalo
         Alert.alert("Confirmação", "Tem certeza que deseja marcar o intervalo?", [
@@ -149,16 +152,23 @@ export default function Home({ navigation }) {
             text: "Confirmar",
             onPress: async () => {
               try {
-                await axios.post('http://192.168.15.11:8080/registros', {
+                const response = await axios.post('http://192.168.15.11:8080/registros', {
                   usuario_id: usuario.id,
                   tipo_registro: 'intervalo',
                   data_hora: dataLocal,
                   localizacao: endereco
                 });
-                Alert.alert("Registro", `Intervalo marcado com sucesso: ${horaAtual}`);
-                setIntervalo(horaAtual);
+  
+                if (response.status === 201) {
+                  Alert.alert("Registro", `Intervalo marcado com sucesso: ${horaAtual}`);
+                  setIntervalo(horaAtual);
+                }
               } catch (error) {
-                Alert.alert("Erro", "Não foi possível marcar o intervalo. Tente novamente.");
+                if (error.response.status === 400) {
+                  Alert.alert("Erro", error.response.data.message);
+                } else {
+                  Alert.alert("Erro", "Não foi possível marcar o intervalo. Tente novamente.");
+                }
                 console.error(error);
               }
             },
@@ -176,16 +186,23 @@ export default function Home({ navigation }) {
             text: "Confirmar",
             onPress: async () => {
               try {
-                await axios.post('http://192.168.15.11:8080/registros', {
+                const response = await axios.post('http://192.168.15.11:8080/registros', {
                   usuario_id: usuario.id,
                   tipo_registro: 'fim_intervalo',
                   data_hora: dataLocal,
                   localizacao: endereco
                 });
-                Alert.alert("Registro", `Fim do intervalo marcado com sucesso: ${horaAtual}`);
-                setFimIntervalo(horaAtual);
+  
+                if (response.status === 201) {
+                  Alert.alert("Registro", `Fim do intervalo marcado com sucesso: ${horaAtual}`);
+                  setFimIntervalo(horaAtual);
+                }
               } catch (error) {
-                Alert.alert("Erro", "Não foi possível marcar o fim do intervalo. Tente novamente.");
+                if (error.response.status === 400) {
+                  Alert.alert("Erro", error.response.data.message);
+                } else {
+                  Alert.alert("Erro", "Não foi possível marcar o fim do intervalo. Tente novamente.");
+                }
                 console.error(error);
               }
             },
@@ -203,16 +220,23 @@ export default function Home({ navigation }) {
             text: "Confirmar",
             onPress: async () => {
               try {
-                await axios.post('http://192.168.15.11:8080/registros', {
+                const response = await axios.post('http://192.168.15.11:8080/registros', {
                   usuario_id: usuario.id,
                   tipo_registro: 'saida',
                   data_hora: dataLocal,
                   localizacao: endereco
                 });
-                Alert.alert("Registro", `Saída marcada com sucesso: ${horaAtual}`);
-                setSaida(horaAtual);
+  
+                if (response.status === 201) {
+                  Alert.alert("Registro", `Saída marcada com sucesso: ${horaAtual}`);
+                  setSaida(horaAtual);
+                }
               } catch (error) {
-                Alert.alert("Erro", "Não foi possível marcar a saída. Tente novamente.");
+                if (error.response.status === 400) {
+                  Alert.alert("Erro", error.response.data.message);
+                } else {
+                  Alert.alert("Erro", "Não foi possível marcar a saída. Tente novamente.");
+                }
                 console.error(error);
               }
             },
@@ -224,6 +248,7 @@ export default function Home({ navigation }) {
       console.error("Erro geral:", error);
     }
   };
+  
   
   
   
@@ -351,12 +376,12 @@ export default function Home({ navigation }) {
               
                 <View style={estilos.cardConteudo}>
                   <View>
-                    <Text style={estilos.cardTexto} variant="titleMedium"> {diaAtual}</Text>
-                    <Text style={estilos.cardTexto} variant="titleMedium">{dataAtualizada}</Text>
+                    <Text style={estilos.cardHora} variant="titleMedium"> {diaAtual}</Text>
+                    <Text style={estilos.cardHora} variant="titleMedium">{dataAtualizada}</Text>
                   </View>
                   <View style={estilos.cardIcon}>
                   
-                    <Text style={estilos.cardHora} variant="titleMedium"> {hora}</Text>
+                    <Text style={estilos.cardHora}> {hora}</Text>
                   </View>
                 </View>
 
@@ -447,7 +472,7 @@ const estilos = StyleSheet.create({
     borderBottomRightRadius: 20,
   },
   menuTexto: {
-    fontSize: 14,
+    fontSize: 15,
     color: "white",
   },
   textoMenu:{
@@ -514,21 +539,21 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 14
   },
-  cardHora: 
-  { 
+  cardHora: { 
     color: "#ff7938", 
     marginBottom: 10, 
-    fontWeight: "bold" 
+    fontWeight: "bold",
+    fontSize: 15
   },
   cardTitulo: {
     color: "#ff7938",
-    fontSize: 17,
+    fontSize: 22,
     fontWeight: "bold",
     justifyContent: "space-between",
     marginBottom: 12,
     backgroundColor: "#ffe9dd",
-    alignItems: "center",
-    paddingLeft: 20
+    textAlign: "center",
+    padding: 12
   },
   bancoTitulo: {
     color: "#ff7938",

@@ -417,18 +417,10 @@ export default function Home({ navigation }) {
           <View>
             <Pressable style={estilos.viewBotao} onPress={marcarPonto}>
              
-              <Text> Marcar Ponto </Text>
+              <Text style={{textAlign: "center", color: "white", fontSize: 17}}> Marcar Ponto </Text>
             </Pressable>
           </View>
-          <View>
-            <Pressable
-              onPress={handleClose}
-              $_text-color="black"
-              style={estilos.viewRelatorio}
-            >
-              <Text>Requisição Manual</Text>
-            </Pressable>
-          </View>
+         
           <View>
 
           </View>
@@ -489,8 +481,11 @@ const estilos = StyleSheet.create({
     marginLeft: "auto",
     marginRight: "auto",
     marginBottom: "6%",
-    
-    backgroundColor: "#ff7938"
+    padding: "3%",
+    backgroundColor: "#ff7938",
+    borderRadius: 20,
+    borderColor: "#ff7938",
+    borderWidth: 1,
   },
   viewRelatorio: {
     width: "90%",

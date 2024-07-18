@@ -1,36 +1,65 @@
 import './gesture-handler';
+import { useState, useEffect } from "react";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "./src/screens/Login";
 import Home from "./src/screens/Home";
+import {
+  DrawerContentScrollView,
+  DrawerItemList,
+  createDrawerNavigator,
+} from "@react-navigation/drawer";
+import {
+  FileText,
+  LogOut,
+  Settings,
+  Clock,
+  CircleX,
+} from "lucide-react-native";
 
-const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props}>
+     
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
+  );
+}
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{
-          // headerStyle: { backgroundColor: "#1D1D1D" },
-          // headerTintColor: "white",
-        }}
-      >
+      <Drawer.Navigator
+          initialRouteName="Home"
+          screenOptions={{
+            headerStyle: { backgroundColor: "#1D1D1D" },
+            headerTintColor: "white",
+          }}
+          drawerContent={(props) => <CustomDrawerContent {...props} />}
+        >
 
-      <Stack.Screen
-        name="Home"
-        component={Home}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        options={{ headerShown: false }}
-      />
+          <Drawer.Screen
+            name="Pontos"
+            component={Home}
+            options={{
+            headerShown: false,
+            drawerIcon: () => (
+            <Clock color="#828282" m="$0" w="$8" h="$6" />
+              ),
+              }}
+          />  
+            <Drawer.Screen
+              name="Login"
+              component={Login}
+              options={{
+                headerShown: false,
+              }}
+            />
 
-    </Stack.Navigator>
+    </Drawer.Navigator>
   </NavigationContainer>
   );
 }

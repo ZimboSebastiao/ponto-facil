@@ -3,7 +3,7 @@ import { useRef, useEffect, useState } from "react";
 import { Alert, ScrollView, StatusBar, StyleSheet, View, Text, Pressable } from "react-native";
 import * as Location from "expo-location";
 import * as Calendar from "expo-calendar";
-import { Card, Divider} from "react-native-paper";
+import { Card, Divider, Avatar} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MapPin } from 'lucide-react-native';
@@ -316,6 +316,7 @@ export default function Home({ navigation }) {
                 color="white"
               />
               <Text style={estilos.menuTexto}>Olá, {usuario ? usuario.nome : 'Visitante'}</Text>
+              <Avatar.Image size={44} source={image ? { uri: image } : null} alt="Foto do perfil" />
               
             </View>
 

@@ -7,6 +7,7 @@ import { Card, Divider, Avatar, Drawer} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { MapPin, AlignLeft } from 'lucide-react-native';
+import axios from 'axios';
 
 
 export default function Home({ navigation }) {
@@ -110,64 +111,35 @@ export default function Home({ navigation }) {
     longitudeDelta: 40,
   };
 
-  const marcarPonto = () => {
+  const marcarPonto = async () => {
     const agora = new Date();
     const horas = String(agora.getHours()).padStart(2, "0");
     const minutos = String(agora.getMinutes()).padStart(2, "0");
-    const horaAtual = `${horas}:${minutos}`;
-
-    if (!dataFormatada) {
-      const dia = String(agora.getDate()).padStart(2, "0");
-      const mes = String(agora.getMonth() + 1).padStart(2, "0"); // Janeiro é 0!
-      const ano = agora.getFullYear();
-      const data = `${dia}/${mes}/${ano}`;
-
-      Alert.alert(
-        "Registro",
-        `Ponto de entrada marcado com sucesso: ${horaAtual} - ${data}`,
-        [
-          {
-            text: "OK",
-            onPress: () => {
-              setDataFormatada(horaAtual);
-              setData(data);
-            },
-          },
-        ]
-      );
-    } else if (!intervalo) {
-      Alert.alert("Confirmação", "Tem certeza que deseja marcar o intervalo?", [
-        {
-          text: "Cancelar",
-          onPress: () => console.log("Cancelado"),
-          style: "cancel",
-        },
-        {
-          text: "Confirmar",
-          onPress: () => {
-            const dia = String(agora.getDate()).padStart(2, "0");
-            const mes = String(agora.getMonth() + 1).padStart(2, "0"); // Janeiro é 0!
-            const ano = agora.getFullYear();
-            const data = `${dia}/${mes}/${ano}`;
-
-            Alert.alert(
-              "Registro",
-              `Intervalo marcado com sucesso: ${horaAtual} - ${data}`,
-              [
-                {
-                  text: "OK",
-                  onPress: () => setIntervalo(horaAtual),
-                },
-              ]
-            );
-          },
-        },
-      ]);
-    } else if (!fimIntervalo) {
-      Alert.alert(
-        "Confirmação",
-        "Tem certeza que deseja marcar o fim do intervalo?",
-        [
+    const segundos = String(agora.getSeconds()).padStart(2, "0");
+    const horaAtual = `${horas}:${minutos}:${segundos}`;
+    
+    const dataLocal = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')} ${horaAtual}`;
+    
+    if (!usuario) {
+      Alert.alert("Erro", "Usuário não encontrado");
+      return;
+    }
+    
+    try {
+      if (!dataFormatada) {
+        // Marcar ponto de entrada
+        await axios.post('http://192.168.15.11:8080/registros', {
+          usuario_id: usuario.id,
+          tipo_registro: 'entrada',
+          data_hora: dataLocal,
+          localizacao: endereco
+        });
+        Alert.alert("Registro", `Ponto de entrada marcado com sucesso: ${horaAtual}`);
+        setDataFormatada(horaAtual);
+        setData(`${agora.getDate().toString().padStart(2, "0")}/${(agora.getMonth() + 1).toString().padStart(2, "0")}/${agora.getFullYear()}`);
+      } else if (!intervalo) {
+        // Marcar ponto de intervalo
+        Alert.alert("Confirmação", "Tem certeza que deseja marcar o intervalo?", [
           {
             text: "Cancelar",
             onPress: () => console.log("Cancelado"),
@@ -175,56 +147,86 @@ export default function Home({ navigation }) {
           },
           {
             text: "Confirmar",
-            onPress: () => {
-              const dia = String(agora.getDate()).padStart(2, "0");
-              const mes = String(agora.getMonth() + 1).padStart(2, "0"); // Janeiro é 0!
-              const ano = agora.getFullYear();
-              const data = `${dia}/${mes}/${ano}`;
-
-              Alert.alert(
-                "Registro",
-                `Fim do intervalo marcado com sucesso: ${horaAtual} - ${data}`,
-                [
-                  {
-                    text: "OK",
-                    onPress: () => setFimIntervalo(horaAtual),
-                  },
-                ]
-              );
+            onPress: async () => {
+              try {
+                await axios.post('http://192.168.15.11:8080/registros', {
+                  usuario_id: usuario.id,
+                  tipo_registro: 'intervalo',
+                  data_hora: dataLocal,
+                  localizacao: endereco
+                });
+                Alert.alert("Registro", `Intervalo marcado com sucesso: ${horaAtual}`);
+                setIntervalo(horaAtual);
+              } catch (error) {
+                Alert.alert("Erro", "Não foi possível marcar o intervalo. Tente novamente.");
+                console.error(error);
+              }
             },
           },
-        ]
-      );
-    } else {
-      Alert.alert("Confirmação", "Tem certeza que deseja marcar a saída?", [
-        {
-          text: "Cancelar",
-          onPress: () => console.log("Cancelado"),
-          style: "cancel",
-        },
-        {
-          text: "Confirmar",
-          onPress: () => {
-            const dia = String(agora.getDate()).padStart(2, "0");
-            const mes = String(agora.getMonth() + 1).padStart(2, "0"); // Janeiro é 0!
-            const ano = agora.getFullYear();
-            const data = `${dia}/${mes}/${ano}`;
-
-            Alert.alert(
-              "Registro",
-              `Saída marcada com sucesso: ${horaAtual} - ${data}`,
-              [
-                {
-                  text: "OK",
-                  onPress: () => setSaida(horaAtual),
-                },
-              ]
-            );
+        ]);
+      } else if (!fimIntervalo) {
+        // Marcar fim de intervalo
+        Alert.alert("Confirmação", "Tem certeza que deseja marcar o fim do intervalo?", [
+          {
+            text: "Cancelar",
+            onPress: () => console.log("Cancelado"),
+            style: "cancel",
           },
-        },
-      ]);
+          {
+            text: "Confirmar",
+            onPress: async () => {
+              try {
+                await axios.post('http://192.168.15.11:8080/registros', {
+                  usuario_id: usuario.id,
+                  tipo_registro: 'fim_intervalo',
+                  data_hora: dataLocal,
+                  localizacao: endereco
+                });
+                Alert.alert("Registro", `Fim do intervalo marcado com sucesso: ${horaAtual}`);
+                setFimIntervalo(horaAtual);
+              } catch (error) {
+                Alert.alert("Erro", "Não foi possível marcar o fim do intervalo. Tente novamente.");
+                console.error(error);
+              }
+            },
+          },
+        ]);
+      } else {
+        // Marcar saída
+        Alert.alert("Confirmação", "Tem certeza que deseja marcar a saída?", [
+          {
+            text: "Cancelar",
+            onPress: () => console.log("Cancelado"),
+            style: "cancel",
+          },
+          {
+            text: "Confirmar",
+            onPress: async () => {
+              try {
+                await axios.post('http://192.168.15.11:8080/registros', {
+                  usuario_id: usuario.id,
+                  tipo_registro: 'saida',
+                  data_hora: dataLocal,
+                  localizacao: endereco
+                });
+                Alert.alert("Registro", `Saída marcada com sucesso: ${horaAtual}`);
+                setSaida(horaAtual);
+              } catch (error) {
+                Alert.alert("Erro", "Não foi possível marcar a saída. Tente novamente.");
+                console.error(error);
+              }
+            },
+          },
+        ]);
+      }
+    } catch (error) {
+      Alert.alert("Erro", "Não foi possível marcar o ponto. Tente novamente.");
+      console.error("Erro geral:", error);
     }
   };
+  
+  
+  
 
   const atualizarHora = () => {
     const agora = new Date();

@@ -205,7 +205,7 @@ const estilos = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginRight: 10,
-    padding: 20,
+    padding: 35,
     width: "100%", 
     backgroundColor: "#ff7938",
     borderBottomLeftRadius: 20,

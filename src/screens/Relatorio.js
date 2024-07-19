@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, View, TouchableOpacity, Text } from "react-native";
-import { Avatar } from "react-native-paper";
+import { StatusBar, StyleSheet, View, TouchableOpacity, Text, SafeAreaView  } from "react-native";
+import { Avatar, SegmentedButtons, Provider as PaperProvider, DefaultTheme } from "react-native-paper";
 import { AlignLeft } from "lucide-react-native";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,9 +9,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
+
 export default function Relatorio({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
+  const [value, setValue] = React.useState('');
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -55,25 +57,38 @@ export default function Relatorio({ navigation }) {
     loadProfileImageUri();
   }, []);
   
+  // função ObterUsuario
   useEffect(() => {
     const obterUsuario = async () => {
       const usuarioJSON = await AsyncStorage.getItem('usuario');
       if (usuarioJSON) {
-        setUsuario(JSON.parse(usuarioJSON));
+        const usuarioData = JSON.parse(usuarioJSON);
+        console.log('Dados do usuário recuperados:', usuarioData); // Logar os dados do usuário recuperados
+        setUsuario(usuarioData);
+      } else {
+        console.log('Nenhum dado de usuário encontrado no AsyncStorage');
       }
     };
-
+  
     obterUsuario();
   }, []);
   
 //   console.log(usuario);
 
-
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'green',  
+    secondaryContainer: 'rgba(255, 121, 56, 0.8)', 
+  },
+};
   
   return (
     <>
-      
-        <View style={estilos.container}>
+      <SafeAreaView style={estilos.container}>
+
+        <View >
           <View style={estilos.menu}>
             <AlignLeft
               onPress={() => navigation.openDrawer()}
@@ -87,78 +102,30 @@ export default function Relatorio({ navigation }) {
             
           </View>
 
-         
 
-          {/* <View style={estilos.selecaoEspaco}>
-            <Select style={estilos.selecao}>
-              <SelectTrigger variant="rounded" size="sm" borderColor="#ff7938">
-                <SelectInput placeholder="Selecione um Período" />
-                <SelectIcon mr="$3">
-                  <Icon as={ChevronDownIcon} />
-                </SelectIcon>
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  <SelectItem label="UX Research" value="ux" />
-
-                  <SelectItem label="Backend Development" value="backend" />
-                </SelectContent>
-              </SelectPortal>
-            </Select>
-          </View>
-
-          <View style={estilos.viewCard}>
-            <Card style={estilos.cardColor}>
-              <Card.Content>
-                <View style={estilos.viewInfoHora}>
-                  <View>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Dias trabalhados:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Horas trabalhadas:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Média de horas trabalhadas:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Horas em pausa:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Média de horas em pausa:
-                    </Text>
-                  </View>
-
-                  <View>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                  </View>
-                </View>
-              </Card.Content>
-            </Card>
-          </View>
-
-          <View style={estilos.viewPeriodo}>
-            <View>
-              <Button style={estilos.viewPeriodoBotao} $_text-color="black">
-                <ButtonText style={{color: "white"}}>Dia</ButtonText>
-              </Button>
-            </View>
-
-            <View>
-              <Button style={estilos.viewPeriodoBotao} $_text-color="black">
-                <ButtonText style={{color: "white"}}>Jornada</ButtonText>
-              </Button>
-            </View>
-          </View> */}
         </View>
+        <PaperProvider theme={theme}>
+        <SegmentedButtons
+        value={value}
+        onValueChange={setValue}
+        buttons={[
+          {
+            value: 'walk',
+            label: 'Histórico',
+            style: estilos.buttonStyle,
+            checkedColor: 'white'
+          },
+          {
+            value: 'train',
+            label: 'Pendentes',
+            style: estilos.buttonStyle,
+            checkedColor: 'white'
+          },
+         
+        ]}
+      />
+       </PaperProvider>
+      </SafeAreaView>
 
     </>
   );
@@ -173,11 +140,10 @@ const estilos = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginRight: 10,
-    padding: 20,
+    padding: 30,
     width: "100%", 
     backgroundColor: "#ff7938",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+
   },
   menuTexto: {
     fontSize: 18,
@@ -251,5 +217,11 @@ const estilos = StyleSheet.create({
   },
   avatarImage: {
     borderRadius: 87, // metade do tamanho da imagem
+  },
+  buttonStyle: {
+    borderRadius: 0,  
+    borderWidth: 1,  
+    borderColor: 'white', 
+    
   },
 });

@@ -343,13 +343,13 @@ export default function Home({ navigation }) {
                 color="white"
               />
               <Text style={estilos.menuTexto}>Olá, {usuario ? usuario.nome : 'Visitante'}</Text>
-              <Avatar.Image size={44} source={image ? { uri: image } : null} alt="Foto do perfil" />
+              <Avatar.Image size={40} source={image ? { uri: image } : null} alt="Foto do perfil" />
               
             </View>
 
               <View style={{flexDirection: "row", alignItems: "center", marginTop: 5}}>
 
-                <MapPin 
+                <Map
                   color="white"
                   size={16}
                   padding="20"

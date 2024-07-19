@@ -18,6 +18,7 @@ import {
   Clock,
   CircleX,
 } from "lucide-react-native";
+import Relatorio from './src/screens/Relatorio';
 
 const Drawer = createDrawerNavigator();
 function CustomDrawerContent(props) {
@@ -51,6 +52,13 @@ export default function App() {
               ),
               }}
           />  
+            <Drawer.Screen
+              name="Relátorios"
+              component={Relatorio}
+              options={{
+                headerShown: false,
+              }}
+            />
             <Drawer.Screen
               name="Login"
               component={Login}

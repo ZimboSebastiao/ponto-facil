@@ -17,10 +17,13 @@ import {
   Settings,
   Clock,
   CircleX,
-  House 
+  House,
+  UserRound,
 } from "lucide-react-native";
-import Relatorio from './src/screens/Relatorio';
+import Perfil from './src/screens/Perfil';
 import UsuarioAvatar from './src/screens/UsuarioAvatar';
+import Relatorio from './src/screens/Relatorio';
+import Logout from './src/components/Logout';
 
 const Drawer = createDrawerNavigator();
 function CustomDrawerContent(props) {
@@ -50,18 +53,35 @@ export default function App() {
             options={{
             headerShown: false,
             drawerIcon: () => (
-            <House  color="#828282" m="$0" w="$8" h="$6" />
+            <House  color="#ff7938" m="$0" w="$8" h="$6" />
+              ),
+              }}
+          />  
+          <Drawer.Screen
+            name="Relatório"
+            component={Relatorio}
+            options={{
+            headerShown: false,
+            drawerIcon: () => (
+            <FileText  color="#ff7938" m="$0" w="$8" h="$6" />
               ),
               }}
           />  
             <Drawer.Screen
-              name="Relátorios"
-              component={Relatorio}
+              name="Perfil"
+              component={Perfil}
               options={{
                 headerShown: false,
                 drawerIcon: () => (
-                  <FileText color="#828282" m="$0" w="$8" h="$6" />
+                  <UserRound color="#ff7938" m="$0" w="$8" h="$6" />
                     ),
+              }}
+            />
+            <Drawer.Screen
+              name="Sair"
+              component={Logout}
+              options={{
+                headerShown: false,
               }}
             />
             <Drawer.Screen

@@ -328,10 +328,9 @@ export default function Home({ navigation }) {
   
     loadProfileImageUri();
   }, []);
- 
+ console.log(usuario);
   return (
     <>
-      <StatusBar />
         <ScrollView style={estilos.container}>
           <View style={estilos.viewMenu} >
             <View style={estilos.menu}>
@@ -366,7 +365,7 @@ export default function Home({ navigation }) {
                   />
 
               <View style={{justifyContent: "space-between", alignItems: "flex-start", padding: 6, margin: 6,}}> 
-              <Text style={{ color: "#DEDEBF", fontSize: 14, marginBottom: 10}}>Localização atual</Text>
+              <Text style={{ color: "#DEDEBF", fontSize: 14, marginBottom: 10}}>Você está próximo a</Text>
              
                 <Text style={estilos.textoMenu}>{endereco}</Text>
                 
@@ -454,7 +453,7 @@ export default function Home({ navigation }) {
              
               
               
-              <Text style={{textAlign: "center", color: "white", fontSize: 20, alignItems: "center" }}><Circle size={18} padding="20"  color="white" /> Marcar Ponto
+              <Text style={{textAlign: "center", color: "white", fontSize: 16, alignItems: "center" }}><Circle size={14} padding="16"  color="white" /> REGISTRAR PONTO
               </Text>
             </Pressable>
           </View>

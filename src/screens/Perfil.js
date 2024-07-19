@@ -9,7 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
-export default function Relatorio({ navigation }) {
+export default function Perfil({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
 
@@ -61,12 +61,13 @@ export default function Relatorio({ navigation }) {
       if (usuarioJSON) {
         setUsuario(JSON.parse(usuarioJSON));
       }
+      
     };
 
     obterUsuario();
   }, []);
   
-//   console.log(usuario);
+  console.log(usuario);
 
 
   
@@ -82,7 +83,7 @@ export default function Relatorio({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Relatório</Text>
+            <Text style={estilos.menuTexto}>Perfil</Text>
               <Avatar.Image size={40} source={image ? { uri: image } : null} alt="Foto do perfil" />
             
           </View>
@@ -101,10 +102,22 @@ export default function Relatorio({ navigation }) {
                 )}
             </View>
             </TouchableOpacity>
-            <View style={estilos.viewInfo}>
-                <Text style={{color: "#ff7938", fontSize: 17}} size="sm">{usuario ? usuario.nome : 'Visitante'}</Text>
-                <Text size="sm">Developer</Text>
-            </View>                         
+            
+            
+              <View style={estilos.viewInfo}>
+                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Nome: </Text> {usuario ? usuario.nome : 'Visitante'}</Text>
+              </View>  
+
+              <View style={estilos.viewInfo}>
+                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Cargo: </Text> {usuario.funcao}</Text>
+              </View>                         
+              <View style={estilos.viewInfo}>
+                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Nível: </Text> {usuario ? usuario.tipo : 'Desconhecido'}</Text>
+              </View>                         
+              <View style={estilos.viewInfo}>
+                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Data de Cadastro: </Text> {usuario ? usuario.nome : 'Visitante'}</Text>
+              </View>                         
+           
           </View>
 
           {/* <View style={estilos.selecaoEspaco}>
@@ -254,9 +267,15 @@ const estilos = StyleSheet.create({
     borderWidth: 1,
   },
   viewInfo: {
-    alignItems: "center",
-    marginTop: 10,
+    alignItems: "flex-start",
+    backgroundColor: 'rgba(255, 121, 56, 0.4)',
+    width: "95%",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: "5%",
+   
   },
+
   avatarContainer: {
     width: 190,
     height: 190,
@@ -266,6 +285,7 @@ const estilos = StyleSheet.create({
     overflow: 'hidden', // garantir que o conteúdo da view se ajuste dentro da borda arredondada
     alignItems: 'center',
     justifyContent: 'center',
+    marginBottom: "15%"
   },
   avatarImage: {
     borderRadius: 87, // metade do tamanho da imagem

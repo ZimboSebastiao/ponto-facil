@@ -82,6 +82,9 @@ export default function App() {
               component={Logout}
               options={{
                 headerShown: false,
+                drawerIcon: () => (
+                  <LogOut  color="#ff7938" m="$0" w="$8" h="$6" />
+                    ),
               }}
             />
             <Drawer.Screen

@@ -82,30 +82,12 @@ export default function Relatorio({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Relatório</Text>
+            <Text style={estilos.menuTexto}>Seus registros</Text>
               <Avatar.Image size={40} source={image ? { uri: image } : null} alt="Foto do perfil" />
             
           </View>
 
-          <View style={estilos.imagem}>
-            <TouchableOpacity onPress={pickImage}>
-            <View  style={estilos.avatarContainer}>
-                {image ? (
-                <Avatar.Image size={190} source={{ uri: image }} alt="Foto do perfil" />
-                ) : (
-                <Avatar.Image 
-                    source={require('./../../assets/images/icon.png')} 
-                    alt="Foto do perfil padrão" 
-                    style={estilos.avatarImage}
-                />
-                )}
-            </View>
-            </TouchableOpacity>
-            <View style={estilos.viewInfo}>
-                <Text style={{color: "#ff7938", fontSize: 17}} size="sm">{usuario ? usuario.nome : 'Visitante'}</Text>
-                <Text size="sm">Developer</Text>
-            </View>                         
-          </View>
+         
 
           {/* <View style={estilos.selecaoEspaco}>
             <Select style={estilos.selecao}>

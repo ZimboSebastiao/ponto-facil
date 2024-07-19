@@ -59,15 +59,16 @@ export default function Perfil({ navigation }) {
     const obterUsuario = async () => {
       const usuarioJSON = await AsyncStorage.getItem('usuario');
       if (usuarioJSON) {
-        setUsuario(JSON.parse(usuarioJSON));
+        const usuarioData = JSON.parse(usuarioJSON);
+        console.log('Dados do usuário recuperados:', usuarioData); // Logar os dados do usuário recuperados
+        setUsuario(usuarioData);
+      } else {
+        console.log('Nenhum dado de usuário encontrado no AsyncStorage');
       }
-      
     };
-
+  
     obterUsuario();
   }, []);
-  
-  console.log(usuario);
 
 
   
@@ -109,7 +110,7 @@ export default function Perfil({ navigation }) {
               </View>  
 
               <View style={estilos.viewInfo}>
-                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Cargo: </Text> {usuario.funcao} </Text>
+                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Cargo: </Text> {usuario ? usuario.funcao : 'Desconhecido'} </Text>
               </View>                         
               <View style={estilos.viewInfo}>
                   <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Nível: </Text> {usuario ? usuario.tipo : 'Desconhecido'}</Text>

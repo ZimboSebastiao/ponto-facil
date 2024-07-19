@@ -93,14 +93,16 @@ export default function Home({ navigation }) {
     const obterUsuario = async () => {
       const usuarioJSON = await AsyncStorage.getItem('usuario');
       if (usuarioJSON) {
-        setUsuario(JSON.parse(usuarioJSON));
+        const usuarioData = JSON.parse(usuarioJSON);
+        console.log('Dados do usuário recuperados:', usuarioData); // Logar os dados do usuário recuperados
+        setUsuario(usuarioData);
+      } else {
+        console.log('Nenhum dado de usuário encontrado no AsyncStorage');
       }
     };
-
+  
     obterUsuario();
   }, []);
-
-  // console.log(usuario);
 
   const [localizacao, setLocalizacao] = useState(null);
 

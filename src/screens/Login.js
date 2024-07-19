@@ -32,6 +32,8 @@ export default function Login({ navigation }) {
         const usuario = response.data.usuario;
         console.log('Usuário autenticado:', usuario); // Logar os dados do usuário autenticado
         await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
+        const usuarioArmazenado = await AsyncStorage.getItem('usuario');
+        console.log('Usuário armazenado:', JSON.parse(usuarioArmazenado)); // Logar os dados do usuário armazenado
         navigation.navigate("Home");
       } else {
         Alert.alert("Ops!", "Erro ao realizar login, tente novamente.");

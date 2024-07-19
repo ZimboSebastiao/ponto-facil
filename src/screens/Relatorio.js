@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from 'react';
 import { StatusBar, StyleSheet, View, TouchableOpacity, Text } from "react-native";
-import { Card, Avatar } from "react-native-paper";
+import { Avatar } from "react-native-paper";
 import { AlignLeft } from "lucide-react-native";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -66,7 +66,7 @@ export default function Relatorio({ navigation }) {
     obterUsuario();
   }, []);
   
-  console.log(usuario);
+//   console.log(usuario);
 
 
   
@@ -90,21 +90,21 @@ export default function Relatorio({ navigation }) {
           <View style={estilos.imagem}>
             <TouchableOpacity onPress={pickImage}>
             <View  style={estilos.avatarContainer}>
-            {image ? (
-            <Avatar.Image size={190} source={{ uri: image }} alt="Foto do perfil" />
-            ) : (
-            <Avatar.Image 
-                source={require('./../../assets/images/icon.png')} 
-                alt="Foto do perfil padrão" 
-                style={estilos.avatarImage}
-            />
-            )}
+                {image ? (
+                <Avatar.Image size={190} source={{ uri: image }} alt="Foto do perfil" />
+                ) : (
+                <Avatar.Image 
+                    source={require('./../../assets/images/icon.png')} 
+                    alt="Foto do perfil padrão" 
+                    style={estilos.avatarImage}
+                />
+                )}
             </View>
-        </TouchableOpacity>
-        <View style={estilos.viewInfo}>
-            <Text style={{color: "#ff7938", fontSize: 17}} size="sm">{usuario ? usuario.nome : 'Visitante'}</Text>
-            <Text size="sm">Developer</Text>
-        </View>                         
+            </TouchableOpacity>
+            <View style={estilos.viewInfo}>
+                <Text style={{color: "#ff7938", fontSize: 17}} size="sm">{usuario ? usuario.nome : 'Visitante'}</Text>
+                <Text size="sm">Developer</Text>
+            </View>                         
           </View>
 
           {/* <View style={estilos.selecaoEspaco}>

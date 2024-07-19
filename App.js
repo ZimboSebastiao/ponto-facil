@@ -19,12 +19,13 @@ import {
   CircleX,
 } from "lucide-react-native";
 import Relatorio from './src/screens/Relatorio';
+import UsuarioAvatar from './src/screens/UsuarioAvatar';
 
 const Drawer = createDrawerNavigator();
 function CustomDrawerContent(props) {
   return (
     <DrawerContentScrollView {...props}>
-     
+     <UsuarioAvatar />
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
@@ -57,6 +58,9 @@ export default function App() {
               component={Relatorio}
               options={{
                 headerShown: false,
+                drawerIcon: () => (
+                  <FileText color="#828282" m="$0" w="$8" h="$6" />
+                    ),
               }}
             />
             <Drawer.Screen

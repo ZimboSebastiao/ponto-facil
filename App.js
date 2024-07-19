@@ -68,7 +68,7 @@ export default function App() {
             headerShown: false,
             drawerIcon: () => <FileText color="#ff7938" m="$0" w="$8" h="$6" />,
           }}
-        />
+        /> 
         <Drawer.Screen
           name="Perfil"
           component={Perfil}
@@ -85,7 +85,7 @@ export default function App() {
             drawerIcon: () => <LogOut color="#ff7938" m="$0" w="$8" h="$6" />,
           }}
         />
-        {!isAuthenticated && (
+       
           <Drawer.Screen
             name="Login"
             component={Login}
@@ -93,7 +93,7 @@ export default function App() {
               headerShown: false,
             }}
           />
-        )}
+       
       </Drawer.Navigator>
     </NavigationContainer>
   );

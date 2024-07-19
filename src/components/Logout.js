@@ -6,15 +6,17 @@ function Logout({ navigation }) {
     const logout = async () => {
       try {
         await AsyncStorage.removeItem('usuario');
-        navigation.navigate("Login");
-        // navigation.navigate('AuthStack', { screen: 'Login' });
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
       } catch (error) {
         console.error("Erro ao fazer logout:", error);
       }
     };
 
     logout();
-  }, []);
+  }, [navigation]);
 
   return null; // não renderiza nada
 }

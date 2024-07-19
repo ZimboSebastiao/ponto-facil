@@ -6,7 +6,7 @@ import * as Calendar from "expo-calendar";
 import { Card, Divider, Avatar, Drawer} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {Circle, AlignLeft,  Map } from 'lucide-react-native';
+import {Circle, AlignLeft,  Map, Clock, } from 'lucide-react-native';
 import axios from 'axios';
 
 
@@ -62,7 +62,7 @@ export default function Home({ navigation }) {
       });
   
       // Verificar a estrutura do objeto de endereço retornado
-      console.log(enderecoReverso);
+      // console.log(enderecoReverso);
   
        // Construir o endereço a partir das informações retornadas
     let enderecoFormatado = "";
@@ -343,7 +343,15 @@ export default function Home({ navigation }) {
                 color="white"
               />
               <Text style={estilos.menuTexto}>Olá, {usuario ? usuario.nome : 'Visitante'}</Text>
-              <Avatar.Image size={40} source={image ? { uri: image } : null} alt="Foto do perfil" />
+
+              <View style={estilos.avatarContainer}>
+                <Avatar.Image 
+                  size={40} 
+                  source={image ? { uri: image } : null} 
+                  alt="Foto do perfil"
+                  style={estilos.avatarImage} 
+                />
+              </View>
               
             </View>
 
@@ -381,8 +389,7 @@ export default function Home({ navigation }) {
                     <Text style={estilos.cardHora} variant="titleMedium">{dataAtualizada}</Text>
                   </View>
                   <View style={estilos.cardIcon}>
-                  
-                    <Text style={estilos.cardHora}> {hora}</Text>
+                    <Text style={estilos.cardHora}> <Clock size={14} color="#ff7938"  /> {hora} </Text>
                   </View>
                 </View>
 
@@ -547,7 +554,7 @@ const estilos = StyleSheet.create({
     color: "#ff7938", 
     marginBottom: 10, 
     fontWeight: "bold",
-    fontSize: 15
+    fontSize: 15,
   },
   cardTitulo: {
     color: "#ff7938",
@@ -627,5 +634,20 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 22,
     paddingLeft: 6
-  }
+  },
+  avatarContainer: {
+    width: 42,
+    height: 42,
+    borderWidth: 1,
+    borderColor: 'white',
+    borderRadius: 65, 
+    overflow: 'hidden', 
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20, 
+  },
 });

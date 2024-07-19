@@ -50,9 +50,9 @@ export default function Login({ navigation }) {
   return (
     <>
       <View style={estilos.container}>
-        <View style={estilos.estiloImagem}>
+        
           <Image source={backgroundImage} style={estilos.background} />
-        </View>
+        
         <View style={estilos.formulario}>
           <TextInput
             onChangeText={(valor) => setEmail(valor)}
@@ -90,14 +90,15 @@ const estilos = StyleSheet.create({
     alignContent: "center",
     alignItems: "center",
     width: "auto",
+    height: "20%",
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
   },
 
   formulario: {
     padding: 23,
-    paddingTop: 70,
-    backgroundColor: "#ff7938",
+    marginTop: 90,
+
   },
   input: {
     borderWidth: 1,
@@ -108,23 +109,27 @@ const estilos = StyleSheet.create({
     backgroundColor: "white",
   },
   botoes: {
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 15,
     borderColor: "white",
     borderRadius: 10,
     marginVertical: 20,
-    backgroundColor: "white",
+    backgroundColor: "#ff7938",
     alignItems: "center",
+    elevation: 10,
+ 
+
+
   },
   botaoRecuperar: {
     padding: 0,
-    marginVertical: 4,
+    marginVertical: 55,
     alignItems: "flex-end",
   },
   textoBotao: {
-    fontSize: 19,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "black",
+    color: "white",
   },
 
   textoBotaoRecuperar: {

@@ -30,6 +30,7 @@ export default function Login({ navigation }) {
 
       if (response.status === 200) {
         const usuario = response.data.usuario;
+        console.log('Usuário autenticado:', usuario); // Logar os dados do usuário autenticado
         await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
         navigation.navigate("Home");
       } else {
@@ -44,15 +45,13 @@ export default function Login({ navigation }) {
         mensagem = "Houve um erro, tente mais tarde!";
       }
       Alert.alert("Ops!", mensagem);
-    }}
-
+    }
+  }
 
   return (
     <>
       <View style={estilos.container}>
-        
-          <Image source={backgroundImage} style={estilos.background} />
-        
+        <Image source={backgroundImage} style={estilos.background} />
         <View style={estilos.formulario}>
           <TextInput
             onChangeText={(valor) => setEmail(valor)}
@@ -66,10 +65,9 @@ export default function Login({ navigation }) {
             secureTextEntry
           />
           <View>
-            <Pressable style={estilos.botaoRecuperar} >
+            <Pressable style={estilos.botaoRecuperar}>
               <Text style={estilos.textoBotaoRecuperar}></Text>
             </Pressable>
-
             <Pressable style={estilos.botoes} onPress={login}>
               <Text style={estilos.textoBotao}>Entrar</Text>
             </Pressable>
@@ -94,11 +92,9 @@ const estilos = StyleSheet.create({
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
   },
-
   formulario: {
     padding: 23,
     marginTop: 90,
-
   },
   input: {
     borderWidth: 1,
@@ -117,9 +113,6 @@ const estilos = StyleSheet.create({
     backgroundColor: "#ff7938",
     alignItems: "center",
     elevation: 10,
- 
-
-
   },
   botaoRecuperar: {
     padding: 0,
@@ -131,7 +124,6 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-
   textoBotaoRecuperar: {
     fontSize: 15,
     fontWeight: "bold",

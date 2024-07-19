@@ -109,7 +109,7 @@ export default function Perfil({ navigation }) {
               </View>  
 
               <View style={estilos.viewInfo}>
-                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Cargo: </Text> {usuario.funcao}</Text>
+                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Cargo: </Text> {usuario.funcao} </Text>
               </View>                         
               <View style={estilos.viewInfo}>
                   <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Nível: </Text> {usuario ? usuario.tipo : 'Desconhecido'}</Text>

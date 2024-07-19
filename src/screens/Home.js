@@ -328,7 +328,7 @@ export default function Home({ navigation }) {
   
     loadProfileImageUri();
   }, []);
-//  console.log(usuario);
+
   return (
     <>
         <ScrollView style={estilos.container}>

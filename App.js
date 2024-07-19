@@ -17,6 +17,7 @@ import {
   Settings,
   Clock,
   CircleX,
+  House 
 } from "lucide-react-native";
 import Relatorio from './src/screens/Relatorio';
 import UsuarioAvatar from './src/screens/UsuarioAvatar';
@@ -44,12 +45,12 @@ export default function App() {
         >
 
           <Drawer.Screen
-            name="Pontos"
+            name="Home"
             component={Home}
             options={{
             headerShown: false,
             drawerIcon: () => (
-            <Clock color="#828282" m="$0" w="$8" h="$6" />
+            <House  color="#828282" m="$0" w="$8" h="$6" />
               ),
               }}
           />  

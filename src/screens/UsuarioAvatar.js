@@ -87,8 +87,7 @@
   
   const estilos = StyleSheet.create({
     container: {
-      padding: 8,
-      marginVertical: 50,
+      marginVertical: 40,
     },
     avatarContainer: {
         width: 125,

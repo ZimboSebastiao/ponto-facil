@@ -6,7 +6,7 @@ import * as Calendar from "expo-calendar";
 import { Card, Divider, Avatar, Drawer} from "react-native-paper";
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { MapPin, AlignLeft,  Map } from 'lucide-react-native';
+import {Circle, AlignLeft,  Map } from 'lucide-react-native';
 import axios from 'axios';
 
 
@@ -445,7 +445,10 @@ export default function Home({ navigation }) {
           <View>
             <Pressable style={estilos.viewBotao} onPress={marcarPonto}>
              
-              <Text style={{textAlign: "center", color: "white", fontSize: 17}}> Marcar Ponto </Text>
+              
+              
+              <Text style={{textAlign: "center", color: "white", fontSize: 20, alignItems: "center" }}><Circle size={18} padding="20"  color="white" /> Marcar Ponto
+              </Text>
             </Pressable>
           </View>
          
@@ -508,8 +511,8 @@ const estilos = StyleSheet.create({
     width: "90%",
     marginLeft: "auto",
     marginRight: "auto",
-    marginBottom: "6%",
-    padding: "3%",
+    marginBottom: "7%",
+    padding: "2%",
     backgroundColor: "#ff7938",
     borderRadius: 20,
     borderColor: "#ff7938",

@@ -144,6 +144,17 @@ export default function Relatorio({ navigation }) {
               },
             ]}
           />
+          {/* Renderiza informações diferentes com base na seleção do botão */}
+          {value === "historico" && (
+            <View style={estilos.informacoes}>
+              <Text>Informações do Histórico</Text>
+            </View>
+          )}
+          {value === "pendentes" && (
+            <View style={estilos.informacoes}>
+              <Text>Informações Pendentes</Text>
+            </View>
+          )}
         </PaperProvider>
       </SafeAreaView>
     </>
@@ -188,5 +199,8 @@ const estilos = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+  },
+  informacoes: {
+    padding: 20,
   },
 });

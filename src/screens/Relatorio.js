@@ -22,6 +22,7 @@ export default function Relatorio({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [value, setValue] = useState("historico");
+  const [histo, setHisto] = useState("");
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -135,19 +136,50 @@ export default function Relatorio({ navigation }) {
                 label: "Histórico",
                 style: estilos.buttonStyle,
                 checkedColor: "white",
+                uncheckedColor: "#C8C8C8",
               },
               {
                 value: "pendentes",
                 label: "Pendentes",
                 style: estilos.buttonStyle,
                 checkedColor: "white",
+                uncheckedColor: "#C8C8C8",
               },
             ]}
           />
+
           {/* Renderiza informações diferentes com base na seleção do botão */}
           {value === "historico" && (
             <View style={estilos.informacoes}>
-              <Text>Informações do Histórico</Text>
+              <SafeAreaView>
+                <SegmentedButtons
+                  value={histo}
+                  onValueChange={setHisto}
+                  buttons={[
+                    {
+                      value: "sete",
+                      label: "7 dias",
+                      style: estilos.botoesHisto,
+                      checkedColor: "white",
+                      uncheckedColor: "#ff7938",
+                    },
+                    {
+                      value: "quinze",
+                      label: "15 dias",
+                      style: estilos.botoesHisto,
+                      checkedColor: "white",
+                      uncheckedColor: "#ff7938",
+                    },
+                    {
+                      value: "personalizado",
+                      label: "Personalizado",
+                      style: estilos.botoesHisto,
+                      checkedColor: "white",
+                      uncheckedColor: "#ff7938",
+                    },
+                  ]}
+                />
+              </SafeAreaView>
             </View>
           )}
           {value === "pendentes" && (
@@ -201,6 +233,11 @@ const estilos = StyleSheet.create({
     borderRadius: 20,
   },
   informacoes: {
-    padding: 20,
+    padding: 15,
+  },
+  botoesHisto: {
+    borderWidth: 1,
+    borderColor: "#ff7938",
+    borderBottomWidth: 3,
   },
 });

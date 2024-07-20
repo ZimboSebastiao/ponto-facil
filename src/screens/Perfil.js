@@ -1,13 +1,16 @@
 import * as React from "react";
-import { useEffect, useState } from 'react';
-import { StatusBar, StyleSheet, View, TouchableOpacity, Text } from "react-native";
+import { useEffect, useState } from "react";
+import {
+  StatusBar,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Text,
+} from "react-native";
 import { Avatar } from "react-native-paper";
 import { AlignLeft } from "lucide-react-native";
-import * as ImagePicker from 'expo-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
-
+import * as ImagePicker from "expo-image-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Perfil({ navigation }) {
   const [image, setImage] = useState(null);
@@ -21,107 +24,139 @@ export default function Perfil({ navigation }) {
       aspect: [4, 3],
       quality: 1,
     });
-    
+
     console.log("Resultado:", result);
-  
-    if (!result.cancelled && result.assets && result.assets.length > 0 && result.assets[0].uri) {
+
+    if (
+      !result.cancelled &&
+      result.assets &&
+      result.assets.length > 0 &&
+      result.assets[0].uri
+    ) {
       console.log("Imagem selecionada:", result.assets[0].uri);
       setImage(result.assets[0].uri);
       // Armazena a URI da imagem selecionada no AsyncStorage
       try {
-        await AsyncStorage.setItem('profileImageUri', result.assets[0].uri);
+        await AsyncStorage.setItem("profileImageUri", result.assets[0].uri);
       } catch (error) {
-        console.log('Erro ao salvar a URI da imagem no AsyncStorage:', error);
+        console.log("Erro ao salvar a URI da imagem no AsyncStorage:", error);
       }
     } else {
       console.log("URI da imagem é inválida.");
     }
-    
-    
   };
-  
+
   useEffect(() => {
     const loadProfileImageUri = async () => {
       try {
-        const uri = await AsyncStorage.getItem('profileImageUri');
+        const uri = await AsyncStorage.getItem("profileImageUri");
         if (uri !== null) {
           setImage(uri);
         }
       } catch (error) {
-        console.log('Erro ao carregar a URI da imagem do AsyncStorage:', error);
+        console.log("Erro ao carregar a URI da imagem do AsyncStorage:", error);
       }
     };
-  
+
     loadProfileImageUri();
   }, []);
-  
+
   useEffect(() => {
     const obterUsuario = async () => {
-      const usuarioJSON = await AsyncStorage.getItem('usuario');
+      const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log('Dados do usuário recuperados:', usuarioData); // Logar os dados do usuário recuperados
+        console.log("Dados do usuário recuperados:", usuarioData); // Logar os dados do usuário recuperados
         setUsuario(usuarioData);
       } else {
-        console.log('Nenhum dado de usuário encontrado no AsyncStorage');
+        console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
     };
-  
+
     obterUsuario();
   }, []);
 
-
-  
   return (
     <>
-      
-        <View style={estilos.container}>
-          <View style={estilos.menu}>
-            <AlignLeft
-              onPress={() => navigation.openDrawer()}
-              m="$3"
-              w="$10"
-              h="$6"
-              color="white"
+      <View style={estilos.container}>
+        <View style={estilos.menu}>
+          <AlignLeft
+            onPress={() => navigation.openDrawer()}
+            m="$3"
+            w="$10"
+            h="$6"
+            color="white"
+          />
+          <Text style={estilos.menuTexto}>Perfil</Text>
+          <View style={estilos.avatarPerfil}>
+            <Avatar.Image
+              size={40}
+              source={image ? { uri: image } : null}
+              alt="Foto do perfil"
+              style={estilos.avatarImage}
             />
-            <Text style={estilos.menuTexto}>Perfil</Text>
-              <Avatar.Image size={40} source={image ? { uri: image } : null} alt="Foto do perfil" />
-            
           </View>
+        </View>
 
-          <View style={estilos.imagem}>
-            <TouchableOpacity onPress={pickImage}>
-            <View  style={estilos.avatarContainer}>
-                {image ? (
-                <Avatar.Image size={190} source={{ uri: image }} alt="Foto do perfil" />
-                ) : (
-                <Avatar.Image 
-                    source={require('./../../assets/images/icon.png')} 
-                    alt="Foto do perfil padrão" 
-                    style={estilos.avatarImage}
+        <View style={estilos.imagem}>
+          <TouchableOpacity onPress={pickImage}>
+            <View style={estilos.avatarContainer}>
+              {image ? (
+                <Avatar.Image
+                  size={190}
+                  source={{ uri: image }}
+                  alt="Foto do perfil"
                 />
-                )}
+              ) : (
+                <Avatar.Image
+                  source={require("./../../assets/images/icon.png")}
+                  alt="Foto do perfil padrão"
+                  style={estilos.avatarImage}
+                />
+              )}
             </View>
-            </TouchableOpacity>
-            
-            
-              <View style={estilos.viewInfo}>
-                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Nome: </Text> {usuario ? usuario.nome : 'Visitante'}</Text>
-              </View>  
+          </TouchableOpacity>
 
-              <View style={estilos.viewInfo}>
-                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Cargo: </Text> {usuario ? usuario.funcao : 'Desconhecido'} </Text>
-              </View>                         
-              <View style={estilos.viewInfo}>
-                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Nível: </Text> {usuario ? usuario.tipo : 'Desconhecido'}</Text>
-              </View>                         
-              <View style={estilos.viewInfo}>
-                  <Text style={{color: "black", fontSize: 17}}> <Text style={{ fontSize: 18, fontWeight:"bold"}} >Data de Cadastro: </Text> {usuario ? usuario.nome : 'Visitante'}</Text>
-              </View>                         
-           
+          <View style={estilos.viewInfo}>
+            <Text style={{ color: "black", fontSize: 17 }}>
+              {" "}
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Nome:{" "}
+              </Text>{" "}
+              {usuario ? usuario.nome : "Visitante"}
+            </Text>
           </View>
 
-          {/* <View style={estilos.selecaoEspaco}>
+          <View style={estilos.viewInfo}>
+            <Text style={{ color: "black", fontSize: 17 }}>
+              {" "}
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Cargo:{" "}
+              </Text>{" "}
+              {usuario ? usuario.funcao : "Desconhecido"}{" "}
+            </Text>
+          </View>
+          <View style={estilos.viewInfo}>
+            <Text style={{ color: "black", fontSize: 17 }}>
+              {" "}
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Nível:{" "}
+              </Text>{" "}
+              {usuario ? usuario.tipo : "Desconhecido"}
+            </Text>
+          </View>
+          <View style={estilos.viewInfo}>
+            <Text style={{ color: "black", fontSize: 17 }}>
+              {" "}
+              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
+                Data de Cadastro:{" "}
+              </Text>{" "}
+              {usuario ? usuario.nome : "Visitante"}
+            </Text>
+          </View>
+        </View>
+
+        {/* <View style={estilos.selecaoEspaco}>
             <Select style={estilos.selecao}>
               <SelectTrigger variant="rounded" size="sm" borderColor="#ff7938">
                 <SelectInput placeholder="Selecione um Período" />
@@ -190,8 +225,7 @@ export default function Perfil({ navigation }) {
               </Button>
             </View>
           </View> */}
-        </View>
-
+      </View>
     </>
   );
 }
@@ -206,7 +240,7 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     marginRight: 10,
     padding: 35,
-    width: "100%", 
+    width: "100%",
     backgroundColor: "#ff7938",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
@@ -216,7 +250,6 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-
 
   imagem: {
     justifyContent: "center",
@@ -269,26 +302,40 @@ const estilos = StyleSheet.create({
   },
   viewInfo: {
     alignItems: "flex-start",
-    backgroundColor: 'rgba(255, 121, 56, 0.4)',
+    backgroundColor: "rgba(255, 121, 56, 0.4)",
     width: "95%",
     borderRadius: 10,
     padding: 10,
     marginBottom: "5%",
-   
   },
 
   avatarContainer: {
     width: 190,
     height: 190,
     borderWidth: 5,
-    borderColor: '#ff7938',
+    borderColor: "#ff7938",
     borderRadius: 95, // metade do tamanho da view para garantir que a borda seja redonda
-    overflow: 'hidden', // garantir que o conteúdo da view se ajuste dentro da borda arredondada
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: "15%"
+    overflow: "hidden", // garantir que o conteúdo da view se ajuste dentro da borda arredondada
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: "15%",
   },
   avatarImage: {
     borderRadius: 87, // metade do tamanho da imagem
+  },
+  avatarPerfil: {
+    width: 42,
+    height: 42,
+    borderWidth: 1,
+    borderColor: "white",
+    borderRadius: 65,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  avatarImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
 });

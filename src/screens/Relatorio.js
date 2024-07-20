@@ -21,7 +21,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Relatorio({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
-  const [value, setValue] = React.useState("");
+  // const [value, setValue] = React.useState("");
+  const [value, setValue] = useState("historico");
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -53,6 +54,7 @@ export default function Relatorio({ navigation }) {
     }
   };
 
+  // funçao para seleção de imagem
   useEffect(() => {
     const loadProfileImageUri = async () => {
       try {
@@ -106,6 +108,7 @@ export default function Relatorio({ navigation }) {
             h="$6"
             color="white"
           />
+
           <Text style={estilos.menuTexto}>Seus registros</Text>
           <View style={estilos.avatarContainer}>
             <Avatar.Image
@@ -119,17 +122,25 @@ export default function Relatorio({ navigation }) {
 
         <PaperProvider theme={theme}>
           <SegmentedButtons
+            // value={value}
+            // onValueChange={setValue}
             value={value}
-            onValueChange={setValue}
+            onValueChange={(newValue) => {
+              if (newValue === "pendentes") {
+                setValue("pendentes");
+              } else {
+                setValue("historico");
+              }
+            }}
             buttons={[
               {
-                value: "walk",
+                value: "historico",
                 label: "Histórico",
                 style: estilos.buttonStyle,
                 checkedColor: "white",
               },
               {
-                value: "train",
+                value: "pendentes",
                 label: "Pendentes",
                 style: estilos.buttonStyle,
                 checkedColor: "white",

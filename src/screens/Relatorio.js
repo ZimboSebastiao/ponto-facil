@@ -21,7 +21,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function Relatorio({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
-  // const [value, setValue] = React.useState("");
   const [value, setValue] = useState("historico");
 
   const pickImage = async () => {
@@ -122,8 +121,6 @@ export default function Relatorio({ navigation }) {
 
         <PaperProvider theme={theme}>
           <SegmentedButtons
-            // value={value}
-            // onValueChange={setValue}
             value={value}
             onValueChange={(newValue) => {
               if (newValue === "pendentes") {

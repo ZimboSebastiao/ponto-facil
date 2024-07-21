@@ -8,6 +8,7 @@ import {
   View,
   Text,
   Pressable,
+  SafeAreaView,
 } from "react-native";
 import * as Location from "expo-location";
 import * as Calendar from "expo-calendar";
@@ -156,6 +157,7 @@ export default function Home({ navigation }) {
     longitudeDelta: 40,
   };
 
+  // Função Marcar Ponto
   const marcarPonto = async () => {
     const agora = new Date();
     const horas = String(agora.getHours()).padStart(2, "0");
@@ -467,154 +469,162 @@ export default function Home({ navigation }) {
   return (
     <>
       <ScrollView style={estilos.container}>
-        <View style={estilos.viewMenu}>
-          <View style={estilos.menu}>
-            <AlignLeft
-              onPress={() => navigation.openDrawer()}
-              m="$3"
-              w="$10"
-              h="$6"
-              color="white"
-            />
-            <Text style={estilos.menuTexto}>
-              Olá, {usuario ? usuario.nome : "Visitante"}
-            </Text>
-
-            <View style={estilos.avatarContainer}>
-              <Avatar.Image
-                size={40}
-                source={image ? { uri: image } : null}
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
+        <SafeAreaView>
+          <View style={estilos.viewMenu}>
+            <View style={estilos.menu}>
+              <AlignLeft
+                onPress={() => navigation.openDrawer()}
+                m="$3"
+                w="$10"
+                h="$6"
+                color="white"
               />
-            </View>
-          </View>
+              <Text style={estilos.menuTexto}>
+                Olá, {usuario ? usuario.nome : "Visitante"}
+              </Text>
 
-          <View
-            style={{ flexDirection: "row", alignItems: "center", marginTop: 5 }}
-          >
-            <Map
-              color="white"
-              size={16}
-              padding="20"
-              style={{ marginTop: 23 }}
-            />
+              <View style={estilos.avatarContainer}>
+                <Avatar.Image
+                  size={40}
+                  source={image ? { uri: image } : null}
+                  alt="Foto do perfil"
+                  style={estilos.avatarImage}
+                />
+              </View>
+            </View>
 
             <View
               style={{
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                padding: 6,
-                margin: 6,
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 5,
               }}
             >
-              <Text
-                style={{ color: "#DEDEBF", fontSize: 14, marginBottom: 10 }}
-              >
-                Você está próximo a
-              </Text>
+              <Map
+                color="white"
+                size={16}
+                padding="20"
+                style={{ marginTop: 23 }}
+              />
 
-              <Text style={estilos.textoMenu}>{endereco}</Text>
+              <View
+                style={{
+                  justifyContent: "space-between",
+                  alignItems: "flex-start",
+                  padding: 6,
+                  margin: 6,
+                }}
+              >
+                <Text
+                  style={{ color: "#DEDEBF", fontSize: 14, marginBottom: 10 }}
+                >
+                  Você está próximo a
+                </Text>
+
+                <Text style={estilos.textoMenu}>{endereco}</Text>
+              </View>
             </View>
           </View>
-        </View>
 
-        <View style={estilos.viewInfo}>
-          <Card style={estilos.cardInfo}>
-            <Text style={estilos.cardTitulo}>Registros de hoje</Text>
-            <Card.Content>
-              <View style={estilos.cardConteudo}>
-                <View>
-                  <Text style={estilos.cardHora} variant="titleMedium">
-                    {" "}
-                    {diaAtual}
-                  </Text>
-                  <Text style={estilos.cardHora} variant="titleMedium">
-                    {dataAtualizada}
-                  </Text>
-                </View>
-                <View style={estilos.cardIcon}>
-                  <Text style={estilos.cardHora}>
-                    {" "}
-                    <Clock size={14} color="#ff7938" /> {hora}{" "}
-                  </Text>
-                </View>
-              </View>
-
-              <Divider orientation="vertical" width="100%" my="$2" />
-
-              <View style={estilos.viewInfoHora}>
-                <View style={{ width: "100%" }}>
-                  <View style={estilos.viewRegistros}>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      1º Registro - Entrada
+          <View style={estilos.viewInfo}>
+            <Card style={estilos.cardInfo}>
+              <Text style={estilos.cardTitulo}>Registros de hoje</Text>
+              <Card.Content>
+                <View style={estilos.cardConteudo}>
+                  <View>
+                    <Text style={estilos.cardHora} variant="titleMedium">
+                      {" "}
+                      {diaAtual}
                     </Text>
-                    <Text style={estilos.textoRegistros}>{dataFormatada}</Text>
+                    <Text style={estilos.cardHora} variant="titleMedium">
+                      {dataAtualizada}
+                    </Text>
                   </View>
-
-                  <Divider
-                    orientation="vertical"
-                    width="100%"
-                    h="auto"
-                    my="$2"
-                  />
-
-                  <View style={estilos.viewRegistros}>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      2º Registro - Intervalo
+                  <View style={estilos.cardIcon}>
+                    <Text style={estilos.cardHora}>
+                      {" "}
+                      <Clock size={14} color="#ff7938" /> {hora}{" "}
                     </Text>
-                    <Text style={estilos.textoRegistros}>{intervalo}</Text>
-                  </View>
-
-                  <Divider
-                    orientation="vertical"
-                    width="100%"
-                    h="auto"
-                    my="$2"
-                  />
-
-                  <View style={estilos.viewRegistros}>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      3º Registro - Fim do Intervalo
-                    </Text>
-                    <Text style={estilos.textoRegistros}>{fimIntervalo}</Text>
-                  </View>
-
-                  <Divider
-                    orientation="vertical"
-                    width="100%"
-                    h="auto"
-                    my="$2"
-                  />
-
-                  <View style={estilos.viewRegistros}>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      4º Registro - Saída
-                    </Text>
-                    <Text style={estilos.textoRegistros}>{saida}</Text>
                   </View>
                 </View>
-              </View>
-            </Card.Content>
-          </Card>
-        </View>
 
-        <View>
-          <Pressable style={estilos.viewBotao} onPress={marcarPonto}>
-            <Text
-              style={{
-                textAlign: "center",
-                color: "white",
-                fontSize: 16,
-                alignItems: "center",
-              }}
-            >
-              <Circle size={14} padding="16" color="white" /> REGISTRAR PONTO
-            </Text>
-          </Pressable>
-        </View>
+                <Divider orientation="vertical" width="100%" my="$2" />
 
-        <View></View>
+                <View style={estilos.viewInfoHora}>
+                  <View style={{ width: "100%" }}>
+                    <View style={estilos.viewRegistros}>
+                      <Text style={estilos.texto} variant="titleMedium">
+                        1º Registro - Entrada
+                      </Text>
+                      <Text style={estilos.textoRegistros}>
+                        {dataFormatada}
+                      </Text>
+                    </View>
+
+                    <Divider
+                      orientation="vertical"
+                      width="100%"
+                      h="auto"
+                      my="$2"
+                    />
+
+                    <View style={estilos.viewRegistros}>
+                      <Text style={estilos.texto} variant="titleMedium">
+                        2º Registro - Intervalo
+                      </Text>
+                      <Text style={estilos.textoRegistros}>{intervalo}</Text>
+                    </View>
+
+                    <Divider
+                      orientation="vertical"
+                      width="100%"
+                      h="auto"
+                      my="$2"
+                    />
+
+                    <View style={estilos.viewRegistros}>
+                      <Text style={estilos.texto} variant="titleMedium">
+                        3º Registro - Fim do Intervalo
+                      </Text>
+                      <Text style={estilos.textoRegistros}>{fimIntervalo}</Text>
+                    </View>
+
+                    <Divider
+                      orientation="vertical"
+                      width="100%"
+                      h="auto"
+                      my="$2"
+                    />
+
+                    <View style={estilos.viewRegistros}>
+                      <Text style={estilos.texto} variant="titleMedium">
+                        4º Registro - Saída
+                      </Text>
+                      <Text style={estilos.textoRegistros}>{saida}</Text>
+                    </View>
+                  </View>
+                </View>
+              </Card.Content>
+            </Card>
+          </View>
+
+          <View>
+            <Pressable style={estilos.viewBotao} onPress={marcarPonto}>
+              <Text
+                style={{
+                  textAlign: "center",
+                  color: "white",
+                  fontSize: 16,
+                  alignItems: "center",
+                }}
+              >
+                <Circle size={14} padding="2" color="white" /> Marcar Ponto
+              </Text>
+            </Pressable>
+          </View>
+
+          <View></View>
+        </SafeAreaView>
       </ScrollView>
     </>
   );
@@ -674,7 +684,7 @@ const estilos = StyleSheet.create({
     marginBottom: "7%",
     padding: "2%",
     backgroundColor: "#ff7938",
-    borderRadius: 20,
+    borderRadius: 10,
     borderColor: "#ff7938",
     borderWidth: 1,
   },
@@ -710,13 +720,13 @@ const estilos = StyleSheet.create({
   },
   cardTitulo: {
     color: "#ff7938",
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
     justifyContent: "space-between",
     marginBottom: 12,
     backgroundColor: "#ffe9dd",
     textAlign: "center",
-    padding: 12,
+    padding: 10,
   },
   bancoTitulo: {
     color: "#ff7938",
@@ -781,9 +791,9 @@ const estilos = StyleSheet.create({
     marginBottom: 20,
   },
   textoRegistros: {
-    color: "black",
+    color: "#4a4848",
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 17,
     paddingLeft: 6,
   },
   avatarContainer: {

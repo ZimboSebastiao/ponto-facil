@@ -1,11 +1,10 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StatusBar,
   StyleSheet,
   View,
-  TouchableOpacity,
   SafeAreaView,
+  FlatList,
 } from "react-native";
 import {
   Avatar,
@@ -18,15 +17,94 @@ import {
 import { AlignLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios"; // Importa o axios para fazer requisições HTTP
+
+const API_URL = "http://192.168.15.11:8080";
+
+const getToken = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const tokenExpiration = await AsyncStorage.getItem("tokenExpiration");
+  const now = new Date();
+
+  if (token && tokenExpiration && new Date(tokenExpiration) > now) {
+    return token;
+  } else {
+    // Token expired or not present, handle refresh or redirect to login
+    return null;
+  }
+};
+
+const refreshToken = async () => {
+  try {
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      throw new Error("No refresh token available.");
+    }
+
+    const response = await axios.post(`${API_URL}/refresh-token`, {
+      refreshToken,
+    });
+    const { token, expiresIn } = response.data;
+
+    await AsyncStorage.setItem("token", token);
+    const expirationDate = new Date();
+    expirationDate.setSeconds(expirationDate.getSeconds() + expiresIn);
+    await AsyncStorage.setItem("tokenExpiration", expirationDate.toISOString());
+
+    return token;
+  } catch (error) {
+    console.error("Erro ao atualizar o token:", error);
+    // Redirecionar para a tela de login ou tratar a falha
+    return null;
+  }
+};
+
+const verifyStoredTokens = async () => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    const tokenExpiration = await AsyncStorage.getItem("tokenExpiration");
+
+    console.log("Token:", token);
+    console.log("Refresh Token:", refreshToken);
+    console.log("Token Expiration:", tokenExpiration);
+  } catch (error) {
+    console.error("Erro ao verificar tokens armazenados:", error);
+  }
+};
+
+verifyStoredTokens();
+
+const fetchWithToken = async (url, config) => {
+  let token = await getToken();
+  if (!token) {
+    token = await refreshToken();
+    if (!token) {
+      // Redirecionar para a tela de login ou tratar a falha
+      throw new Error("Não foi possível obter um token válido.");
+    }
+  }
+
+  const response = await axios.get(url, {
+    ...config,
+    headers: {
+      ...config.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
 
 export default function Relatorio({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [value, setValue] = useState("historico");
   const [histo, setHisto] = useState("sete");
+  const [registros, setRegistros] = useState([]);
 
+  // Função para selecionar a imagem
   const pickImage = async () => {
-    console.log("Selecionando imagem...");
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -34,28 +112,22 @@ export default function Relatorio({ navigation }) {
       quality: 1,
     });
 
-    console.log("Resultado:", result);
-
     if (
       !result.cancelled &&
       result.assets &&
       result.assets.length > 0 &&
       result.assets[0].uri
     ) {
-      console.log("Imagem selecionada:", result.assets[0].uri);
       setImage(result.assets[0].uri);
-      // Armazena a URI da imagem selecionada no AsyncStorage
       try {
         await AsyncStorage.setItem("profileImageUri", result.assets[0].uri);
       } catch (error) {
         console.log("Erro ao salvar a URI da imagem no AsyncStorage:", error);
       }
-    } else {
-      console.log("URI da imagem é inválida.");
     }
   };
 
-  // funçao para seleção de imagem
+  // Carregar a URI da imagem do perfil
   useEffect(() => {
     const loadProfileImageUri = async () => {
       try {
@@ -71,23 +143,37 @@ export default function Relatorio({ navigation }) {
     loadProfileImageUri();
   }, []);
 
-  // função ObterUsuario
+  // Obter dados do usuário
   useEffect(() => {
     const obterUsuario = async () => {
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log("Dados do usuário recuperados:", usuarioData); // Logar os dados do usuário recuperados
         setUsuario(usuarioData);
-      } else {
-        console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
     };
 
     obterUsuario();
   }, []);
 
-  //   console.log(usuario);
+  // Buscar registros dos últimos 7 dias
+  useEffect(() => {
+    if (histo === "sete" && usuario) {
+      const fetchRegistros = async () => {
+        try {
+          const data = await fetchWithToken(
+            `${API_URL}/registros/ultimos-7-dias`,
+            {}
+          );
+          setRegistros(data);
+        } catch (error) {
+          console.error("Erro ao buscar registros:", error.message);
+        }
+      };
+
+      fetchRegistros();
+    }
+  }, [histo, usuario]);
 
   const theme = {
     ...DefaultTheme,
@@ -143,7 +229,6 @@ export default function Relatorio({ navigation }) {
             ]}
           />
 
-          {/* BOTÃO HISTÓRICO -> Renderiza informações diferentes com base na seleção do botão */}
           {value === "historico" && (
             <View style={estilos.informacoes}>
               <SafeAreaView>
@@ -182,12 +267,26 @@ export default function Relatorio({ navigation }) {
                     >
                       Hoje
                     </Text>
-                    <Card>
-                      <Card.Content>
-                        <Text variant="titleLarge">Card title</Text>
-                        <Text variant="bodyMedium">Card content</Text>
-                      </Card.Content>
-                    </Card>
+                    <FlatList
+                      data={registros}
+                      keyExtractor={(item) => item.id.toString()}
+                      renderItem={({ item }) => (
+                        <Card style={estilos.card}>
+                          <Card.Content>
+                            <Text variant="titleLarge">
+                              Tipo: {item.tipo_registro}
+                            </Text>
+                            <Text variant="bodyMedium">
+                              Data e Hora:{" "}
+                              {new Date(item.data_hora).toLocaleString()}
+                            </Text>
+                            <Text variant="bodyMedium">
+                              Localização: {item.localizacao}
+                            </Text>
+                          </Card.Content>
+                        </Card>
+                      )}
+                    />
                   </View>
                 )}
                 {histo === "quinze" && (
@@ -204,11 +303,9 @@ export default function Relatorio({ navigation }) {
             </View>
           )}
 
-          {/* BOTÃO PENDENTES -> Renderiza informações diferentes com base na seleção do botão */}
           {value === "pendentes" && (
             <View style={estilos.informacoes}>
               <Text>Informações Pendentes</Text>
-              {/* Coloque aqui os dados específicos dos pendentes */}
             </View>
           )}
         </PaperProvider>
@@ -235,7 +332,6 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-
   buttonStyle: {
     borderRadius: 0,
     borderWidth: 1,
@@ -249,19 +345,18 @@ const estilos = StyleSheet.create({
     borderRadius: 65,
     overflow: "hidden",
     alignItems: "center",
-    justifyContent: "center",
   },
   avatarImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: "white",
   },
   informacoes: {
-    padding: 15,
+    padding: 10,
   },
   botoesHisto: {
-    borderWidth: 1,
-    borderColor: "#ff7938",
-    borderBottomWidth: 3,
+    margin: 5,
+  },
+  card: {
+    margin: 5,
   },
 });

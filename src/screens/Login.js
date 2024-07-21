@@ -7,13 +7,13 @@ import {
   Text,
   Image,
 } from "react-native";
-import axios from 'axios';
+import axios from "axios";
 import { useState } from "react";
 import backgroundImage from "../../assets/images/login.png";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
-  const [email, setEmail] = useState("");   
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
   const login = async () => {
@@ -23,17 +23,42 @@ export default function Login({ navigation }) {
     }
 
     try {
-      const response = await axios.post('http://192.168.15.11:8080/login', {
+      const response = await axios.post("http://192.168.15.11:8080/login", {
         email: email,
         senha: senha,
       });
+      const { token, refreshToken, expiresIn } = response.data;
 
       if (response.status === 200) {
         const usuario = response.data.usuario;
-        console.log('Usuário autenticado:', usuario); // Logar os dados do usuário autenticado
-        await AsyncStorage.setItem('usuario', JSON.stringify(usuario));
-        const usuarioArmazenado = await AsyncStorage.getItem('usuario');
-        console.log('Usuário armazenado:', JSON.parse(usuarioArmazenado)); // Logar os dados do usuário armazenado
+        console.log("Usuário autenticado:", usuario);
+
+        await AsyncStorage.setItem("usuario", JSON.stringify(usuario));
+        await AsyncStorage.setItem("token", token);
+
+        if (refreshToken) {
+          await AsyncStorage.setItem("refreshToken", refreshToken);
+        } else {
+          console.warn("Refresh token não disponível.");
+        }
+
+        // Calcular a data de expiração do token
+        const expirationDate = new Date();
+        expirationDate.setSeconds(
+          expirationDate.getSeconds() + (expiresIn || 3600)
+        ); // Valor padrão de 3600 segundos se expiresIn não estiver definido
+        await AsyncStorage.setItem(
+          "tokenExpiration",
+          expirationDate.toISOString()
+        );
+
+        console.log("Token salvo:", token);
+        console.log("Refresh Token salvo:", refreshToken);
+        console.log(
+          "Data de expiração do token:",
+          expirationDate.toISOString()
+        );
+
         navigation.navigate("Home");
       } else {
         Alert.alert("Ops!", "Erro ao realizar login, tente novamente.");
@@ -48,7 +73,7 @@ export default function Login({ navigation }) {
       }
       Alert.alert("Ops!", mensagem);
     }
-  }
+  };
 
   return (
     <>

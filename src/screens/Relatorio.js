@@ -5,7 +5,6 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  Text,
   SafeAreaView,
 } from "react-native";
 import {
@@ -13,6 +12,8 @@ import {
   SegmentedButtons,
   Provider as PaperProvider,
   DefaultTheme,
+  Card,
+  Text,
 } from "react-native-paper";
 import { AlignLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -22,7 +23,7 @@ export default function Relatorio({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [value, setValue] = useState("historico");
-  const [histo, setHisto] = useState("");
+  const [histo, setHisto] = useState("sete");
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -123,13 +124,7 @@ export default function Relatorio({ navigation }) {
         <PaperProvider theme={theme}>
           <SegmentedButtons
             value={value}
-            onValueChange={(newValue) => {
-              if (newValue === "pendentes") {
-                setValue("pendentes");
-              } else {
-                setValue("historico");
-              }
-            }}
+            onValueChange={(newValue) => setValue(newValue)}
             buttons={[
               {
                 value: "historico",
@@ -148,19 +143,13 @@ export default function Relatorio({ navigation }) {
             ]}
           />
 
-          {/* Renderiza informações diferentes com base na seleção do botão */}
+          {/* BOTÃO HISTÓRICO -> Renderiza informações diferentes com base na seleção do botão */}
           {value === "historico" && (
             <View style={estilos.informacoes}>
               <SafeAreaView>
                 <SegmentedButtons
                   value={histo}
-                  onValueChange={(newHisto) => {
-                    if (newHisto === "quinze") {
-                      setHisto("quinze");
-                    } else {
-                      setHisto("sete");
-                    }
-                  }}
+                  onValueChange={setHisto}
                   buttons={[
                     {
                       value: "sete",
@@ -186,12 +175,40 @@ export default function Relatorio({ navigation }) {
                     },
                   ]}
                 />
+                {histo === "sete" && (
+                  <View style={estilos.informacoes}>
+                    <Text
+                      style={{ color: "#6f7571", fontSize: 18, padding: 6 }}
+                    >
+                      Hoje
+                    </Text>
+                    <Card>
+                      <Card.Content>
+                        <Text variant="titleLarge">Card title</Text>
+                        <Text variant="bodyMedium">Card content</Text>
+                      </Card.Content>
+                    </Card>
+                  </View>
+                )}
+                {histo === "quinze" && (
+                  <View style={estilos.informacoes}>
+                    <Text>Informações dos últimos 15 dias</Text>
+                  </View>
+                )}
+                {histo === "personalizado" && (
+                  <View style={estilos.informacoes}>
+                    <Text>Informações personalizadas</Text>
+                  </View>
+                )}
               </SafeAreaView>
             </View>
           )}
+
+          {/* BOTÃO PENDENTES -> Renderiza informações diferentes com base na seleção do botão */}
           {value === "pendentes" && (
             <View style={estilos.informacoes}>
               <Text>Informações Pendentes</Text>
+              {/* Coloque aqui os dados específicos dos pendentes */}
             </View>
           )}
         </PaperProvider>

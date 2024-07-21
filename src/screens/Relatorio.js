@@ -154,7 +154,13 @@ export default function Relatorio({ navigation }) {
               <SafeAreaView>
                 <SegmentedButtons
                   value={histo}
-                  onValueChange={setHisto}
+                  onValueChange={(newHisto) => {
+                    if (newHisto === "quinze") {
+                      setHisto("quinze");
+                    } else {
+                      setHisto("sete");
+                    }
+                  }}
                   buttons={[
                     {
                       value: "sete",
@@ -176,6 +182,7 @@ export default function Relatorio({ navigation }) {
                       style: estilos.botoesHisto,
                       checkedColor: "white",
                       uncheckedColor: "#ff7938",
+                      disabled: true,
                     },
                   ]}
                 />

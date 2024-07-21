@@ -14,10 +14,10 @@ import {
   Card,
   Text,
 } from "react-native-paper";
-import { AlignLeft } from "lucide-react-native";
+import { AlignLeft, Clock, MapPinned } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios"; // Importa o axios para fazer requisições HTTP
+import axios from "axios";
 
 const API_URL = "http://192.168.15.11:8080";
 
@@ -232,6 +232,7 @@ export default function Relatorio({ navigation }) {
             <SegmentedButtons
               value={histo}
               onValueChange={setHisto}
+              style={estilos.informacoes}
               buttons={[
                 {
                   value: "sete",
@@ -264,15 +265,29 @@ export default function Relatorio({ navigation }) {
                     registros.map((item) => (
                       <Card key={item.id} style={estilos.card}>
                         <Card.Content>
-                          <Text variant="titleLarge">
-                            Tipo: {item.tipo_registro}
+                          <View style={estilos.viewEntrada}>
+                            <Text style={estilos.viewTipo}>
+                              {item.tipo_registro}
+                            </Text>
+                            <Text style={estilos.viewTipo}>
+                              {new Date(item.data_hora).toLocaleDateString()}
+                            </Text>
+                          </View>
+                          <Text style={estilos.viewData}>
+                            <Clock size={13} color="#818582" />{" "}
+                            {new Date(item.data_hora).toLocaleTimeString(
+                              "pt-BR",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                              }
+                            )}
                           </Text>
-                          <Text variant="bodyMedium">
-                            Data e Hora:{" "}
-                            {new Date(item.data_hora).toLocaleString()}
-                          </Text>
-                          <Text variant="bodyMedium">
-                            Localização: {item.localizacao}
+
+                          <Text style={estilos.viewLoc}>
+                            <MapPinned size={13} color="#818582" />{" "}
+                            {item.localizacao}
                           </Text>
                         </Card.Content>
                       </Card>
@@ -351,12 +366,32 @@ const estilos = StyleSheet.create({
   botoesHisto: {
     borderColor: "#ff7938",
     borderBottomWidth: 3,
+    marginTop: 20,
+    marginBottom: 15,
   },
   card: {
     margin: 5,
-    borderRadius: 30,
+    borderRadius: 10,
+    backgroundColor: "#f5f7f7",
   },
   scrollView: {
     flex: 1,
+  },
+  viewTipo: {
+    fontSize: 15,
+    color: "#ff7938",
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  viewEntrada: {
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+  },
+  viewData: {
+    color: "#818582",
+  },
+  viewLoc: {
+    color: "#818582",
+    marginTop: 6,
   },
 });

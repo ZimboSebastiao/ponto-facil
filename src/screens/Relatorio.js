@@ -4,7 +4,7 @@ import {
   StyleSheet,
   View,
   SafeAreaView,
-  FlatList,
+  ScrollView,
 } from "react-native";
 import {
   Avatar,
@@ -185,132 +185,126 @@ export default function Relatorio({ navigation }) {
   };
 
   return (
-    <>
-      <SafeAreaView style={estilos.container}>
-        <View style={estilos.menu}>
-          <AlignLeft
-            onPress={() => navigation.openDrawer()}
-            m="$3"
-            w="$10"
-            h="$6"
-            color="white"
-          />
+    <SafeAreaView style={estilos.container}>
+      <View style={estilos.menu}>
+        <AlignLeft
+          onPress={() => navigation.openDrawer()}
+          m="$3"
+          w="$10"
+          h="$6"
+          color="white"
+        />
 
-          <Text style={estilos.menuTexto}>Seus registros</Text>
-          <View style={estilos.avatarContainer}>
-            <Avatar.Image
-              size={40}
-              source={image ? { uri: image } : null}
-              alt="Foto do perfil"
-              style={estilos.avatarImage}
-            />
-          </View>
+        <Text style={estilos.menuTexto}>Seus registros</Text>
+        <View style={estilos.avatarContainer}>
+          <Avatar.Image
+            size={40}
+            source={image ? { uri: image } : null}
+            alt="Foto do perfil"
+            style={estilos.avatarImage}
+          />
         </View>
+      </View>
 
-        <PaperProvider theme={theme}>
-          <SegmentedButtons
-            value={value}
-            onValueChange={(newValue) => setValue(newValue)}
-            buttons={[
-              {
-                value: "historico",
-                label: "Histórico",
-                style: estilos.buttonStyle,
-                checkedColor: "white",
-                uncheckedColor: "#C8C8C8",
-              },
-              {
-                value: "pendentes",
-                label: "Pendentes",
-                style: estilos.buttonStyle,
-                checkedColor: "white",
-                uncheckedColor: "#C8C8C8",
-              },
-            ]}
-          />
-
-          {value === "historico" && (
-            <View style={estilos.informacoes}>
-              <SafeAreaView>
-                <SegmentedButtons
-                  value={histo}
-                  onValueChange={setHisto}
-                  buttons={[
-                    {
-                      value: "sete",
-                      label: "7 dias",
-                      style: estilos.botoesHisto,
-                      checkedColor: "white",
-                      uncheckedColor: "#ff7938",
-                    },
-                    {
-                      value: "quinze",
-                      label: "15 dias",
-                      style: estilos.botoesHisto,
-                      checkedColor: "white",
-                      uncheckedColor: "#ff7938",
-                    },
-                    {
-                      value: "personalizado",
-                      label: "Personalizado",
-                      style: estilos.botoesHisto,
-                      checkedColor: "white",
-                      uncheckedColor: "#ff7938",
-                      disabled: true,
-                    },
-                  ]}
-                />
-                {histo === "sete" && (
-                  <View style={estilos.informacoes}>
-                    <Text
-                      style={{ color: "#6f7571", fontSize: 18, padding: 6 }}
-                    >
-                      Hoje
+      <PaperProvider theme={theme}>
+        <SegmentedButtons
+          value={value}
+          onValueChange={(newValue) => setValue(newValue)}
+          buttons={[
+            {
+              value: "historico",
+              label: "Histórico",
+              style: estilos.buttonStyle,
+              checkedColor: "white",
+              uncheckedColor: "#C8C8C8",
+            },
+            {
+              value: "pendentes",
+              label: "Pendentes",
+              style: estilos.buttonStyle,
+              checkedColor: "white",
+              uncheckedColor: "#C8C8C8",
+            },
+          ]}
+        />
+        {value === "historico" && (
+          <>
+            <SegmentedButtons
+              value={histo}
+              onValueChange={setHisto}
+              buttons={[
+                {
+                  value: "sete",
+                  label: "7 dias",
+                  style: estilos.botoesHisto,
+                  checkedColor: "white",
+                  uncheckedColor: "#ff7938",
+                },
+                {
+                  value: "quinze",
+                  label: "15 dias",
+                  style: estilos.botoesHisto,
+                  checkedColor: "white",
+                  uncheckedColor: "#ff7938",
+                },
+                {
+                  value: "personalizado",
+                  label: "Personalizado",
+                  style: estilos.botoesHisto,
+                  checkedColor: "white",
+                  uncheckedColor: "#ff7938",
+                  disabled: true,
+                },
+              ]}
+            />
+            {histo === "sete" && (
+              <ScrollView style={estilos.scrollView}>
+                <View style={estilos.informacoes}>
+                  {registros.length > 0 ? (
+                    registros.map((item) => (
+                      <Card key={item.id} style={estilos.card}>
+                        <Card.Content>
+                          <Text variant="titleLarge">
+                            Tipo: {item.tipo_registro}
+                          </Text>
+                          <Text variant="bodyMedium">
+                            Data e Hora:{" "}
+                            {new Date(item.data_hora).toLocaleString()}
+                          </Text>
+                          <Text variant="bodyMedium">
+                            Localização: {item.localizacao}
+                          </Text>
+                        </Card.Content>
+                      </Card>
+                    ))
+                  ) : (
+                    <Text style={estilos.noDataText}>
+                      Nenhum registro encontrado.
                     </Text>
-                    <FlatList
-                      data={registros}
-                      keyExtractor={(item) => item.id.toString()}
-                      renderItem={({ item }) => (
-                        <Card style={estilos.card}>
-                          <Card.Content>
-                            <Text variant="titleLarge">
-                              Tipo: {item.tipo_registro}
-                            </Text>
-                            <Text variant="bodyMedium">
-                              Data e Hora:{" "}
-                              {new Date(item.data_hora).toLocaleString()}
-                            </Text>
-                            <Text variant="bodyMedium">
-                              Localização: {item.localizacao}
-                            </Text>
-                          </Card.Content>
-                        </Card>
-                      )}
-                    />
-                  </View>
-                )}
-                {histo === "quinze" && (
-                  <View style={estilos.informacoes}>
-                    <Text>Informações dos últimos 15 dias</Text>
-                  </View>
-                )}
-                {histo === "personalizado" && (
-                  <View style={estilos.informacoes}>
-                    <Text>Informações personalizadas</Text>
-                  </View>
-                )}
-              </SafeAreaView>
-            </View>
-          )}
+                  )}
+                </View>
+              </ScrollView>
+            )}
+            {histo === "quinze" && (
+              <View style={estilos.informacoes}>
+                <Text>Informações dos últimos 15 dias</Text>
+              </View>
+            )}
+            {histo === "personalizado" && (
+              <View style={estilos.informacoes}>
+                <Text>Informações personalizadas</Text>
+              </View>
+            )}
+          </>
+        )}
 
-          {value === "pendentes" && (
-            <View style={estilos.informacoes}>
-              <Text>Informações Pendentes</Text>
-            </View>
-          )}
-        </PaperProvider>
-      </SafeAreaView>
-    </>
+        {value === "pendentes" && (
+          <View style={estilos.informacoes}>
+            <Text>Informações Pendentes</Text>
+          </View>
+        )}
+      </PaperProvider>
+    </SafeAreaView>
   );
 }
 
@@ -336,6 +330,7 @@ const estilos = StyleSheet.create({
     borderRadius: 0,
     borderWidth: 1,
     borderColor: "white",
+    paddingBottom: 7,
   },
   avatarContainer: {
     width: 42,
@@ -351,12 +346,17 @@ const estilos = StyleSheet.create({
     borderColor: "white",
   },
   informacoes: {
-    padding: 10,
+    padding: 13,
   },
   botoesHisto: {
-    margin: 5,
+    borderColor: "#ff7938",
+    borderBottomWidth: 3,
   },
   card: {
     margin: 5,
+    borderRadius: 30,
+  },
+  scrollView: {
+    flex: 1,
   },
 });

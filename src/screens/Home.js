@@ -31,6 +31,10 @@ export default function Home({ navigation }) {
   const [endereco, setEndereco] = useState("");
   const [usuario, setUsuario] = useState(null);
   const [registros, setRegistros] = useState([]);
+  const [registroEntradaHoje, setRegistroEntradaHoje] = useState("");
+  const [registroIntervaloHoje, setRegistroIntervaloHoje] = useState("");
+  const [registroFimIntervaloHoje, setRegistroFimIntervaloHoje] = useState("");
+  const [registroSaidaHoje, setRegistroSaidaHoje] = useState("");
 
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const handleClose = () => setShowActionsheet(!showActionsheet);
@@ -127,6 +131,48 @@ export default function Home({ navigation }) {
             return currentTime - registroTime < 23 * 60 * 60 * 1000;
           });
           setRegistros(registrosValidos);
+
+          const hoje = new Date().toISOString().split("T")[0];
+
+          // Função Entrada
+          const entradaHoje = registrosValidos.find(
+            (registro) =>
+              registro.tipo_registro === "entrada" &&
+              registro.data_hora.startsWith(hoje)
+          );
+          setRegistroEntradaHoje(
+            entradaHoje ? entradaHoje.data_hora.split(" ")[1] : ""
+          );
+
+          // Função Intervalo
+          const intervaloHoje = registrosValidos.find(
+            (registro) =>
+              registro.tipo_registro === "intervalo" &&
+              registro.data_hora.startsWith(hoje)
+          );
+          setRegistroIntervaloHoje(
+            intervaloHoje ? intervaloHoje.data_hora.split(" ")[1] : ""
+          );
+
+          // Função Fim Intervalo
+          const fimIntervaloHoje = registrosValidos.find(
+            (registro) =>
+              registro.tipo_registro === "fim_intervalo" &&
+              registro.data_hora.startsWith(hoje)
+          );
+          setRegistroFimIntervaloHoje(
+            fimIntervaloHoje ? fimIntervaloHoje.data_hora.split(" ")[1] : ""
+          );
+
+          // Função Saida
+          const saidaHoje = registrosValidos.find(
+            (registro) =>
+              registro.tipo_registro === "fim_intervalo" &&
+              registro.data_hora.startsWith(hoje)
+          );
+          setRegistroSaidaHoje(
+            saidaHoje ? saidaHoje.data_hora.split(" ")[1] : ""
+          );
         }
       } catch (error) {
         console.log("Erro ao carregar registros:", error);
@@ -210,6 +256,7 @@ export default function Home({ navigation }) {
             data_hora: dataLocal,
           };
           setRegistros((prevRegistros) => [...prevRegistros, novoRegistro]);
+          setRegistroEntradaHoje(horaAtual);
         }
       } else if (!intervalo) {
         // Marcar ponto de intervalo
@@ -252,17 +299,17 @@ export default function Home({ navigation }) {
                       ...prevRegistros,
                       novoRegistro,
                     ]);
+                    setRegistroIntervaloHoje(horaAtual);
                   }
                 } catch (error) {
-                  if (error.response.status === 400) {
-                    Alert.alert("Erro", error.response.data.message);
-                  } else {
+                  if (error.response) {
                     Alert.alert(
                       "Erro",
-                      "Não foi possível marcar o intervalo. Tente novamente."
+                      `Erro ao marcar ponto de intervalo: ${error.response.data.message}`
                     );
+                  } else {
+                    console.log("Erro ao marcar ponto de intervalo:", error);
                   }
-                  console.error(error);
                 }
               },
             },
@@ -272,7 +319,7 @@ export default function Home({ navigation }) {
         // Marcar fim do intervalo
         Alert.alert(
           "Confirmação",
-          "Tem certeza que deseja finalizar o intervalo?",
+          "Tem certeza que deseja marcar o fim do intervalo?",
           [
             {
               text: "Cancelar",
@@ -287,7 +334,7 @@ export default function Home({ navigation }) {
                     "http://192.168.15.11:8080/registros",
                     {
                       usuario_id: usuario.id,
-                      tipo_registro: "fim intervalo",
+                      tipo_registro: "fim_intervalo",
                       data_hora: dataLocal,
                       localizacao: endereco,
                     }
@@ -296,30 +343,33 @@ export default function Home({ navigation }) {
                   if (response.status === 201) {
                     Alert.alert(
                       "Registro",
-                      `Fim do intervalo marcado com sucesso: ${horaAtual}`
+                      `Fim de intervalo marcado com sucesso: ${horaAtual}`
                     );
                     setFimIntervalo(horaAtual);
 
                     // Adiciona o novo registro
                     const novoRegistro = {
-                      tipo_registro: "fim intervalo",
+                      tipo_registro: "fim_intervalo",
                       data_hora: dataLocal,
                     };
                     setRegistros((prevRegistros) => [
                       ...prevRegistros,
                       novoRegistro,
                     ]);
+                    setRegistroFimIntervaloHoje(horaAtual);
                   }
                 } catch (error) {
-                  if (error.response.status === 400) {
-                    Alert.alert("Erro", error.response.data.message);
-                  } else {
+                  if (error.response) {
                     Alert.alert(
                       "Erro",
-                      "Não foi possível finalizar o intervalo. Tente novamente."
+                      `Erro ao marcar ponto de fim de intervalo: ${error.response.data.message}`
+                    );
+                  } else {
+                    console.log(
+                      "Erro ao marcar ponto de fim de intervalo:",
+                      error
                     );
                   }
-                  console.error(error);
                 }
               },
             },
@@ -327,61 +377,73 @@ export default function Home({ navigation }) {
         );
       } else if (!saida) {
         // Marcar ponto de saída
-        Alert.alert("Confirmação", "Tem certeza que deseja marcar a saída?", [
-          {
-            text: "Cancelar",
-            onPress: () => console.log("Cancelado"),
-            style: "cancel",
-          },
-          {
-            text: "Confirmar",
-            onPress: async () => {
-              try {
-                const response = await axios.post(
-                  "http://192.168.15.11:8080/registros",
-                  {
-                    usuario_id: usuario.id,
-                    tipo_registro: "saida",
-                    data_hora: dataLocal,
-                    localizacao: endereco,
-                  }
-                );
-
-                if (response.status === 201) {
-                  Alert.alert(
-                    "Registro",
-                    `Ponto de saída marcado com sucesso: ${horaAtual}`
-                  );
-                  setSaida(horaAtual);
-
-                  // Adiciona o novo registro
-                  const novoRegistro = {
-                    tipo_registro: "saida",
-                    data_hora: dataLocal,
-                  };
-                  setRegistros((prevRegistros) => [
-                    ...prevRegistros,
-                    novoRegistro,
-                  ]);
-                }
-              } catch (error) {
-                if (error.response.status === 400) {
-                  Alert.alert("Erro", error.response.data.message);
-                } else {
-                  Alert.alert(
-                    "Erro",
-                    "Não foi possível marcar a saída. Tente novamente."
-                  );
-                }
-                console.error(error);
-              }
+        Alert.alert(
+          "Confirmação",
+          "Tem certeza que deseja marcar o ponto de saída?",
+          [
+            {
+              text: "Cancelar",
+              onPress: () => console.log("Cancelado"),
+              style: "cancel",
             },
-          },
-        ]);
+            {
+              text: "Confirmar",
+              onPress: async () => {
+                try {
+                  const response = await axios.post(
+                    "http://192.168.15.11:8080/registros",
+                    {
+                      usuario_id: usuario.id,
+                      tipo_registro: "saida",
+                      data_hora: dataLocal,
+                      localizacao: endereco,
+                    }
+                  );
+
+                  if (response.status === 201) {
+                    Alert.alert(
+                      "Registro",
+                      `Ponto de saída marcado com sucesso: ${horaAtual}`
+                    );
+                    setSaida(horaAtual);
+
+                    // Adiciona o novo registro
+                    const novoRegistro = {
+                      tipo_registro: "saida",
+                      data_hora: dataLocal,
+                    };
+                    setRegistros((prevRegistros) => [
+                      ...prevRegistros,
+                      novoRegistro,
+                    ]);
+                    setRegistroSaidaHoje(horaAtual);
+                  }
+                } catch (error) {
+                  if (error.response) {
+                    Alert.alert(
+                      "Erro",
+                      `Erro ao marcar ponto de saída: ${error.response.data.message}`
+                    );
+                  } else {
+                    console.log("Erro ao marcar ponto de saída:", error);
+                  }
+                }
+              },
+            },
+          ]
+        );
+      } else {
+        Alert.alert("Registro", "Todos os pontos já foram marcados hoje.");
       }
     } catch (error) {
-      console.error(error);
-      Alert.alert("Erro", "Não foi possível marcar o ponto. Tente novamente.");
+      if (error.response) {
+        Alert.alert(
+          "Erro",
+          `Erro ao marcar ponto: ${error.response.data.message}`
+        );
+      } else {
+        console.log("Erro ao marcar ponto:", error);
+      }
     }
   };
 
@@ -558,6 +620,7 @@ export default function Home({ navigation }) {
                       </Text>
                       <Text style={estilos.textoRegistros}>
                         {dataFormatada}
+                        {registroEntradaHoje}
                       </Text>
                     </View>
 
@@ -572,7 +635,10 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         2º Registro - Intervalo
                       </Text>
-                      <Text style={estilos.textoRegistros}>{intervalo}</Text>
+                      <Text style={estilos.textoRegistros}>
+                        {intervalo}
+                        {registroIntervaloHoje}
+                      </Text>
                     </View>
 
                     <Divider
@@ -586,7 +652,10 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         3º Registro - Fim do Intervalo
                       </Text>
-                      <Text style={estilos.textoRegistros}>{fimIntervalo}</Text>
+                      <Text style={estilos.textoRegistros}>
+                        {fimIntervalo}
+                        {registroFimIntervaloHoje}
+                      </Text>
                     </View>
 
                     <Divider
@@ -600,7 +669,10 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         4º Registro - Saída
                       </Text>
-                      <Text style={estilos.textoRegistros}>{saida}</Text>
+                      <Text style={estilos.textoRegistros}>
+                        {saida}
+                        {registroSaidaHoje}
+                      </Text>
                     </View>
                   </View>
                 </View>

@@ -31,11 +31,6 @@ export default function Home({ navigation }) {
   const [saida, setSaida] = useState("");
   const [endereco, setEndereco] = useState("");
   const [usuario, setUsuario] = useState(null);
-  const [registros, setRegistros] = useState([]);
-  const [registroEntradaHoje, setRegistroEntradaHoje] = useState("");
-  const [registroIntervaloHoje, setRegistroIntervaloHoje] = useState("");
-  const [registroFimIntervaloHoje, setRegistroFimIntervaloHoje] = useState("");
-  const [registroSaidaHoje, setRegistroSaidaHoje] = useState("");
 
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const handleClose = () => setShowActionsheet(!showActionsheet);
@@ -126,81 +121,6 @@ export default function Home({ navigation }) {
     obterUsuario();
   }, []);
 
-  // Função Registros
-  useEffect(() => {
-    const loadRegistros = async () => {
-      try {
-        const registrosJSON = await AsyncStorage.getItem("registros");
-        if (registrosJSON) {
-          const registrosData = JSON.parse(registrosJSON);
-          const registrosValidos = registrosData.filter((registro) => {
-            const registroTime = new Date(registro.data_hora).getTime();
-            const currentTime = new Date().getTime();
-            return currentTime - registroTime < 23 * 60 * 60 * 1000;
-          });
-          setRegistros(registrosValidos);
-
-          const hoje = new Date().toISOString().split("T")[0];
-
-          // Função Entrada
-          const entradaHoje = registrosValidos.find(
-            (registro) =>
-              registro.tipo_registro === "entrada" &&
-              registro.data_hora.startsWith(hoje)
-          );
-          setRegistroEntradaHoje(
-            entradaHoje ? entradaHoje.data_hora.split(" ")[1] : ""
-          );
-
-          // Função Intervalo
-          const intervaloHoje = registrosValidos.find(
-            (registro) =>
-              registro.tipo_registro === "intervalo" &&
-              registro.data_hora.startsWith(hoje)
-          );
-          setRegistroIntervaloHoje(
-            intervaloHoje ? intervaloHoje.data_hora.split(" ")[1] : ""
-          );
-
-          // Função Fim Intervalo
-          const fimIntervaloHoje = registrosValidos.find(
-            (registro) =>
-              registro.tipo_registro === "fim_intervalo" &&
-              registro.data_hora.startsWith(hoje)
-          );
-          setRegistroFimIntervaloHoje(
-            fimIntervaloHoje ? fimIntervaloHoje.data_hora.split(" ")[1] : ""
-          );
-
-          // Função Saida
-          const saidaHoje = registrosValidos.find(
-            (registro) =>
-              registro.tipo_registro === "fim_intervalo" &&
-              registro.data_hora.startsWith(hoje)
-          );
-          setRegistroSaidaHoje(
-            saidaHoje ? saidaHoje.data_hora.split(" ")[1] : ""
-          );
-        }
-      } catch (error) {
-        console.log("Erro ao carregar registros:", error);
-      }
-    };
-    loadRegistros();
-  }, []);
-
-  // Função salavRegistros
-  useEffect(() => {
-    const saveRegistros = async () => {
-      try {
-        await AsyncStorage.setItem("registros", JSON.stringify(registros));
-      } catch (error) {
-        console.log("Erro ao salvar registros:", error);
-      }
-    };
-    saveRegistros();
-  }, [registros]);
-
   const [localizacao, setLocalizacao] = useState(null);
 
   // Função Mapa
@@ -263,8 +183,6 @@ export default function Home({ navigation }) {
             tipo_registro: "entrada",
             data_hora: dataLocal,
           };
-          setRegistros((prevRegistros) => [...prevRegistros, novoRegistro]);
-          setRegistroEntradaHoje(horaAtual);
         }
       } else if (!intervalo) {
         // Marcar ponto de intervalo
@@ -303,11 +221,6 @@ export default function Home({ navigation }) {
                       tipo_registro: "intervalo",
                       data_hora: dataLocal,
                     };
-                    setRegistros((prevRegistros) => [
-                      ...prevRegistros,
-                      novoRegistro,
-                    ]);
-                    setRegistroIntervaloHoje(horaAtual);
                   }
                 } catch (error) {
                   if (error.response) {
@@ -360,11 +273,6 @@ export default function Home({ navigation }) {
                       tipo_registro: "fim_intervalo",
                       data_hora: dataLocal,
                     };
-                    setRegistros((prevRegistros) => [
-                      ...prevRegistros,
-                      novoRegistro,
-                    ]);
-                    setRegistroFimIntervaloHoje(horaAtual);
                   }
                 } catch (error) {
                   if (error.response) {
@@ -420,11 +328,6 @@ export default function Home({ navigation }) {
                       tipo_registro: "saida",
                       data_hora: dataLocal,
                     };
-                    setRegistros((prevRegistros) => [
-                      ...prevRegistros,
-                      novoRegistro,
-                    ]);
-                    setRegistroSaidaHoje(horaAtual);
                   }
                 } catch (error) {
                   if (error.response) {
@@ -636,7 +539,6 @@ export default function Home({ navigation }) {
                       </Text>
                       <Text style={estilos.textoRegistros}>
                         {dataFormatada}
-                        {registroEntradaHoje}
                       </Text>
                     </View>
 
@@ -651,10 +553,7 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         2º Registro - Intervalo
                       </Text>
-                      <Text style={estilos.textoRegistros}>
-                        {intervalo}
-                        {registroIntervaloHoje}
-                      </Text>
+                      <Text style={estilos.textoRegistros}>{intervalo}</Text>
                     </View>
 
                     <Divider
@@ -668,10 +567,7 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         3º Registro - Fim do Intervalo
                       </Text>
-                      <Text style={estilos.textoRegistros}>
-                        {fimIntervalo}
-                        {registroFimIntervaloHoje}
-                      </Text>
+                      <Text style={estilos.textoRegistros}>{fimIntervalo}</Text>
                     </View>
 
                     <Divider
@@ -685,10 +581,7 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         4º Registro - Saída
                       </Text>
-                      <Text style={estilos.textoRegistros}>
-                        {saida}
-                        {registroSaidaHoje}
-                      </Text>
+                      <Text style={estilos.textoRegistros}>{saida}</Text>
                     </View>
                   </View>
                 </View>

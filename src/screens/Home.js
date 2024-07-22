@@ -719,6 +719,7 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    marginTop: 13,
   },
   viewMenu: {
     padding: 20,

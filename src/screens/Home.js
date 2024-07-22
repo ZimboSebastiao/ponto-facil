@@ -158,199 +158,217 @@ export default function Home({ navigation }) {
     }
 
     try {
-      if (!dataFormatada) {
-        // Marcar ponto de entrada
-        const response = await axios.post(
-          "http://192.168.15.11:8080/registros",
-          {
-            usuario_id: usuario.id,
-            tipo_registro: "entrada",
-            data_hora: dataLocal,
-            localizacao: endereco,
+      // Recupera o token do AsyncStorage
+      const token = await AsyncStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token não encontrado!");
+        return;
+      }
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      // Obter registros do dia atual
+      const response = await axios.get(
+        "http://192.168.15.11:8080/registros-dia-atual",
+        config
+      );
+
+      if (response.status === 200) {
+        const dados = response.data;
+        const registrosDiaAtual = {
+          entrada:
+            dados.find((reg) => reg.tipo_registro === "entrada")?.data_hora ||
+            null,
+          intervalo:
+            dados.find((reg) => reg.tipo_registro === "intervalo")?.data_hora ||
+            null,
+          fimIntervalo:
+            dados.find((reg) => reg.tipo_registro === "fim_intervalo")
+              ?.data_hora || null,
+          saida:
+            dados.find((reg) => reg.tipo_registro === "saida")?.data_hora ||
+            null,
+        };
+
+        if (!registrosDiaAtual.entrada) {
+          // Marcar ponto de entrada
+          const response = await axios.post(
+            "http://192.168.15.11:8080/registros",
+            {
+              usuario_id: usuario.id,
+              tipo_registro: "entrada",
+              data_hora: dataLocal,
+              localizacao: endereco,
+            },
+            config
+          );
+
+          if (response.status === 201) {
+            Alert.alert(
+              "Registro",
+              `Ponto de entrada marcado com sucesso: ${horaAtual}`
+            );
+            setDataFormatada(horaAtual);
+            setData(
+              `${agora.getDate().toString().padStart(2, "0")}/${(
+                agora.getMonth() + 1
+              )
+                .toString()
+                .padStart(2, "0")}/${agora.getFullYear()}`
+            );
           }
-        );
-
-        if (response.status === 201) {
+        } else if (!registrosDiaAtual.intervalo) {
+          // Marcar ponto de intervalo
           Alert.alert(
-            "Registro",
-            `Ponto de entrada marcado com sucesso: ${horaAtual}`
-          );
-          setDataFormatada(horaAtual);
-          setData(
-            `${agora.getDate().toString().padStart(2, "0")}/${(
-              agora.getMonth() + 1
-            )
-              .toString()
-              .padStart(2, "0")}/${agora.getFullYear()}`
-          );
+            "Confirmação",
+            "Tem certeza que deseja marcar o intervalo?",
+            [
+              {
+                text: "Cancelar",
+                onPress: () => console.log("Cancelado"),
+                style: "cancel",
+              },
+              {
+                text: "Confirmar",
+                onPress: async () => {
+                  try {
+                    const response = await axios.post(
+                      "http://192.168.15.11:8080/registros",
+                      {
+                        usuario_id: usuario.id,
+                        tipo_registro: "intervalo",
+                        data_hora: dataLocal,
+                        localizacao: endereco,
+                      },
+                      config
+                    );
 
-          // Adiciona o novo registro
-          const novoRegistro = {
-            tipo_registro: "entrada",
-            data_hora: dataLocal,
-          };
+                    if (response.status === 201) {
+                      Alert.alert(
+                        "Registro",
+                        `Intervalo marcado com sucesso: ${horaAtual}`
+                      );
+                      setIntervalo(horaAtual);
+                    }
+                  } catch (error) {
+                    if (error.response) {
+                      Alert.alert(
+                        "Erro",
+                        `Erro ao marcar ponto de intervalo: ${error.response.data.message}`
+                      );
+                    } else {
+                      console.log("Erro ao marcar ponto de intervalo:", error);
+                    }
+                  }
+                },
+              },
+            ]
+          );
+        } else if (!registrosDiaAtual.fimIntervalo) {
+          // Marcar fim do intervalo
+          Alert.alert(
+            "Confirmação",
+            "Tem certeza que deseja marcar o fim do intervalo?",
+            [
+              {
+                text: "Cancelar",
+                onPress: () => console.log("Cancelado"),
+                style: "cancel",
+              },
+              {
+                text: "Confirmar",
+                onPress: async () => {
+                  try {
+                    const response = await axios.post(
+                      "http://192.168.15.11:8080/registros",
+                      {
+                        usuario_id: usuario.id,
+                        tipo_registro: "fim_intervalo",
+                        data_hora: dataLocal,
+                        localizacao: endereco,
+                      },
+                      config
+                    );
+
+                    if (response.status === 201) {
+                      Alert.alert(
+                        "Registro",
+                        `Fim de intervalo marcado com sucesso: ${horaAtual}`
+                      );
+                      setFimIntervalo(horaAtual);
+                    }
+                  } catch (error) {
+                    if (error.response) {
+                      Alert.alert(
+                        "Erro",
+                        `Erro ao marcar ponto de fim de intervalo: ${error.response.data.message}`
+                      );
+                    } else {
+                      console.log(
+                        "Erro ao marcar ponto de fim de intervalo:",
+                        error
+                      );
+                    }
+                  }
+                },
+              },
+            ]
+          );
+        } else if (!registrosDiaAtual.saida) {
+          // Marcar ponto de saída
+          Alert.alert(
+            "Confirmação",
+            "Tem certeza que deseja marcar o ponto de saída?",
+            [
+              {
+                text: "Cancelar",
+                onPress: () => console.log("Cancelado"),
+                style: "cancel",
+              },
+              {
+                text: "Confirmar",
+                onPress: async () => {
+                  try {
+                    const response = await axios.post(
+                      "http://192.168.15.11:8080/registros",
+                      {
+                        usuario_id: usuario.id,
+                        tipo_registro: "saida",
+                        data_hora: dataLocal,
+                        localizacao: endereco,
+                      },
+                      config
+                    );
+
+                    if (response.status === 201) {
+                      Alert.alert(
+                        "Registro",
+                        `Ponto de saída marcado com sucesso: ${horaAtual}`
+                      );
+                      setSaida(horaAtual);
+                    }
+                  } catch (error) {
+                    if (error.response) {
+                      Alert.alert(
+                        "Erro",
+                        `Erro ao marcar ponto de saída: ${error.response.data.message}`
+                      );
+                    } else {
+                      console.log("Erro ao marcar ponto de saída:", error);
+                    }
+                  }
+                },
+              },
+            ]
+          );
+        } else {
+          Alert.alert("Registro", "Todos os pontos já foram marcados hoje.");
         }
-      } else if (!intervalo) {
-        // Marcar ponto de intervalo
-        Alert.alert(
-          "Confirmação",
-          "Tem certeza que deseja marcar o intervalo?",
-          [
-            {
-              text: "Cancelar",
-              onPress: () => console.log("Cancelado"),
-              style: "cancel",
-            },
-            {
-              text: "Confirmar",
-              onPress: async () => {
-                try {
-                  const response = await axios.post(
-                    "http://192.168.15.11:8080/registros",
-                    {
-                      usuario_id: usuario.id,
-                      tipo_registro: "intervalo",
-                      data_hora: dataLocal,
-                      localizacao: endereco,
-                    }
-                  );
-
-                  if (response.status === 201) {
-                    Alert.alert(
-                      "Registro",
-                      `Intervalo marcado com sucesso: ${horaAtual}`
-                    );
-                    setIntervalo(horaAtual);
-
-                    // Adiciona o novo registro
-                    const novoRegistro = {
-                      tipo_registro: "intervalo",
-                      data_hora: dataLocal,
-                    };
-                  }
-                } catch (error) {
-                  if (error.response) {
-                    Alert.alert(
-                      "Erro",
-                      `Erro ao marcar ponto de intervalo: ${error.response.data.message}`
-                    );
-                  } else {
-                    console.log("Erro ao marcar ponto de intervalo:", error);
-                  }
-                }
-              },
-            },
-          ]
-        );
-      } else if (!fimIntervalo) {
-        // Marcar fim do intervalo
-        Alert.alert(
-          "Confirmação",
-          "Tem certeza que deseja marcar o fim do intervalo?",
-          [
-            {
-              text: "Cancelar",
-              onPress: () => console.log("Cancelado"),
-              style: "cancel",
-            },
-            {
-              text: "Confirmar",
-              onPress: async () => {
-                try {
-                  const response = await axios.post(
-                    "http://192.168.15.11:8080/registros",
-                    {
-                      usuario_id: usuario.id,
-                      tipo_registro: "fim_intervalo",
-                      data_hora: dataLocal,
-                      localizacao: endereco,
-                    }
-                  );
-
-                  if (response.status === 201) {
-                    Alert.alert(
-                      "Registro",
-                      `Fim de intervalo marcado com sucesso: ${horaAtual}`
-                    );
-                    setFimIntervalo(horaAtual);
-
-                    // Adiciona o novo registro
-                    const novoRegistro = {
-                      tipo_registro: "fim_intervalo",
-                      data_hora: dataLocal,
-                    };
-                  }
-                } catch (error) {
-                  if (error.response) {
-                    Alert.alert(
-                      "Erro",
-                      `Erro ao marcar ponto de fim de intervalo: ${error.response.data.message}`
-                    );
-                  } else {
-                    console.log(
-                      "Erro ao marcar ponto de fim de intervalo:",
-                      error
-                    );
-                  }
-                }
-              },
-            },
-          ]
-        );
-      } else if (!saida) {
-        // Marcar ponto de saída
-        Alert.alert(
-          "Confirmação",
-          "Tem certeza que deseja marcar o ponto de saída?",
-          [
-            {
-              text: "Cancelar",
-              onPress: () => console.log("Cancelado"),
-              style: "cancel",
-            },
-            {
-              text: "Confirmar",
-              onPress: async () => {
-                try {
-                  const response = await axios.post(
-                    "http://192.168.15.11:8080/registros",
-                    {
-                      usuario_id: usuario.id,
-                      tipo_registro: "saida",
-                      data_hora: dataLocal,
-                      localizacao: endereco,
-                    }
-                  );
-
-                  if (response.status === 201) {
-                    Alert.alert(
-                      "Registro",
-                      `Ponto de saída marcado com sucesso: ${horaAtual}`
-                    );
-                    setSaida(horaAtual);
-
-                    // Adiciona o novo registro
-                    const novoRegistro = {
-                      tipo_registro: "saida",
-                      data_hora: dataLocal,
-                    };
-                  }
-                } catch (error) {
-                  if (error.response) {
-                    Alert.alert(
-                      "Erro",
-                      `Erro ao marcar ponto de saída: ${error.response.data.message}`
-                    );
-                  } else {
-                    console.log("Erro ao marcar ponto de saída:", error);
-                  }
-                }
-              },
-            },
-          ]
-        );
-      } else {
-        Alert.alert("Registro", "Todos os pontos já foram marcados hoje.");
       }
     } catch (error) {
       if (error.response) {
@@ -447,7 +465,7 @@ export default function Home({ navigation }) {
 
   // Função para formatar a data r
   const formatarHora = (dataHora) => {
-    if (!dataHora) return "Não disponível";
+    if (!dataHora) return " ";
     return new Date(dataHora).toLocaleTimeString("pt-BR", {
       hour: "2-digit",
       minute: "2-digit",
@@ -609,8 +627,7 @@ export default function Home({ navigation }) {
                         1º Registro - Entrada
                       </Text>
                       <Text style={estilos.textoRegistros}>
-                        {dataFormatada}
-                        {registros.entrada || "Não disponível"}
+                        {registros.entrada || " "}
                       </Text>
                     </View>
 
@@ -625,7 +642,9 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         2º Registro - Intervalo
                       </Text>
-                      <Text style={estilos.textoRegistros}>{intervalo}</Text>
+                      <Text style={estilos.textoRegistros}>
+                        {registros.intervalo || " "}
+                      </Text>
                     </View>
 
                     <Divider
@@ -639,7 +658,9 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         3º Registro - Fim do Intervalo
                       </Text>
-                      <Text style={estilos.textoRegistros}>{fimIntervalo}</Text>
+                      <Text style={estilos.textoRegistros}>
+                        {registros.fimIntervalo || " "}
+                      </Text>
                     </View>
 
                     <Divider
@@ -653,7 +674,9 @@ export default function Home({ navigation }) {
                       <Text style={estilos.texto} variant="titleMedium">
                         4º Registro - Saída
                       </Text>
-                      <Text style={estilos.textoRegistros}>{saida}</Text>
+                      <Text style={estilos.textoRegistros}>
+                        {registros.saida || " "}
+                      </Text>
                     </View>
                   </View>
                 </View>

@@ -3,7 +3,6 @@ import { useRef, useEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
-  StatusBar,
   StyleSheet,
   View,
   Text,
@@ -41,7 +40,7 @@ export default function Home({ navigation }) {
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const handleClose = () => setShowActionsheet(!showActionsheet);
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
   // Função Localização
   useEffect(() => {
@@ -51,6 +50,7 @@ export default function Home({ navigation }) {
 
       if (status !== "granted") {
         Alert.alert("Ops!", "Você não autorizou o uso de geolocalização");
+        setLoading(false);
         return;
       }
 
@@ -103,6 +103,7 @@ export default function Home({ navigation }) {
         }, ${numero} ${cidade} - ${estado} - CEP: ${cep}`;
       }
       setEndereco(enderecoFormatado);
+      setLoading(false);
     }
     obterLocalizacao();
   }, []);
@@ -110,6 +111,7 @@ export default function Home({ navigation }) {
   // Função ObterUsuario
   useEffect(() => {
     const obterUsuario = async () => {
+      setLoading(true);
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
@@ -118,6 +120,7 @@ export default function Home({ navigation }) {
       } else {
         console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
+      setLoading(false);
     };
 
     obterUsuario();
@@ -533,6 +536,14 @@ export default function Home({ navigation }) {
     loadProfileImageUri();
   }, []);
 
+  if (loading) {
+    return (
+      <View style={estilos.loadingContainer}>
+        <ActivityIndicator size="large" color="#ff7938" />
+      </View>
+    );
+  }
+
   return (
     <>
       <ScrollView style={estilos.container}>
@@ -710,6 +721,11 @@ export default function Home({ navigation }) {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
   menu: {
     flexDirection: "row",

@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 
 import { Avatar } from "react-native-paper";
 import * as ImagePicker from "expo-image-picker";
@@ -8,6 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function UsuarioAvatar() {
   const [usuario, setUsuario] = useState(null);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -60,10 +61,19 @@ export default function UsuarioAvatar() {
       if (usuarioJSON) {
         setUsuario(JSON.parse(usuarioJSON));
       }
+      setLoading(false);
     };
 
     obterUsuario();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={estilos.loadingContainer}>
+        <ActivityIndicator size="large" color="#ff7938" />
+      </View>
+    );
+  }
 
   return (
     <View style={estilos.container}>
@@ -121,5 +131,10 @@ const estilos = StyleSheet.create({
     color: "#4a4848",
     fontWeight: "bold",
     fontSize: 14,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

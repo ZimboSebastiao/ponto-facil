@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
-  StatusBar,
+  ActivityIndicator,
   StyleSheet,
   View,
   SafeAreaView,
@@ -103,6 +103,7 @@ export default function Relatorio({ navigation }) {
   const [value, setValue] = useState("historico");
   const [histo, setHisto] = useState("sete");
   const [registros, setRegistros] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Função para selecionar a imagem
   const pickImage = async () => {
@@ -149,11 +150,13 @@ export default function Relatorio({ navigation }) {
   // Obter dados do usuário
   useEffect(() => {
     const obterUsuario = async () => {
+      setLoading(true);
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
         setUsuario(usuarioData);
       }
+      setLoading(false);
     };
 
     obterUsuario();
@@ -186,6 +189,14 @@ export default function Relatorio({ navigation }) {
       secondaryContainer: "rgba(255, 121, 56, 0.8)",
     },
   };
+
+  if (loading) {
+    return (
+      <View style={estilos.loadingContainer}>
+        <ActivityIndicator size="large" color="#ff7938" />
+      </View>
+    );
+  }
 
   return (
     <SafeAreaView style={estilos.container}>
@@ -330,6 +341,12 @@ const estilos = StyleSheet.create({
   container: {
     flex: 1,
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   menu: {
     flexDirection: "row",
     justifyContent: "space-between",

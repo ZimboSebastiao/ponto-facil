@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
 import {
-  StatusBar,
+  ActivityIndicator,
   StyleSheet,
   View,
   TouchableOpacity,
@@ -16,6 +16,7 @@ import { CheckAuth } from "../components/CheckAuth";
 export default function Perfil({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -65,6 +66,7 @@ export default function Perfil({ navigation }) {
 
   useEffect(() => {
     const obterUsuario = async () => {
+      setLoading(true);
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
@@ -73,10 +75,19 @@ export default function Perfil({ navigation }) {
       } else {
         console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
+      setLoading(false);
     };
 
     obterUsuario();
   }, []);
+
+  if (loading) {
+    return (
+      <View style={estilos.loadingContainer}>
+        <ActivityIndicator size="large" color="#ff7938" />
+      </View>
+    );
+  }
 
   return (
     <>
@@ -339,5 +350,10 @@ const estilos = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

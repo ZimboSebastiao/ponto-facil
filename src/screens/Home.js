@@ -34,6 +34,12 @@ export default function Home({ navigation }) {
 
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const handleClose = () => setShowActionsheet(!showActionsheet);
+  const [registros, setRegistros] = useState({
+    entrada: null,
+    intervalo: null,
+    fimIntervalo: null,
+    saida: null,
+  });
 
   const [loading, setLoading] = useState(true);
 
@@ -439,6 +445,71 @@ export default function Home({ navigation }) {
     loadProfileImageUri();
   }, []);
 
+  // Função para formatar a data r
+  const formatarHora = (dataHora) => {
+    if (!dataHora) return "Não disponível";
+    return new Date(dataHora).toLocaleTimeString("pt-BR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    });
+  };
+
+  // Função para obter registro do dia atual
+  const obterRegistrosDiaAtual = async () => {
+    try {
+      // Recupera o token do AsyncStorage
+      const token = await AsyncStorage.getItem("token");
+
+      if (!token) {
+        console.error("Token não encontrado!");
+        return;
+      }
+
+      console.log("Token recuperado:", token);
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await axios.get(
+        "http://192.168.15.11:8080/registros-dia-atual",
+        config
+      );
+
+      if (response.status === 200) {
+        const dados = response.data;
+        console.log("Dados recebidos:", dados);
+
+        const novosRegistros = {
+          entrada: formatarHora(
+            dados.find((reg) => reg.tipo_registro === "entrada")?.data_hora
+          ),
+          intervalo: formatarHora(
+            dados.find((reg) => reg.tipo_registro === "intervalo")?.data_hora
+          ),
+          fimIntervalo: formatarHora(
+            dados.find((reg) => reg.tipo_registro === "fim_intervalo")
+              ?.data_hora
+          ),
+          saida: formatarHora(
+            dados.find((reg) => reg.tipo_registro === "saida")?.data_hora
+          ),
+        };
+
+        setRegistros(novosRegistros);
+      }
+    } catch (error) {
+      console.error("Erro ao obter registros do dia atual:", error);
+    }
+  };
+
+  useEffect(() => {
+    obterRegistrosDiaAtual();
+  }, []);
+
   if (loading) {
     return (
       <View style={estilos.loadingContainer}>
@@ -539,6 +610,7 @@ export default function Home({ navigation }) {
                       </Text>
                       <Text style={estilos.textoRegistros}>
                         {dataFormatada}
+                        {registros.entrada || "Não disponível"}
                       </Text>
                     </View>
 

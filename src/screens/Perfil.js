@@ -11,6 +11,7 @@ import { Avatar } from "react-native-paper";
 import { AlignLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { CheckAuth } from "../components/CheckAuth";
 
 export default function Perfil({ navigation }) {
   const [image, setImage] = useState(null);
@@ -47,6 +48,7 @@ export default function Perfil({ navigation }) {
   };
 
   useEffect(() => {
+    CheckAuth(navigation);
     const loadProfileImageUri = async () => {
       try {
         const uri = await AsyncStorage.getItem("profileImageUri");

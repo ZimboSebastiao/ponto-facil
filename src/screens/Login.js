@@ -59,7 +59,8 @@ export default function Login({ navigation }) {
           expirationDate.toISOString()
         );
 
-        navigation.navigate("Home");
+        // navigation.navigate("Home");
+        navigation.navigate("AppDrawer", { screen: "Home" });
       } else {
         Alert.alert("Ops!", "Erro ao realizar login, tente novamente.");
       }

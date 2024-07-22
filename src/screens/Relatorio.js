@@ -18,6 +18,7 @@ import { AlignLeft, Clock, MapPinned } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { CheckAuth } from "../components/CheckAuth";
 
 const API_URL = "http://192.168.15.11:8080";
 
@@ -129,6 +130,8 @@ export default function Relatorio({ navigation }) {
 
   // Carregar a URI da imagem do perfil
   useEffect(() => {
+    CheckAuth(navigation);
+
     const loadProfileImageUri = async () => {
       try {
         const uri = await AsyncStorage.getItem("profileImageUri");

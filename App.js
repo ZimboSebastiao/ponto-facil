@@ -1,7 +1,7 @@
 import "./gesture-handler";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -30,6 +30,52 @@ function CustomDrawerContent(props) {
   );
 }
 
+function AppDrawer() {
+  return (
+    <Drawer.Navigator
+      initialRouteName="Home"
+      screenOptions={{
+        headerStyle: { backgroundColor: "#1D1D1D" },
+        headerTintColor: "white",
+      }}
+      drawerContent={(props) => <CustomDrawerContent {...props} />}
+    >
+      <Drawer.Screen
+        name="Home"
+        component={Home}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <House color="#ff7938" m="$0" w="$8" h="$6" />,
+        }}
+      />
+      <Drawer.Screen
+        name="Relatório"
+        component={Relatorio}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <FileText color="#ff7938" m="$0" w="$8" h="$6" />,
+        }}
+      />
+      <Drawer.Screen
+        name="Perfil"
+        component={Perfil}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,
+        }}
+      />
+      <Drawer.Screen
+        name="Sair"
+        component={Logout}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <LogOut color="#ff7938" m="$0" w="$8" h="$6" />,
+        }}
+      />
+    </Drawer.Navigator>
+  );
+}
+
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -49,57 +95,20 @@ export default function App() {
   return (
     <NavigationContainer>
       <StatusBar style="auto" />
-      <Drawer.Navigator
-        initialRouteName="Home"
-        screenOptions={{
-          headerStyle: { backgroundColor: "#1D1D1D" },
-          headerTintColor: "white",
-        }}
-        drawerContent={(props) => <CustomDrawerContent {...props} />}
-      >
-        <Drawer.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerShown: false,
-            drawerIcon: () => <House color="#ff7938" m="$0" w="$8" h="$6" />,
-          }}
+      <Stack.Navigator>
+        <Stack.Screen
+          name="AppDrawer"
+          component={AppDrawer}
+          options={{ headerShown: false }}
         />
-        <Drawer.Screen
-          name="Relatório"
-          component={Relatorio}
-          options={{
-            headerShown: false,
-            drawerIcon: () => <FileText color="#ff7938" m="$0" w="$8" h="$6" />,
-          }}
-        />
-        <Drawer.Screen
-          name="Perfil"
-          component={Perfil}
-          options={{
-            headerShown: false,
-            drawerIcon: () => (
-              <UserRound color="#ff7938" m="$0" w="$8" h="$6" />
-            ),
-          }}
-        />
-        <Drawer.Screen
-          name="Sair"
-          component={Logout}
-          options={{
-            headerShown: false,
-            drawerIcon: () => <LogOut color="#ff7938" m="$0" w="$8" h="$6" />,
-          }}
-        />
-
-        <Drawer.Screen
-          name="Login"
-          component={Login}
-          options={{
-            headerShown: false,
-          }}
-        />
-      </Drawer.Navigator>
+        {!isAuthenticated && (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }

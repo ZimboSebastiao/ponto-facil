@@ -9,6 +9,7 @@ import {
   Text,
   Pressable,
   SafeAreaView,
+  ActivityIndicator,
 } from "react-native";
 import * as Location from "expo-location";
 import * as Calendar from "expo-calendar";
@@ -17,6 +18,7 @@ import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Circle, AlignLeft, Map, Clock } from "lucide-react-native";
 import axios from "axios";
+import { CheckAuth } from "../components/CheckAuth";
 
 export default function Home({ navigation }) {
   const [minhaLocalizacao, setMinhaLocalizacao] = useState(null);
@@ -39,8 +41,11 @@ export default function Home({ navigation }) {
   const [showActionsheet, setShowActionsheet] = React.useState(false);
   const handleClose = () => setShowActionsheet(!showActionsheet);
 
+  const [isLoading, setIsLoading] = useState(true);
+
   // Função Localização
   useEffect(() => {
+    CheckAuth(navigation);
     async function obterLocalizacao() {
       const { status } = await Location.requestForegroundPermissionsAsync();
 

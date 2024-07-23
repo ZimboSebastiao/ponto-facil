@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   Text,
 } from "react-native";
-import { Avatar } from "react-native-paper";
-import { AlignLeft } from "lucide-react-native";
+import { Avatar, List } from "react-native-paper";
+import { AlignLeft, Group } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -93,62 +93,78 @@ export default function Perfil({ navigation }) {
     <>
       <View style={estilos.container}>
         <View style={estilos.menu}>
-          <AlignLeft
-            onPress={() => navigation.openDrawer()}
-            m="$3"
-            w="$10"
-            h="$6"
-            color="white"
-          />
-          <Text style={estilos.menuTexto}>Perfil</Text>
-          <View style={estilos.avatarPerfil}>
-            <Avatar.Image
-              size={40}
-              source={image ? { uri: image } : null}
-              alt="Foto do perfil"
-              style={estilos.avatarImage}
+          <View style={estilos.cabecalho}>
+            <AlignLeft
+              onPress={() => navigation.openDrawer()}
+              m="$3"
+              w="$10"
+              h="$6"
+              color="white"
             />
-          </View>
-        </View>
-
-        <View style={estilos.imagem}>
-          <TouchableOpacity onPress={pickImage}>
-            <View style={estilos.avatarContainer}>
-              {image ? (
-                <Avatar.Image
-                  size={190}
-                  source={{ uri: image }}
-                  alt="Foto do perfil"
-                />
-              ) : (
-                <Avatar.Image
-                  source={require("./../../assets/images/icon.png")}
-                  alt="Foto do perfil padrão"
-                  style={estilos.avatarImage}
-                />
-              )}
+            <Text style={estilos.menuTexto}>Perfil do Usuário</Text>
+            <View style={estilos.avatarPerfil}>
+              <Avatar.Image
+                size={40}
+                source={image ? { uri: image } : null}
+                alt="Foto do perfil"
+                style={estilos.avatarImage}
+              />
             </View>
-          </TouchableOpacity>
+          </View>
 
-          <View style={estilos.viewInfo}>
-            <Text style={{ color: "black", fontSize: 17 }}>
-              {" "}
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Nome:{" "}
-              </Text>{" "}
+          <View style={estilos.imagem}>
+            <TouchableOpacity onPress={pickImage}>
+              <View style={estilos.avatarContainer}>
+                {image ? (
+                  <Avatar.Image
+                    size={150}
+                    source={{ uri: image }}
+                    alt="Foto do perfil"
+                  />
+                ) : (
+                  <Avatar.Image
+                    source={require("./../../assets/images/icon.png")}
+                    alt="Foto do perfil padrão"
+                    style={estilos.avatarImage}
+                  />
+                )}
+              </View>
+            </TouchableOpacity>
+            <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
               {usuario ? usuario.nome : "Visitante"}
             </Text>
-          </View>
 
-          <View style={estilos.viewInfo}>
-            <Text style={{ color: "black", fontSize: 17 }}>
-              {" "}
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Cargo:{" "}
-              </Text>{" "}
+            <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
               {usuario ? usuario.funcao : "Desconhecido"}{" "}
             </Text>
           </View>
+        </View>
+
+        <View style={estilos.viewDados}>
+          <View style={estilos.grupoLista}>
+            <List.AccordionGroup>
+              <List.Accordion
+                title="Informações Pessoais"
+                id="1"
+                style={estilos.lista}
+              >
+                <List.Item title="Item 1" />
+              </List.Accordion>
+              <List.Accordion title="Accordion 2" id="2" style={estilos.lista}>
+                <List.Item title="Item 2" />
+              </List.Accordion>
+              <View>
+                <List.Accordion
+                  title="Accordion 3"
+                  id="3"
+                  style={estilos.lista}
+                >
+                  <List.Item title="Item 3" />
+                </List.Accordion>
+              </View>
+            </List.AccordionGroup>
+          </View>
+
           <View style={estilos.viewInfo}>
             <Text style={{ color: "black", fontSize: 17 }}>
               {" "}
@@ -164,80 +180,12 @@ export default function Perfil({ navigation }) {
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Data de Cadastro:{" "}
               </Text>{" "}
-              {usuario ? usuario.nome : "Visitante"}
+              {usuario
+                ? new Date(usuario.data_criacao).toLocaleDateString()
+                : "Data Indisponível"}
             </Text>
           </View>
         </View>
-
-        {/* <View style={estilos.selecaoEspaco}>
-            <Select style={estilos.selecao}>
-              <SelectTrigger variant="rounded" size="sm" borderColor="#ff7938">
-                <SelectInput placeholder="Selecione um Período" />
-                <SelectIcon mr="$3">
-                  <Icon as={ChevronDownIcon} />
-                </SelectIcon>
-              </SelectTrigger>
-              <SelectPortal>
-                <SelectBackdrop />
-                <SelectContent>
-                  <SelectDragIndicatorWrapper>
-                    <SelectDragIndicator />
-                  </SelectDragIndicatorWrapper>
-                  <SelectItem label="UX Research" value="ux" />
-
-                  <SelectItem label="Backend Development" value="backend" />
-                </SelectContent>
-              </SelectPortal>
-            </Select>
-          </View>
-
-          <View style={estilos.viewCard}>
-            <Card style={estilos.cardColor}>
-              <Card.Content>
-                <View style={estilos.viewInfoHora}>
-                  <View>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Dias trabalhados:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Horas trabalhadas:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Média de horas trabalhadas:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Horas em pausa:
-                    </Text>
-                    <Text style={estilos.texto} variant="titleMedium">
-                      Média de horas em pausa:
-                    </Text>
-                  </View>
-
-                  <View>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                    <Text>--:--</Text>
-                  </View>
-                </View>
-              </Card.Content>
-            </Card>
-          </View>
-
-          <View style={estilos.viewPeriodo}>
-            <View>
-              <Button style={estilos.viewPeriodoBotao} $_text-color="black">
-                <ButtonText style={{color: "white"}}>Dia</ButtonText>
-              </Button>
-            </View>
-
-            <View>
-              <Button style={estilos.viewPeriodoBotao} $_text-color="black">
-                <ButtonText style={{color: "white"}}>Jornada</ButtonText>
-              </Button>
-            </View>
-          </View> */}
       </View>
     </>
   );
@@ -246,17 +194,22 @@ export default function Perfil({ navigation }) {
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#ff7938",
   },
   menu: {
+    marginRight: 10,
+    padding: 25,
+    width: "100%",
+    backgroundColor: "#ff7938",
+    paddingBottom: "0%",
+    marginBottom: "0%",
+  },
+  cabecalho: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginRight: 10,
-    padding: 35,
-    width: "100%",
-    backgroundColor: "#ff7938",
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    padding: 0,
+    margin: 0,
   },
   menuTexto: {
     fontSize: 18,
@@ -269,72 +222,34 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     marginTop: 20,
   },
-  selecao: {
-    justifyContent: "center",
-    width: "85%",
-    borderColor: "#ff7938",
-    marginBottom: 30,
-  },
-  selecaoEspaco: {
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  viewCard: {
-    width: "90%",
-    marginLeft: "auto",
-    marginRight: "auto",
-    marginBottom: "6%",
-  },
-  cardColor: {
-    backgroundColor: "#f2f9ff",
-  },
+
   texto: {
     fontWeight: "bold",
     fontSize: 16,
   },
-  viewInfoHora: {
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  viewPeriodo: {
-    width: "90%",
-    justifyContent: "space-between",
-    flexDirection: "row",
-    alignItems: "center",
-    marginLeft: "auto",
-    marginRight: "auto",
-  },
-  viewPeriodoBotao: {
-    width: "84%",
-    marginBottom: "6%",
-    borderRadius: 40,
-    backgroundColor: "#ff7938",
-    borderColor: "#ff7938",
-    borderWidth: 1,
-  },
+
   viewInfo: {
     alignItems: "flex-start",
-    backgroundColor: "rgba(255, 121, 56, 0.4)",
-    width: "95%",
+    // backgroundColor: "rgba(255, 121, 56, 0.4)",
+
     borderRadius: 10,
     padding: 10,
     marginBottom: "5%",
   },
 
   avatarContainer: {
-    width: 190,
-    height: 190,
-    borderWidth: 5,
-    borderColor: "#ff7938",
-    borderRadius: 95, // metade do tamanho da view para garantir que a borda seja redonda
+    width: 150,
+    height: 150,
+    borderWidth: 2,
+    borderColor: "white",
+    borderRadius: 85, // metade do tamanho da view para garantir que a borda seja redonda
     overflow: "hidden", // garantir que o conteúdo da view se ajuste dentro da borda arredondada
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: "15%",
+    marginBottom: "5%",
   },
   avatarImage: {
-    borderRadius: 87, // metade do tamanho da imagem
+    borderRadius: 47, // metade do tamanho da imagem
   },
   avatarPerfil: {
     width: 42,
@@ -355,5 +270,22 @@ const estilos = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  viewDados: {
+    width: "100%",
+    height: "100%",
+    marginTop: 20,
+    backgroundColor: "#f8f8f8",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  lista: {
+    borderBottomWidth: 1,
+    borderColor: "#c2bbba",
+    backgroundColor: "#f8f8f8",
+  },
+  grupoLista: {
+    backgroundColor: "red",
+    marginTop: 35,
   },
 });

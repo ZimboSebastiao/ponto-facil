@@ -26,9 +26,6 @@ export default function Home({ navigation }) {
   const [hora, setHora] = useState("");
   const [dataAtualizada, setDataAtualizada] = useState("");
   const [diaAtual, setDiaAtual] = useState("");
-  const [intervalo, setIntervalo] = useState("");
-  const [fimIntervalo, setFimIntervalo] = useState("");
-  const [saida, setSaida] = useState("");
   const [endereco, setEndereco] = useState("");
   const [usuario, setUsuario] = useState(null);
 
@@ -253,7 +250,6 @@ export default function Home({ navigation }) {
                         "Registro",
                         `Intervalo marcado com sucesso: ${horaAtual}`
                       );
-                      setIntervalo(horaAtual);
                     }
                   } catch (error) {
                     if (error.response) {
@@ -300,7 +296,6 @@ export default function Home({ navigation }) {
                         "Registro",
                         `Fim de intervalo marcado com sucesso: ${horaAtual}`
                       );
-                      setFimIntervalo(horaAtual);
                     }
                   } catch (error) {
                     if (error.response) {
@@ -350,7 +345,6 @@ export default function Home({ navigation }) {
                         "Registro",
                         `Ponto de saída marcado com sucesso: ${horaAtual}`
                       );
-                      setSaida(horaAtual);
                     }
                   } catch (error) {
                     if (error.response) {

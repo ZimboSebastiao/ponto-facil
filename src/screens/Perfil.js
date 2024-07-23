@@ -210,10 +210,10 @@ export default function Perfil({ navigation }) {
 
           <View style={estilos.viewInfo}>
             <Button
-              icon={() => <LogOut color="red" />}
+              icon={() => <LogOut color="#d95148" />}
               mode="text"
               onPress={logout}
-              labelStyle={{ color: "red", fontSize: 17 }}
+              labelStyle={{ color: "#d95148", fontSize: 17 }}
             >
               LogOut
             </Button>
@@ -275,7 +275,7 @@ const estilos = StyleSheet.create({
     // backgroundColor: "rgba(255, 121, 56, 0.4)",
 
     borderRadius: 10,
-    padding: 10,
+    padding: 6,
     marginBottom: "5%",
   },
 
@@ -316,7 +316,7 @@ const estilos = StyleSheet.create({
   viewDados: {
     width: "100%",
     height: "100%",
-    marginTop: 20,
+    marginTop: 30,
     backgroundColor: "#f8f8f8",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,

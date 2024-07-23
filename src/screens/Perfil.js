@@ -6,9 +6,16 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Alert,
 } from "react-native";
-import { Avatar, List } from "react-native-paper";
-import { AlignLeft, Group } from "lucide-react-native";
+import { Avatar, List, Button } from "react-native-paper";
+import {
+  AlignLeft,
+  User,
+  UserPlus,
+  UserCog,
+  LogOut,
+} from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -81,6 +88,32 @@ export default function Perfil({ navigation }) {
     obterUsuario();
   }, []);
 
+  const logout = async () => {
+    try {
+      await AsyncStorage.multiRemove([
+        "usuario",
+        "token",
+        "refreshToken",
+        "tokenExpiration",
+      ]);
+
+      Alert.alert("Sessão Terminada", "Você foi desconectado com sucesso.", [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "Login" }],
+            });
+          },
+        },
+      ]);
+    } catch (error) {
+      console.error("Erro ao realizar logout:", error);
+      Alert.alert("Erro", "Houve um erro ao realizar logout. Tente novamente.");
+    }
+  };
+
   if (loading) {
     return (
       <View style={estilos.loadingContainer}>
@@ -134,6 +167,9 @@ export default function Perfil({ navigation }) {
               {usuario ? usuario.nome : "Visitante"}
             </Text>
 
+            <Text style={{ color: "white", fontSize: 14, marginTop: 4 }}>
+              {usuario ? usuario.tipo : "Desconhecido"}{" "}
+            </Text>
             <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
               {usuario ? usuario.funcao : "Desconhecido"}{" "}
             </Text>
@@ -147,17 +183,24 @@ export default function Perfil({ navigation }) {
                 title="Informações Pessoais"
                 id="1"
                 style={estilos.lista}
+                left={(props) => <User {...props} />}
               >
                 <List.Item title="Item 1" />
               </List.Accordion>
-              <List.Accordion title="Accordion 2" id="2" style={estilos.lista}>
+              <List.Accordion
+                title="Adicionar Usuário"
+                id="2"
+                style={estilos.lista}
+                left={(props) => <UserPlus {...props} />}
+              >
                 <List.Item title="Item 2" />
               </List.Accordion>
               <View>
                 <List.Accordion
-                  title="Accordion 3"
+                  title="Gestão de Usuários"
                   id="3"
                   style={estilos.lista}
+                  left={(props) => <UserCog {...props} />}
                 >
                   <List.Item title="Item 3" />
                 </List.Accordion>
@@ -166,16 +209,15 @@ export default function Perfil({ navigation }) {
           </View>
 
           <View style={estilos.viewInfo}>
-            <Text style={{ color: "black", fontSize: 17 }}>
-              {" "}
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Nível:{" "}
-              </Text>{" "}
-              {usuario ? usuario.tipo : "Desconhecido"}
-            </Text>
-          </View>
-          <View style={estilos.viewInfo}>
-            <Text style={{ color: "black", fontSize: 17 }}>
+            <Button
+              icon={() => <LogOut color="red" />}
+              mode="text"
+              onPress={logout}
+              labelStyle={{ color: "red", fontSize: 17 }}
+            >
+              LogOut
+            </Button>
+            {/* <Text style={{ color: "black", fontSize: 17 }}>
               {" "}
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Data de Cadastro:{" "}
@@ -183,7 +225,7 @@ export default function Perfil({ navigation }) {
               {usuario
                 ? new Date(usuario.data_criacao).toLocaleDateString()
                 : "Data Indisponível"}
-            </Text>
+            </Text> */}
           </View>
         </View>
       </View>
@@ -285,7 +327,6 @@ const estilos = StyleSheet.create({
     backgroundColor: "#f8f8f8",
   },
   grupoLista: {
-    backgroundColor: "red",
     marginTop: 35,
   },
 });

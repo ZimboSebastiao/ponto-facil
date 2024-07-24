@@ -180,7 +180,7 @@ export default function Perfil({ navigation }) {
 
         <View style={estilos.viewDados}>
           <ScrollView contentContainerStyle={estilos.scrollContainer}>
-            <View style={estilos.grupoLista}>
+            <View>
               <List.AccordionGroup>
                 <List.Accordion
                   title="Informações Pessoais"
@@ -215,20 +215,43 @@ export default function Perfil({ navigation }) {
                       </List.Section>
                     </List.Section>
 
-                    <List.Section style={estilos.grupo}>
-                      <List.Item title="Nacionalidade:" style={estilos.label} />
-                      <List.Item
-                        value={usuario.nacionalidade}
-                        title={usuario.nacionalidade}
-                      />
+                    <List.Section style={estilos.viewInputs}>
+                      <List.Section>
+                        <List.Item
+                          title="Nacionalidade"
+                          style={estilos.label}
+                        />
+                        <List.Item
+                          value={usuario.nacionalidade}
+                          title={usuario.nacionalidade}
+                        />
+                      </List.Section>
+
+                      <List.Section>
+                        <List.Item title="Celular" style={estilos.label} />
+                        <List.Item
+                          value={usuario.celular}
+                          title={usuario.celular}
+                        />
+                      </List.Section>
                     </List.Section>
 
-                    <List.Section style={estilos.grupo}>
-                      <List.Item title="Celular:" style={estilos.label} />
-                      <List.Item
-                        value={usuario.celular}
-                        title={usuario.celular}
-                      />
+                    <List.Section style={estilos.viewInputs}>
+                      <List.Section>
+                        <List.Item title="Empresa" style={estilos.label} />
+                        <List.Item
+                          value={usuario.empresa}
+                          title={usuario.empresa}
+                        />
+                      </List.Section>
+
+                      <List.Section>
+                        <List.Item title="Cargo" style={estilos.label} />
+                        <List.Item
+                          value={usuario.funcao}
+                          title={usuario.funcao}
+                        />
+                      </List.Section>
                     </List.Section>
                   </List.Section>
                 </List.Accordion>
@@ -376,31 +399,26 @@ const estilos = StyleSheet.create({
     borderColor: "#c2bbba",
     backgroundColor: "#f8f8f8",
   },
-  grupoLista: {
-    marginTop: 35,
-    margin: "0%",
-    padding: "0%",
-  },
+
   infoPessoais: {
-    justifyContent: "flex-start",
-    alignItems: "flex-start",
     margin: "0%",
     padding: "0%",
     paddingLeft: 0,
     paddingRight: 0,
   },
-  input: {
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-  },
+
   label: {
     fontWeight: "bold",
     fontSize: 14,
-    color: "rgba(0, 0, 0, 0.6)",
+    color: "black",
   },
   viewInputs: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     width: "100%",
+    alignContent: "flex-start",
+    borderWidth: 1,
+    borderColor: "rgba(0, 0, 0, 0.2)",
   },
   listItem: {
     margin: "0%",
@@ -412,10 +430,5 @@ const estilos = StyleSheet.create({
     backgroundColor: "#f8f8f8",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
-  },
-  grupo: {
-    flexDirection: "row",
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    width: "100%",
   },
 });

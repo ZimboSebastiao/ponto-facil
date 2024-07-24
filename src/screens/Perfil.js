@@ -201,17 +201,30 @@ export default function Perfil({ navigation }) {
                           style={estilos.input}
                         />
                       </List.Section>
+
                       <List.Section>
                         <List.Item
-                          title="Nacionalidade"
+                          title="Data Nascimento"
                           style={estilos.label}
                         />
                         <List.Item
-                          value={usuario.nacionalidade}
-                          title={usuario.nacionalidade}
+                          value={usuario.data_nascimento}
+                          title={usuario.data_nascimento}
                           style={estilos.input}
                         />
                       </List.Section>
+                    </List.Section>
+
+                    <List.Section style={estilos.grupo}>
+                      <List.Item
+                        title="Data Nascimento"
+                        style={estilos.label}
+                      />
+                      <List.Item
+                        value={usuario.data_nascimento}
+                        title={usuario.data_nascimento}
+                        style={estilos.input}
+                      />
                     </List.Section>
                   </List.Section>
                 </List.Accordion>
@@ -379,7 +392,7 @@ const estilos = StyleSheet.create({
   },
   label: {
     fontWeight: "bold",
-    fontSize: 15,
+    fontSize: 14,
     color: "rgba(0, 0, 0, 0.6)",
   },
   viewInputs: {
@@ -387,7 +400,6 @@ const estilos = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     backgroundColor: "orange",
-    padding: 15,
   },
   listItem: {
     margin: "0%",
@@ -399,5 +411,8 @@ const estilos = StyleSheet.create({
     backgroundColor: "#f8f8f8",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+  },
+  grupo: {
+    flexDirection: "row",
   },
 });

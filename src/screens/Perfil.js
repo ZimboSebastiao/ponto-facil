@@ -216,14 +216,18 @@ export default function Perfil({ navigation }) {
                     </List.Section>
 
                     <List.Section style={estilos.grupo}>
+                      <List.Item title="Nacionalidade:" style={estilos.label} />
                       <List.Item
-                        title="Data Nascimento"
-                        style={estilos.label}
+                        value={usuario.nacionalidade}
+                        title={usuario.nacionalidade}
                       />
+                    </List.Section>
+
+                    <List.Section style={estilos.grupo}>
+                      <List.Item title="Celular:" style={estilos.label} />
                       <List.Item
-                        value={usuario.data_nascimento}
-                        title={usuario.data_nascimento}
-                        style={estilos.input}
+                        value={usuario.celular}
+                        title={usuario.celular}
                       />
                     </List.Section>
                   </List.Section>
@@ -232,6 +236,7 @@ export default function Perfil({ navigation }) {
                   title="Adicionar Usuário"
                   id="2"
                   left={(props) => <UserPlus {...props} />}
+                  style={estilos.lista}
                 >
                   <List.Item
                     title={usuario.nome}
@@ -385,9 +390,6 @@ const estilos = StyleSheet.create({
     paddingRight: 0,
   },
   input: {
-    borderWidth: 1,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-    borderRadius: 8,
     backgroundColor: "rgba(0, 0, 0, 0.2)",
   },
   label: {
@@ -399,7 +401,6 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
-    backgroundColor: "orange",
   },
   listItem: {
     margin: "0%",
@@ -414,5 +415,7 @@ const estilos = StyleSheet.create({
   },
   grupo: {
     flexDirection: "row",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    width: "100%",
   },
 });

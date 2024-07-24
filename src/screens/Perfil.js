@@ -188,34 +188,32 @@ export default function Perfil({ navigation }) {
                   style={estilos.lista}
                   left={(props) => <User {...props} />}
                 >
-                  <View style={estilos.infoPessoais}>
-                    <View style={estilos.viewInputs}>
-                      <View>
-                        <Text style={estilos.label}>Nome Completo</Text>
-                        <Text style={estilos.input}>{usuario.nome}</Text>
-                      </View>
-
-                      <View>
-                        <Text style={estilos.label}>Data de Nascimento</Text>
-                        <Text style={estilos.input}>
-                          {usuario.data_nascimento}
-                        </Text>
-                      </View>
-                    </View>
-                    <View style={estilos.viewInputs}>
-                      <View>
-                        <Text style={estilos.label}>Nacionalidade</Text>
-                        <Text style={estilos.input}>
-                          {usuario.nacionalidade}
-                        </Text>
-                      </View>
-
-                      <View>
-                        <Text style={estilos.label}>Celular</Text>
-                        <Text style={estilos.input}>{usuario.celular}</Text>
-                      </View>
-                    </View>
-                  </View>
+                  <List.Section style={estilos.infoPessoais}>
+                    <List.Section style={estilos.viewInputs}>
+                      <List.Section>
+                        <List.Item
+                          title="Nome Completo"
+                          style={estilos.label}
+                        />
+                        <List.Item
+                          value={usuario.nome}
+                          title={usuario.nome}
+                          style={estilos.input}
+                        />
+                      </List.Section>
+                      <List.Section>
+                        <List.Item
+                          title="Nome Completo"
+                          style={estilos.label}
+                        />
+                        <List.Item
+                          value={usuario.nome}
+                          title={usuario.nome}
+                          style={estilos.input}
+                        />
+                      </List.Section>
+                    </List.Section>
+                  </List.Section>
                 </List.Accordion>
                 <List.Accordion
                   title="Adicionar Usuário"
@@ -235,7 +233,7 @@ export default function Perfil({ navigation }) {
                     style={estilos.lista}
                     left={(props) => <UserCog {...props} />}
                   >
-                    <List.Item title="Item 3" />
+                    <List.Item title="Item 3"></List.Item>
                   </List.Accordion>
                 </View>
               </List.AccordionGroup>
@@ -366,7 +364,6 @@ const estilos = StyleSheet.create({
     padding: "0%",
   },
   infoPessoais: {
-    height: "40%",
     paddingTop: 40,
     justifyContent: "flex-start",
     alignItems: "flex-start",
@@ -377,15 +374,13 @@ const estilos = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    padding: 15,
     borderColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 8,
-    width: "100%",
     backgroundColor: "rgba(0, 0, 0, 0.2)",
+    // backgroundColor: "yellow",
   },
   label: {
     fontWeight: "bold",
-    marginBottom: 10,
     fontSize: 15,
     color: "rgba(0, 0, 0, 0.6)",
   },
@@ -393,6 +388,7 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     width: "100%",
+    backgroundColor: "orange",
   },
   listItem: {
     margin: "0%",

@@ -8,8 +8,9 @@ import {
   Text,
   Alert,
   ScrollView,
+  TextInput,
 } from "react-native";
-import { Avatar, List, Button, TextInput } from "react-native-paper";
+import { Avatar, List, Button, MD3Colors } from "react-native-paper";
 import {
   AlignLeft,
   User,
@@ -169,62 +170,87 @@ export default function Perfil({ navigation }) {
             </Text>
 
             <Text style={{ color: "white", fontSize: 14, marginTop: 4 }}>
-              {usuario ? usuario.tipo : "Desconhecido"}{" "}
+              {usuario ? usuario.tipo : "Desconhecido"}
             </Text>
             <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
-              {usuario ? usuario.funcao : "Desconhecido"}{" "}
+              {usuario ? usuario.funcao : "Desconhecido"}
             </Text>
           </View>
         </View>
 
         <View style={estilos.viewDados}>
-          <View style={estilos.grupoLista}>
-            <List.AccordionGroup>
-              <List.Accordion
-                title="Informações Pessoais"
-                id="1"
-                style={estilos.lista}
-                left={(props) => <User {...props} />}
-              >
-                <View style={estilos.infoPessoais}>
-                  <TextInput
-                    disabled={true}
-                    label="Nome Completo"
-                    value={usuario.nome}
-                  />
-                </View>
-              </List.Accordion>
-              <List.Accordion
-                title="Adicionar Usuário"
-                id="2"
-                style={estilos.lista}
-                left={(props) => <UserPlus {...props} />}
-              >
-                <List.Item title={usuario.nome} value={usuario.nome} />
-              </List.Accordion>
-              <View>
+          <ScrollView contentContainerStyle={estilos.scrollContainer}>
+            <View style={estilos.grupoLista}>
+              <List.AccordionGroup>
                 <List.Accordion
-                  title="Gestão de Usuários"
-                  id="3"
+                  title="Informações Pessoais"
+                  id="1"
                   style={estilos.lista}
-                  left={(props) => <UserCog {...props} />}
+                  left={(props) => <User {...props} />}
                 >
-                  <List.Item title="Item 3" />
-                </List.Accordion>
-              </View>
-            </List.AccordionGroup>
-          </View>
+                  <View style={estilos.infoPessoais}>
+                    <View style={estilos.viewInputs}>
+                      <View>
+                        <Text style={estilos.label}>Nome Completo</Text>
+                        <Text style={estilos.input}>{usuario.nome}</Text>
+                      </View>
 
-          <View style={estilos.viewInfo}>
-            <Button
-              icon={() => <LogOut color="#d95148" />}
-              mode="text"
-              onPress={logout}
-              labelStyle={{ color: "#d95148", fontSize: 17 }}
-            >
-              LogOut
-            </Button>
-            {/* <Text style={{ color: "black", fontSize: 17 }}>
+                      <View>
+                        <Text style={estilos.label}>Data de Nascimento</Text>
+                        <Text style={estilos.input}>
+                          {usuario.data_nascimento}
+                        </Text>
+                      </View>
+                    </View>
+                    <View style={estilos.viewInputs}>
+                      <View>
+                        <Text style={estilos.label}>Nacionalidade</Text>
+                        <Text style={estilos.input}>
+                          {usuario.nacionalidade}
+                        </Text>
+                      </View>
+
+                      <View>
+                        <Text style={estilos.label}>Celular</Text>
+                        <Text style={estilos.input}>{usuario.celular}</Text>
+                      </View>
+                    </View>
+                  </View>
+                </List.Accordion>
+                <List.Accordion
+                  title="Adicionar Usuário"
+                  id="2"
+                  left={(props) => <UserPlus {...props} />}
+                >
+                  <List.Item
+                    title={usuario.nome}
+                    value={usuario.nome}
+                    style={estilos.listItem}
+                  />
+                </List.Accordion>
+                <View>
+                  <List.Accordion
+                    title="Gestão de Usuários"
+                    id="3"
+                    style={estilos.lista}
+                    left={(props) => <UserCog {...props} />}
+                  >
+                    <List.Item title="Item 3" />
+                  </List.Accordion>
+                </View>
+              </List.AccordionGroup>
+            </View>
+
+            <View style={estilos.viewInfo}>
+              <Button
+                icon={() => <LogOut color="#d95148" />}
+                mode="text"
+                onPress={logout}
+                labelStyle={{ color: "#d95148", fontSize: 17 }}
+              >
+                LogOut
+              </Button>
+              {/* <Text style={{ color: "black", fontSize: 17 }}>
               {" "}
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
                 Data de Cadastro:{" "}
@@ -233,7 +259,8 @@ export default function Perfil({ navigation }) {
                 ? new Date(usuario.data_criacao).toLocaleDateString()
                 : "Data Indisponível"}
             </Text> */}
-          </View>
+            </View>
+          </ScrollView>
         </View>
       </View>
     </>
@@ -279,7 +306,6 @@ const estilos = StyleSheet.create({
 
   viewInfo: {
     alignItems: "flex-start",
-    // backgroundColor: "rgba(255, 121, 56, 0.4)",
 
     borderRadius: 10,
     padding: 6,
@@ -321,12 +347,13 @@ const estilos = StyleSheet.create({
     alignItems: "center",
   },
   viewDados: {
-    width: "100%",
-    height: "100%",
+    flex: 1,
     marginTop: 30,
     backgroundColor: "#f8f8f8",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    margin: "0%",
+    padding: "0%",
   },
   lista: {
     borderBottomWidth: 1,
@@ -335,11 +362,47 @@ const estilos = StyleSheet.create({
   },
   grupoLista: {
     marginTop: 35,
+    margin: "0%",
+    padding: "0%",
   },
   infoPessoais: {
-    // backgroundColor: "yellow",
     height: "40%",
     paddingTop: 40,
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
+    margin: "0%",
+    padding: "0%",
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  input: {
+    borderWidth: 1,
+    padding: 15,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+    borderRadius: 8,
     width: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+  },
+  label: {
+    fontWeight: "bold",
+    marginBottom: 10,
+    fontSize: 15,
+    color: "rgba(0, 0, 0, 0.6)",
+  },
+  viewInputs: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+  },
+  listItem: {
+    margin: "0%",
+    padding: "0%",
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  scrollContainer: {
+    backgroundColor: "#f8f8f8",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
 });

@@ -7,8 +7,9 @@ import {
   TouchableOpacity,
   Text,
   Alert,
+  ScrollView,
 } from "react-native";
-import { Avatar, List, Button } from "react-native-paper";
+import { Avatar, List, Button, TextInput } from "react-native-paper";
 import {
   AlignLeft,
   User,
@@ -185,7 +186,13 @@ export default function Perfil({ navigation }) {
                 style={estilos.lista}
                 left={(props) => <User {...props} />}
               >
-                <List.Item title="Item 1" />
+                <View style={estilos.infoPessoais}>
+                  <TextInput
+                    disabled={true}
+                    label="Nome Completo"
+                    value={usuario.nome}
+                  />
+                </View>
               </List.Accordion>
               <List.Accordion
                 title="Adicionar Usuário"
@@ -193,7 +200,7 @@ export default function Perfil({ navigation }) {
                 style={estilos.lista}
                 left={(props) => <UserPlus {...props} />}
               >
-                <List.Item title="Item 2" />
+                <List.Item title={usuario.nome} value={usuario.nome} />
               </List.Accordion>
               <View>
                 <List.Accordion
@@ -328,5 +335,11 @@ const estilos = StyleSheet.create({
   },
   grupoLista: {
     marginTop: 35,
+  },
+  infoPessoais: {
+    // backgroundColor: "yellow",
+    height: "40%",
+    paddingTop: 40,
+    width: "100%",
   },
 });

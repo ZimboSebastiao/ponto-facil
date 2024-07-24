@@ -154,6 +154,7 @@ export default function Relatorio({ navigation }) {
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
+        console.log("Dados do usuário recuperados:", usuarioData);
         setUsuario(usuarioData);
       }
       setLoading(false);

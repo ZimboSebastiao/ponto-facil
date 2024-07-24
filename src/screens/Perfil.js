@@ -203,12 +203,12 @@ export default function Perfil({ navigation }) {
                       </List.Section>
                       <List.Section>
                         <List.Item
-                          title="Nome Completo"
+                          title="Nacionalidade"
                           style={estilos.label}
                         />
                         <List.Item
-                          value={usuario.nome}
-                          title={usuario.nome}
+                          value={usuario.nacionalidade}
+                          title={usuario.nacionalidade}
                           style={estilos.input}
                         />
                       </List.Section>
@@ -364,7 +364,6 @@ const estilos = StyleSheet.create({
     padding: "0%",
   },
   infoPessoais: {
-    paddingTop: 40,
     justifyContent: "flex-start",
     alignItems: "flex-start",
     margin: "0%",
@@ -377,7 +376,6 @@ const estilos = StyleSheet.create({
     borderColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 8,
     backgroundColor: "rgba(0, 0, 0, 0.2)",
-    // backgroundColor: "yellow",
   },
   label: {
     fontWeight: "bold",
@@ -389,6 +387,7 @@ const estilos = StyleSheet.create({
     justifyContent: "space-around",
     width: "100%",
     backgroundColor: "orange",
+    padding: 15,
   },
   listItem: {
     margin: "0%",

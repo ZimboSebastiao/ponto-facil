@@ -236,7 +236,7 @@ export default function Perfil({ navigation }) {
                     title="Gestão de Usuários"
                     id="3"
                     style={estilos.lista}
-                    left={(props) => <UserCog {...props} />}
+                    left={(props) => <UserMinus {...props} />}
                   >
                     <List.Item title="Item 3"></List.Item>
                   </List.Accordion>

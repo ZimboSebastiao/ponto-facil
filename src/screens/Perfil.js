@@ -9,14 +9,16 @@ import {
   Alert,
   ScrollView,
   TextInput,
+  Pressable,
 } from "react-native";
-import { Avatar, List, Button, MD3Colors } from "react-native-paper";
+import { Avatar, List } from "react-native-paper";
 import {
   AlignLeft,
   User,
   UserPlus,
   UserCog,
-  LogOut,
+  UserMinus,
+  UserRoundPen,
 } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -89,32 +91,6 @@ export default function Perfil({ navigation }) {
 
     obterUsuario();
   }, []);
-
-  const logout = async () => {
-    try {
-      await AsyncStorage.multiRemove([
-        "usuario",
-        "token",
-        "refreshToken",
-        "tokenExpiration",
-      ]);
-
-      Alert.alert("Sessão Terminada", "Você foi desconectado com sucesso.", [
-        {
-          text: "OK",
-          onPress: () => {
-            navigation.reset({
-              index: 0,
-              routes: [{ name: "Login" }],
-            });
-          },
-        },
-      ]);
-    } catch (error) {
-      console.error("Erro ao realizar logout:", error);
-      Alert.alert("Erro", "Houve um erro ao realizar logout. Tente novamente.");
-    }
-  };
 
   if (loading) {
     return (
@@ -225,17 +201,35 @@ export default function Perfil({ navigation }) {
                     </List.Section>
                   </List.Section>
                 </List.Accordion>
+
                 <List.Accordion
                   title="Adicionar Usuário"
                   id="2"
                   left={(props) => <UserPlus {...props} />}
                   style={estilos.lista}
                 >
-                  <List.Item
-                    title={usuario.nome}
-                    value={usuario.nome}
-                    style={estilos.listItem}
-                  />
+                  <List.Section>
+                    <TextInput placeholder="Nome" style={estilos.input} />
+                    <TextInput placeholder="E-mail" style={estilos.input} />
+                    <TextInput placeholder="Senha" style={estilos.input} />
+                    <TextInput placeholder="tipo" style={estilos.input} />
+                    <TextInput placeholder="cargo" style={estilos.input} />
+                    <TextInput placeholder="Empresa" style={estilos.input} />
+                    <TextInput
+                      placeholder="Nacionalidade"
+                      style={estilos.input}
+                    />
+                    <TextInput placeholder="Endereço" style={estilos.input} />
+                    <TextInput placeholder="CEP" style={estilos.input} />
+                    <TextInput placeholder="Celular" style={estilos.input} />
+                    <TextInput
+                      placeholder="Data de Nascimento"
+                      style={estilos.input}
+                    />
+                    <Pressable style={estilos.botoes}>
+                      <Text style={estilos.textoBotao}>Cadastrar Usuário</Text>
+                    </Pressable>
+                  </List.Section>
                 </List.Accordion>
                 <View>
                   <List.Accordion
@@ -251,14 +245,6 @@ export default function Perfil({ navigation }) {
             </View>
 
             <View style={estilos.viewInfo}>
-              <Button
-                icon={() => <LogOut color="#d95148" />}
-                mode="text"
-                onPress={logout}
-                labelStyle={{ color: "#d95148", fontSize: 17 }}
-              >
-                LogOut
-              </Button>
               {/* <Text style={{ color: "black", fontSize: 17 }}>
               {" "}
               <Text style={{ fontSize: 18, fontWeight: "bold" }}>
@@ -359,8 +345,6 @@ const estilos = StyleSheet.create({
     flex: 1,
     marginTop: 30,
     backgroundColor: "#f8f8f8",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
     margin: "0%",
     padding: "0%",
   },
@@ -382,6 +366,29 @@ const estilos = StyleSheet.create({
 
     justifyContent: "space-between",
   },
+
+  input: {
+    borderWidth: 1,
+    padding: 8,
+    borderColor: "rgba(0, 0, 0, 0.2)",
+    borderRadius: 10,
+    marginVertical: 10,
+    backgroundColor: "rgba(0, 0, 0, 0.2)",
+    width: "70%",
+  },
+  botoes: {
+    width: "70%",
+    padding: 8,
+    borderRadius: 8,
+    marginVertical: 20,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    alignItems: "center",
+  },
+  textoBotao: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white",
+  },
   viewInputs: {
     width: "100%",
     alignContent: "flex-start",
@@ -396,7 +403,5 @@ const estilos = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
   },
 });

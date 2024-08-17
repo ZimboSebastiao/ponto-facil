@@ -1,5 +1,7 @@
+import "./gesture-handler";
+import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import {
@@ -28,7 +30,7 @@ function CustomDrawerContent(props) {
   );
 }
 
-function HomeScreen() {
+function AppDrawer() {
   return (
     <Drawer.Navigator
       initialRouteName="Home"
@@ -75,25 +77,37 @@ function HomeScreen() {
 }
 
 export default function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        const user = await AsyncStorage.getItem("usuario");
+        setIsAuthenticated(!!user); // Se o usuário existe, está autenticado
+      } catch (error) {
+        console.error("Erro ao verificar status de autenticação:", error);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Login"
-        screenOptions={{
-          headerStyle: { backgroundColor: "#1D1D1D" },
-          headerTintColor: "white",
-        }}
-      >
+      <StatusBar style="auto" />
+      <Stack.Navigator>
         <Stack.Screen
-          name="HomeScreen"
-          component={HomeScreen}
+          name="AppDrawer"
+          component={AppDrawer}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{ headerShown: false }}
-        />
+        {!isAuthenticated && (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            options={{ headerShown: false }}
+          />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -102,18 +116,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F4F4F4",
+    backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-  },
-  activeTab: {
-    backgroundColor: "#ffff",
-    padding: 15,
-    borderRadius: 30,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  inactiveTab: {
-    // Estilo para ícones inativos, se necessário
   },
 });

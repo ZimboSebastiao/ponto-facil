@@ -190,63 +190,33 @@ export default function Perfil({ navigation }) {
                 >
                   <List.Section style={estilos.infoPessoais}>
                     <List.Section style={estilos.viewInputs}>
-                      <List.Section>
-                        <List.Item
-                          title="Nome Completo"
-                          style={estilos.label}
-                        />
-                        <List.Item
-                          value={usuario.nome}
-                          title={usuario.nome}
-                          style={estilos.input}
-                        />
-                      </List.Section>
-
-                      <List.Section>
-                        <List.Item
-                          title="Data Nascimento"
-                          style={estilos.label}
-                        />
-                        <List.Item
-                          value={usuario.data_nascimento}
-                          title={usuario.data_nascimento}
-                          style={estilos.input}
-                        />
-                      </List.Section>
-                    </List.Section>
-
-                    <List.Section style={estilos.viewInputs}>
-                      <List.Section>
-                        <List.Item
-                          title="Nacionalidade"
-                          style={estilos.label}
-                        />
+                      <List.Section style={estilos.seccao}>
+                        <List.Item title="Nacionalidade:" />
                         <List.Item
                           value={usuario.nacionalidade}
                           title={usuario.nacionalidade}
                         />
                       </List.Section>
-
-                      <List.Section>
-                        <List.Item title="Celular" style={estilos.label} />
-                        <List.Item
-                          value={usuario.celular}
-                          title={usuario.celular}
-                        />
-                      </List.Section>
+                    </List.Section>
+                    <List.Section style={estilos.seccao}>
+                      <List.Item title="Celular:" />
+                      <List.Item
+                        value={usuario.celular}
+                        title={usuario.celular}
+                      />
                     </List.Section>
 
                     <List.Section style={estilos.viewInputs}>
-                      <List.Section>
-                        <List.Item title="Empresa" style={estilos.label} />
+                      <List.Section style={estilos.seccao}>
+                        <List.Item title="Empresa:" />
                         <List.Item
                           value={usuario.empresa}
                           title={usuario.empresa}
                         />
                       </List.Section>
 
-                      <List.Section>
-                        <List.Item title="Cargo" style={estilos.label} />
+                      <List.Section style={estilos.seccao}>
+                        <List.Item title="Cargo:" />
                         <List.Item
                           value={usuario.funcao}
                           title={usuario.funcao}
@@ -407,17 +377,15 @@ const estilos = StyleSheet.create({
     paddingRight: 0,
   },
 
-  label: {
-    fontWeight: "bold",
-    fontSize: 14,
-    color: "black",
+  seccao: {
+    flexDirection: "row",
+
+    justifyContent: "space-between",
   },
   viewInputs: {
-    flexDirection: "row",
-    justifyContent: "space-between",
     width: "100%",
     alignContent: "flex-start",
-    borderWidth: 1,
+    borderWidth: 0.5,
     borderColor: "rgba(0, 0, 0, 0.2)",
   },
   listItem: {

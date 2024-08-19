@@ -12,12 +12,14 @@ import Home from "./src/screens/Home";
 import Perfil from "./src/screens/Perfil";
 import UsuarioAvatar from "./src/screens/UsuarioAvatar";
 import Relatorio from "./src/screens/Relatorio";
+import Atualizar from "./src/screens/Atualizar";
 import Logout from "./src/components/Logout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FileText, LogOut, House, UserRound } from "lucide-react-native";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
+const condicaoParaOcultar = true;
 
 function CustomDrawerContent(props) {
   return (
@@ -62,6 +64,17 @@ function HomeScreen() {
           drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,
         }}
       />
+
+      <Drawer.Screen
+        name="Atualizar"
+        component={Atualizar}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+
       <Drawer.Screen
         name="Sair"
         component={Logout}
@@ -113,7 +126,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  inactiveTab: {
-    // Estilo para ícones inativos, se necessário
-  },
+  inactiveTab: {},
 });

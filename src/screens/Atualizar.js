@@ -6,6 +6,7 @@ import {
   View,
   TouchableOpacity,
   Text,
+  Alert,
   ScrollView,
   TextInput,
   Pressable,
@@ -22,9 +23,8 @@ import {
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
-import Atualizar from "./Atualizar";
 
-export default function Perfil({ navigation }) {
+export default function Atualizar({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -148,119 +148,19 @@ export default function Perfil({ navigation }) {
             <Text style={{ color: "white", fontSize: 14, marginTop: 4 }}>
               @{usuario ? usuario.tipo : "Desconhecido"}
             </Text>
-            <Pressable
-              style={estilos.botao}
-              onPress={() =>
-                navigation.navigate("HomeScreen", { screen: "Atualizar" })
-              }
-            >
+            {/* <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
+              {usuario ? usuario.funcao : "Desconhecido"}
+            </Text> */}
+            <Pressable style={estilos.botao}>
               <Text style={estilos.textoEditar}>Editar Perfil</Text>
             </Pressable>
           </View>
         </View>
 
         <View style={estilos.viewDados}>
-          <ScrollView contentContainerStyle={estilos.scrollContainer}>
-            <View>
-              <List.AccordionGroup>
-                <List.Accordion
-                  title="Informações Pessoais"
-                  id="1"
-                  style={estilos.lista}
-                  left={(props) => <User {...props} />}
-                >
-                  <List.Section style={estilos.infoPessoais}>
-                    <List.Section style={estilos.viewInputs}>
-                      <List.Section style={estilos.seccao}>
-                        <List.Item title="Nacionalidade:" />
-                        <List.Item
-                          value={usuario.nacionalidade}
-                          title={usuario.nacionalidade}
-                        />
-                      </List.Section>
-                    </List.Section>
-                    <List.Section style={estilos.seccao}>
-                      <List.Item title="Celular:" />
-                      <List.Item
-                        value={usuario.celular}
-                        title={usuario.celular}
-                      />
-                    </List.Section>
-
-                    <List.Section style={estilos.viewInputs}>
-                      <List.Section style={estilos.seccao}>
-                        <List.Item title="Empresa:" />
-                        <List.Item
-                          value={usuario.empresa}
-                          title={usuario.empresa}
-                        />
-                      </List.Section>
-
-                      <List.Section style={estilos.seccao}>
-                        <List.Item title="Cargo:" />
-                        <List.Item
-                          value={usuario.funcao}
-                          title={usuario.funcao}
-                        />
-                      </List.Section>
-                    </List.Section>
-                  </List.Section>
-                </List.Accordion>
-
-                <List.Accordion
-                  title="Adicionar Usuário"
-                  id="2"
-                  left={(props) => <UserPlus {...props} />}
-                  style={estilos.lista}
-                >
-                  <List.Section>
-                    <TextInput placeholder="Nome" style={estilos.input} />
-                    <TextInput placeholder="E-mail" style={estilos.input} />
-                    <TextInput placeholder="Senha" style={estilos.input} />
-                    <TextInput placeholder="tipo" style={estilos.input} />
-                    <TextInput placeholder="cargo" style={estilos.input} />
-                    <TextInput placeholder="Empresa" style={estilos.input} />
-                    <TextInput
-                      placeholder="Nacionalidade"
-                      style={estilos.input}
-                    />
-                    <TextInput placeholder="Endereço" style={estilos.input} />
-                    <TextInput placeholder="CEP" style={estilos.input} />
-                    <TextInput placeholder="Celular" style={estilos.input} />
-                    <TextInput
-                      placeholder="Data de Nascimento"
-                      style={estilos.input}
-                    />
-                    <Pressable style={estilos.botoes}>
-                      <Text style={estilos.textoBotao}>Cadastrar Usuário</Text>
-                    </Pressable>
-                  </List.Section>
-                </List.Accordion>
-                <View>
-                  <List.Accordion
-                    title="Gestão de Usuários"
-                    id="3"
-                    style={estilos.lista}
-                    left={(props) => <UserMinus {...props} />}
-                  >
-                    <List.Item title="Item 3"></List.Item>
-                  </List.Accordion>
-                </View>
-              </List.AccordionGroup>
-            </View>
-
-            <View style={estilos.viewInfo}>
-              {/* <Text style={{ color: "black", fontSize: 17 }}>
-              {" "}
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>
-                Data de Cadastro:{" "}
-              </Text>{" "}
-              {usuario
-                ? new Date(usuario.data_criacao).toLocaleDateString()
-                : "Data Indisponível"}
-            </Text> */}
-            </View>
-          </ScrollView>
+          <ScrollView
+            contentContainerStyle={estilos.scrollContainer}
+          ></ScrollView>
         </View>
       </View>
     </>

@@ -95,6 +95,8 @@ export default function Login({ navigation }) {
               placeholder="Senha"
               style={estilos.input}
               secureTextEntry
+              returnKeyType="send"
+              onSubmitEditing={login}
             />
           </View>
           <View>

@@ -59,7 +59,6 @@ export default function Login({ navigation }) {
           expirationDate.toISOString()
         );
 
-        // navigation.navigate("Home");
         navigation.navigate("HomeScreen", { screen: "Home" });
       } else {
         Alert.alert("Ops!", "Erro ao realizar login, tente novamente.");
@@ -81,17 +80,23 @@ export default function Login({ navigation }) {
       <View style={estilos.container}>
         <Image source={backgroundImage} style={estilos.background} />
         <View style={estilos.formulario}>
-          <TextInput
-            onChangeText={(valor) => setEmail(valor)}
-            placeholder="Email"
-            style={estilos.input}
-          />
-          <TextInput
-            onChangeText={(valor) => setSenha(valor)}
-            placeholder="Senha"
-            style={estilos.input}
-            secureTextEntry
-          />
+          <View>
+            <Text style={estilos.textoInput}>Usuário</Text>
+            <TextInput
+              onChangeText={(valor) => setEmail(valor)}
+              placeholder="E-mail"
+              style={estilos.input}
+            />
+          </View>
+          <View style={estilos.viewInputs}>
+            <Text style={estilos.textoInput}>Palavra-Passe</Text>
+            <TextInput
+              onChangeText={(valor) => setSenha(valor)}
+              placeholder="Senha"
+              style={estilos.input}
+              secureTextEntry
+            />
+          </View>
           <View>
             <Pressable style={estilos.botaoRecuperar}>
               <Text style={estilos.textoBotaoRecuperar}></Text>
@@ -161,5 +166,14 @@ const estilos = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     color: "#207FDE",
+  },
+  viewInputs: {
+    paddingTop: 15,
+  },
+  textoInput: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18,
+    padding: 4,
   },
 });

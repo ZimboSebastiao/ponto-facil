@@ -124,23 +124,22 @@ export default function Perfil({ navigation }) {
           </View>
 
           <View style={estilos.imagem}>
-            <TouchableOpacity onPress={pickImage}>
-              <View style={estilos.avatarContainer}>
-                {image ? (
-                  <Avatar.Image
-                    size={150}
-                    source={{ uri: image }}
-                    alt="Foto do perfil"
-                  />
-                ) : (
-                  <Avatar.Image
-                    source={require("./../../assets/images/icon.png")}
-                    alt="Foto do perfil padrão"
-                    style={estilos.avatarImage}
-                  />
-                )}
-              </View>
-            </TouchableOpacity>
+            <View style={estilos.avatarContainer}>
+              {image ? (
+                <Avatar.Image
+                  size={150}
+                  source={{ uri: image }}
+                  alt="Foto do perfil"
+                />
+              ) : (
+                <Avatar.Image
+                  source={require("./../../assets/images/perfil.jpg")}
+                  alt="Foto do perfil padrão"
+                  style={estilos.avatarImage}
+                />
+              )}
+            </View>
+
             <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
               {usuario ? usuario.nome : "Visitante"}
             </Text>

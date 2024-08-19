@@ -19,7 +19,6 @@ import { FileText, LogOut, House, UserRound } from "lucide-react-native";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
-const condicaoParaOcultar = true;
 
 function CustomDrawerContent(props) {
   return (

@@ -100,6 +100,16 @@ export default function Atualizar({ navigation }) {
     );
   }
 
+  const data = new Date(usuario.data_criacao);
+  // Opções para formatar a data
+  const opcoes = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
+  // Formata a data
+  const dataFormatada = data.toLocaleDateString("pt-BR", opcoes);
+
   return (
     <>
       <View style={estilos.container}>
@@ -112,7 +122,7 @@ export default function Atualizar({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Perfil</Text>
+            <Text style={estilos.menuTexto}>Editar Perfil</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}
@@ -141,27 +151,78 @@ export default function Atualizar({ navigation }) {
                 )}
               </View>
             </TouchableOpacity>
-            <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
-              {usuario ? usuario.nome : "Visitante"}
-            </Text>
-
-            <Text style={{ color: "white", fontSize: 14, marginTop: 4 }}>
-              @{usuario ? usuario.tipo : "Desconhecido"}
-            </Text>
-            {/* <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
-              {usuario ? usuario.funcao : "Desconhecido"}
-            </Text> */}
-            <Pressable style={estilos.botao}>
-              <Text style={estilos.textoEditar}>Editar Perfil</Text>
-            </Pressable>
           </View>
         </View>
 
-        <View style={estilos.viewDados}>
-          <ScrollView
-            contentContainerStyle={estilos.scrollContainer}
-          ></ScrollView>
-        </View>
+        <ScrollView contentContainerStyle={estilos.scrollContainer}>
+          <View style={estilos.viewInfo}>
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Nome Completo</Text>
+              <TextInput style={estilos.input} value={usuario.nome} />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
+              <TextInput style={estilos.input} value={usuario.email} />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Celular</Text>
+              <TextInput style={estilos.input} value={usuario.celular} />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Senha</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.senha}
+                secureTextEntry={true}
+                maxLength={15}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Data de Nascimento</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.data_nascimento}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Nacionalidade</Text>
+              <TextInput style={estilos.input} value={usuario.nacionalidade} />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Empresa</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.empresa}
+                editable={false}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Cargo</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.funcao}
+                editable={false}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Pressable style={estilos.botao}>
+                <Text style={estilos.textoBotao}>Atualizar</Text>
+              </Pressable>
+            </View>
+          </View>
+
+          <View style={estilos.viewCriacao}>
+            <Text style={estilos.criacao}>Ingressou {dataFormatada}</Text>
+          </View>
+        </ScrollView>
       </View>
     </>
   );
@@ -205,11 +266,8 @@ const estilos = StyleSheet.create({
   },
 
   viewInfo: {
-    alignItems: "flex-start",
-
-    borderRadius: 10,
-    padding: 6,
-    marginBottom: "5%",
+    padding: 16,
+    backgroundColor: "#ff7938",
   },
 
   avatarContainer: {
@@ -217,8 +275,8 @@ const estilos = StyleSheet.create({
     height: 130,
     borderWidth: 2,
     borderColor: "white",
-    borderRadius: 85, // metade do tamanho da view para garantir que a borda seja redonda
-    overflow: "hidden", // garantir que o conteúdo da view se ajuste dentro da borda arredondada
+    borderRadius: 85,
+    overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: "5%",
@@ -244,81 +302,54 @@ const estilos = StyleSheet.create({
   botao: {
     marginTop: 16,
     backgroundColor: "#ff7938",
-    padding: 10,
-    borderRadius: 20,
-    borderWidth: 0.8,
+    padding: 9,
+    borderRadius: 30,
+    borderWidth: 1.5,
     borderColor: "white",
-    width: "45%",
+    width: "100%",
+    elevation: 3,
   },
-  textoEditar: {
+  textoBotao: {
     color: "white",
-    textAlign: "center",
     fontWeight: "bold",
+    paddingBottom: 12,
+    fontSize: 17,
+    textAlign: "center",
+  },
+  textoInfo: {
+    color: "white",
+    fontWeight: "bold",
+    padding: 6,
+    paddingBottom: 12,
+    fontSize: 17,
+  },
+  viewDados: {
+    paddingTop: 20,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  viewDados: {
-    flex: 1,
-    marginTop: 30,
-    backgroundColor: "#f8f8f8",
-    margin: "0%",
-    padding: "0%",
-  },
-  lista: {
-    borderBottomWidth: 1,
-    borderColor: "#c2bbba",
-    backgroundColor: "#f8f8f8",
-  },
-
-  infoPessoais: {
-    margin: "0%",
-    padding: "0%",
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-
-  seccao: {
-    flexDirection: "row",
-
-    justifyContent: "space-between",
-  },
 
   input: {
     borderWidth: 1,
     padding: 8,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-    borderRadius: 10,
-    marginVertical: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    width: "70%",
-  },
-  botoes: {
-    width: "70%",
-    padding: 8,
-    borderRadius: 8,
-    marginVertical: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    alignItems: "center",
-  },
-  textoBotao: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "white",
-  },
-  viewInputs: {
+    borderColor: "#F2F5FC",
+    borderRadius: 20,
+    backgroundColor: "#F2F5FC",
     width: "100%",
-    alignContent: "flex-start",
-    borderWidth: 0.5,
-    borderColor: "rgba(0, 0, 0, 0.2)",
+    color: "gray",
   },
-  listItem: {
-    margin: "0%",
-    padding: "0%",
-    paddingLeft: 0,
-    paddingRight: 0,
+  viewCriacao: {
+    backgroundColor: "#ff7938",
+    paddingTop: 40,
+    paddingBottom: 6,
+  },
+  criacao: {
+    color: "white",
+    fontSize: 10,
+    padding: 6,
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",

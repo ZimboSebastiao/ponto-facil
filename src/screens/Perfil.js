@@ -112,7 +112,7 @@ export default function Perfil({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Perfil</Text>
+            <Text style={estilos.menuTexto}>Perfil do Usuário</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}

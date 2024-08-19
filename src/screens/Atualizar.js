@@ -142,7 +142,7 @@ export default function Atualizar({ navigation }) {
                 <Camera size={30} color="#ff7938" />
               </TouchableOpacity>
             </View>
-            <Text style={{ color: "white", fontSize: 16 }}>
+            <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
               @{usuario ? usuario.tipo : "Desconhecido"}
             </Text>
           </View>

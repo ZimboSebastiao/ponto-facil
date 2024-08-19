@@ -154,6 +154,8 @@ export default function Atualizar({ navigation }) {
           </View>
         </View>
 
+        <View style={estilos.linhaHorizontal} />
+
         <ScrollView contentContainerStyle={estilos.scrollContainer}>
           <View style={estilos.viewInfo}>
             <View style={estilos.viewDados}>
@@ -239,7 +241,7 @@ const estilos = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
-    marginBottom: "0%",
+    marginBottom: "14%",
   },
   cabecalho: {
     flexDirection: "row",
@@ -305,7 +307,7 @@ const estilos = StyleSheet.create({
     padding: 9,
     borderRadius: 30,
     borderWidth: 1.5,
-    borderColor: "white",
+    borderColor: "#e8eefc",
     width: "100%",
     elevation: 3,
   },
@@ -335,21 +337,26 @@ const estilos = StyleSheet.create({
   input: {
     borderWidth: 1,
     padding: 8,
-    borderColor: "#F2F5FC",
+    borderColor: "#e8eefc",
     borderRadius: 20,
-    backgroundColor: "#F2F5FC",
+    backgroundColor: "#e8eefc",
     width: "100%",
     color: "gray",
   },
   viewCriacao: {
     backgroundColor: "#ff7938",
-    paddingTop: 40,
+    paddingTop: 25,
     paddingBottom: 6,
   },
   criacao: {
     color: "white",
     fontSize: 10,
     padding: 6,
+  },
+  linhaHorizontal: {
+    height: 2,
+    backgroundColor: "white",
+    marginVertical: 4,
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",

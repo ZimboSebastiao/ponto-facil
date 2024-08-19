@@ -12,14 +12,7 @@ import {
   Pressable,
 } from "react-native";
 import { Avatar, List } from "react-native-paper";
-import {
-  AlignLeft,
-  User,
-  UserPlus,
-  UserCog,
-  UserMinus,
-  UserRoundPen,
-} from "lucide-react-native";
+import { AlignLeft, Camera } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -134,23 +127,21 @@ export default function Atualizar({ navigation }) {
           </View>
 
           <View style={estilos.imagem}>
-            <TouchableOpacity onPress={pickImage}>
-              <View style={estilos.avatarContainer}>
-                {image ? (
-                  <Avatar.Image
-                    size={150}
-                    source={{ uri: image }}
-                    alt="Foto do perfil"
-                  />
-                ) : (
-                  <Avatar.Image
-                    source={require("./../../assets/images/icon.png")}
-                    alt="Foto do perfil padrão"
-                    style={estilos.avatarImage}
-                  />
-                )}
-              </View>
-            </TouchableOpacity>
+            <View style={estilos.avatarContainer}>
+              <Avatar.Image
+                size={150}
+                source={
+                  image
+                    ? { uri: image }
+                    : require("./../../assets/images/icon.png")
+                }
+                alt="Foto do perfil"
+                style={estilos.avatarImage}
+              />
+              <TouchableOpacity onPress={pickImage} style={estilos.cameraIcon}>
+                <Camera size={30} color="#ff7938" />
+              </TouchableOpacity>
+            </View>
             <Text style={{ color: "white", fontSize: 16 }}>
               @{usuario ? usuario.tipo : "Desconhecido"}
             </Text>
@@ -278,16 +269,16 @@ const estilos = StyleSheet.create({
   avatarContainer: {
     width: 150,
     height: 150,
-    borderWidth: 2,
     borderColor: "white",
     borderRadius: 85,
     overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: "5%",
+    position: "relative",
   },
-  avatarImage: {
-    borderRadius: 47, // metade do tamanho da imagem
+  avatarContainer: {
+    position: "relative",
   },
   avatarPerfil: {
     width: 42,
@@ -299,11 +290,7 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  avatarImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
+
   botao: {
     marginTop: 16,
     backgroundColor: "#ff7938",
@@ -363,5 +350,15 @@ const estilos = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",
+  },
+
+  avatarImage: {},
+  cameraIcon: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "#ffff",
+    borderRadius: 20,
+    padding: 5,
   },
 });

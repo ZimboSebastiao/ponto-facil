@@ -276,8 +276,8 @@ const estilos = StyleSheet.create({
   },
 
   avatarContainer: {
-    width: 130,
-    height: 130,
+    width: 150,
+    height: 150,
     borderWidth: 2,
     borderColor: "white",
     borderRadius: 85,
@@ -344,7 +344,7 @@ const estilos = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#e8eefc",
     width: "100%",
-    color: "gray",
+    color: "black",
   },
   viewCriacao: {
     backgroundColor: "#ff7938",

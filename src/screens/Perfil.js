@@ -112,7 +112,7 @@ export default function Perfil({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Perfil do Usuário</Text>
+            <Text style={estilos.menuTexto}>Perfil</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}
@@ -146,11 +146,14 @@ export default function Perfil({ navigation }) {
             </Text>
 
             <Text style={{ color: "white", fontSize: 14, marginTop: 4 }}>
-              {usuario ? usuario.tipo : "Desconhecido"}
+              @{usuario ? usuario.tipo : "Desconhecido"}
             </Text>
-            <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
+            {/* <Text style={{ color: "white", fontSize: 15, marginTop: 4 }}>
               {usuario ? usuario.funcao : "Desconhecido"}
-            </Text>
+            </Text> */}
+            <Pressable style={estilos.botao}>
+              <Text style={estilos.textoEditar}>Editar Perfil</Text>
+            </Pressable>
           </View>
         </View>
 
@@ -308,8 +311,8 @@ const estilos = StyleSheet.create({
   },
 
   avatarContainer: {
-    width: 150,
-    height: 150,
+    width: 130,
+    height: 130,
     borderWidth: 2,
     borderColor: "white",
     borderRadius: 85, // metade do tamanho da view para garantir que a borda seja redonda
@@ -335,6 +338,20 @@ const estilos = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
+  },
+  botao: {
+    marginTop: 16,
+    backgroundColor: "#ff7938",
+    padding: 10,
+    borderRadius: 20,
+    borderWidth: 0.8,
+    borderColor: "white",
+    width: "45%",
+  },
+  textoEditar: {
+    color: "white",
+    textAlign: "center",
+    fontWeight: "bold",
   },
   loadingContainer: {
     flex: 1,

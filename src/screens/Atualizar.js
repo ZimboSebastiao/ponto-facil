@@ -151,6 +151,9 @@ export default function Atualizar({ navigation }) {
                 )}
               </View>
             </TouchableOpacity>
+            <Text style={{ color: "white", fontSize: 16 }}>
+              @{usuario ? usuario.tipo : "Desconhecido"}
+            </Text>
           </View>
         </View>
 
@@ -241,7 +244,7 @@ const estilos = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
-    marginBottom: "14%",
+    marginBottom: "6%",
   },
   cabecalho: {
     flexDirection: "row",

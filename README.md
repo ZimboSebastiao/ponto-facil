@@ -19,6 +19,26 @@ O aplicativo foi desenvolvido em React Native com funcionalidades de login, home
   <img src="assets/images/editarp.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
 </div>
 
+## Instalação
+
+1. Clone este repositório:
+
+```bash
+git clone https://github.com/ZimboSebastiao/ponto-facil.git
+```
+
+2. Instale as dependências:
+
+```bash
+npm install
+```
+
+3. Execute o aplicativo:
+
+```bash
+npx expo start
+```
+
 ## Estrutura de Pastas
 
 ```plaintext
@@ -76,3 +96,15 @@ Os tokens de autenticação e seus tempos de expiração são armazenados localm
 ### 4. Relatórios e Histórico
 
 O usuário pode visualizar relatórios e históricos relacionados às suas atividades no aplicativo. A tela de Relatório exibe dados, como eventos e registros de tempo, e permite ao usuário carregar ou atualizar uma imagem de perfil.
+
+## Tecnologias Utilizadas
+
+- **React Native:** Framework para desenvolvimento de aplicativos mobile.
+- **Expo:** Plataforma para desenvolvimento de apps React Native.
+- **Axios:** Cliente HTTP para chamadas à API.
+- **AsyncStorage:** Armazenamento local no dispositivo para tokens de autenticação.
+- **React Navigation:** Gerenciamento de navegação entre telas.
+
+## Considerações Finais
+
+O aplicativo está sendo desenvolvido com o objetivo de ajudar pequenas empresas a gerenciar de forma eficiente as horas de trabalho dos seus funcionários. Buscamos criar uma ferramenta funcional, intuitiva e acessível, que simplifique o processo de marcação de ponto e contribua para a organização interna da empresa. Nosso foco está em oferecer uma solução útil que atenda às necessidades das pequenas empresas, garantindo praticidade e eficiência no dia a dia.

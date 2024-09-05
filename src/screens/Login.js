@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import axios from "axios";
 import { useState } from "react";
-import backgroundImage from "../../assets/images/login.png";
+import backgroundImage from "../../assets/images/img-login.png";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Login({ navigation }) {
@@ -124,8 +124,8 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     width: "auto",
     height: "20%",
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
+    borderBottomLeftRadius: 15,
+    borderBottomRightRadius: 15,
   },
   formulario: {
     padding: 23,

@@ -15,6 +15,7 @@ O aplicativo foi desenvolvido em React Native com funcionalidades de login, home
   <img src="assets/images/registrada.jpg" alt="Registradal" style="width: 23%; height: auto;">
   <img src="assets/images/lateral.jpg" alt="Menu Lateral" style="width: 23%; height: auto;">
   <img src="assets/images/historico.jpg" alt="Historico" style="width: 23%; height: auto;">
+  <img src="assets/images/user.jpg" alt="Perfil" style="width: 23%; height: auto;">
   <img src="assets/images/editar.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
   <img src="assets/images/editarp.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
 </div>

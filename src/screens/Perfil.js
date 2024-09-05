@@ -4,20 +4,17 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
-  TouchableOpacity,
   Text,
   ScrollView,
-  TextInput,
   Pressable,
 } from "react-native";
 import { Avatar, List } from "react-native-paper";
 import {
   AlignLeft,
-  User,
   UserPlus,
-  UserCog,
   UserMinus,
-  UserRoundPen,
+  ChevronRight,
+  Users,
 } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -160,7 +157,35 @@ export default function Perfil({ navigation }) {
 
         <View style={estilos.viewDados}>
           <ScrollView contentContainerStyle={estilos.scrollContainer}>
-            <View></View>
+            <View style={estilos.viewOpcoes}>
+              <Users color="#ff7938" />
+              <Pressable style={estilos.botaoOpcoes}>
+                <Text>Funcionários</Text>
+                <ChevronRight color="#ff7938" />
+              </Pressable>
+            </View>
+
+            <View style={estilos.linhahorizontal} />
+
+            <View style={estilos.viewOpcoes}>
+              <UserPlus color="#ff7938" />
+              <Pressable style={estilos.botaoOpcoes}>
+                <Text>Adicionar Funcionário</Text>
+                <ChevronRight color="#ff7938" />
+              </Pressable>
+            </View>
+
+            <View style={estilos.linhahorizontal} />
+
+            <View style={estilos.viewOpcoes}>
+              <UserMinus color="#ff7938" />
+              <Pressable style={estilos.botaoOpcoes}>
+                <Text>Deletar Funcionário</Text>
+                <ChevronRight color="#ff7938" />
+              </Pressable>
+            </View>
+
+            <View style={estilos.linhahorizontal} />
           </ScrollView>
         </View>
       </View>
@@ -250,6 +275,8 @@ const estilos = StyleSheet.create({
     borderWidth: 0.8,
     borderColor: "white",
     width: "45%",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
   },
   textoEditar: {
     color: "white",
@@ -323,5 +350,22 @@ const estilos = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",
+  },
+  viewOpcoes: {
+    padding: 16,
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  botaoOpcoes: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-end",
+    width: "91%",
+  },
+  linhahorizontal: {
+    margin: 11,
+    height: 0.7,
+    backgroundColor: "gray",
+    marginVertical: 6,
   },
 });

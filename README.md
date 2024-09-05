@@ -8,14 +8,16 @@ O aplicativo foi desenvolvido em React Native com funcionalidades de login, home
 
 ## Imagens das Telas
 
-![Login](assets/images/entrar.jpg)
-![Home](assets/images/home.jpg)
-![Registrol](assets/images/registro.jpg)
-![Registradal](assets/images/registrada.jpg)
-![Menu Lateral](assets/images/lateral.jpg)
-![Historico](assets/images/historico.jpg)
-![Editar Perfil](assets/images/editar.jpg)
-![Editar Perfil](assets/images/editarp.jpg)
+<div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+  <img src="assets/images/entrar.jpg" alt="Login" style="width: 23%; height: auto;">
+  <img src="assets/images/home.jpg" alt="Home" style="width: 23%; height: auto;">
+  <img src="assets/images/registro.jpg" alt="Registro" style="width: 23%; height: auto;">
+  <img src="assets/images/registrada.jpg" alt="Registradal" style="width: 23%; height: auto;">
+  <img src="assets/images/lateral.jpg" alt="Menu Lateral" style="width: 23%; height: auto;">
+  <img src="assets/images/historico.jpg" alt="Historico" style="width: 23%; height: auto;">
+  <img src="assets/images/editar.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
+  <img src="assets/images/editarp.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
+</div>
 
 ## Estrutura de Pastas
 

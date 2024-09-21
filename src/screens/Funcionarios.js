@@ -4,12 +4,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
-  TouchableOpacity,
-  Text,
-  Alert,
   ScrollView,
-  TextInput,
-  Pressable,
+  Text,
 } from "react-native";
 import { Avatar, Searchbar } from "react-native-paper";
 import { AlignLeft, UserRound } from "lucide-react-native";
@@ -23,36 +19,7 @@ export default function Funcionarios({ navigation }) {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
   const [funcionarios, setFuncionarios] = useState([]);
-
-  const pickImage = async () => {
-    console.log("Selecionando imagem...");
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    console.log("Resultado:", result);
-
-    if (
-      !result.cancelled &&
-      result.assets &&
-      result.assets.length > 0 &&
-      result.assets[0].uri
-    ) {
-      console.log("Imagem selecionada:", result.assets[0].uri);
-      setImage(result.assets[0].uri);
-      // Armazena a URI da imagem selecionada no AsyncStorage
-      try {
-        await AsyncStorage.setItem("profileImageUri", result.assets[0].uri);
-      } catch (error) {
-        console.log("Erro ao salvar a URI da imagem no AsyncStorage:", error);
-      }
-    } else {
-      console.log("URI da imagem é inválida.");
-    }
-  };
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
   useEffect(() => {
     CheckAuth(navigation);
@@ -66,7 +33,6 @@ export default function Funcionarios({ navigation }) {
         console.log("Erro ao carregar a URI da imagem do AsyncStorage:", error);
       }
     };
-
     loadProfileImageUri();
   }, []);
 
@@ -76,10 +42,7 @@ export default function Funcionarios({ navigation }) {
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log("Dados do usuário recuperados:", usuarioData);
         setUsuario(usuarioData);
-      } else {
-        console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
       setLoading(false);
     };
@@ -88,34 +51,67 @@ export default function Funcionarios({ navigation }) {
   }, []);
 
   useEffect(() => {
-    const fetchFuncionarios = async () => {
-      setLoading(true);
-      try {
-        const response = await fetch(
-          "http://192.168.15.11:8080/funcionarios/listar",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${await AsyncStorage.getItem("token")}`, // Adapte conforme o nome do seu token
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await response.json();
-        if (response.ok) {
-          setFuncionarios(data);
-        } else {
-          console.error("Erro ao buscar funcionários:", data);
-        }
-      } catch (error) {
-        console.error("Erro na requisição:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFuncionarios();
+    fetchTodosFuncionarios();
   }, []);
+
+  // Função para buscar todos os funcionários
+  const fetchTodosFuncionarios = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        "http://192.168.15.11:8080/funcionarios/listar",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setFuncionarios(data);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Função para buscar funcionários pelo nome
+  const fetchFuncionariosByName = async () => {
+    setLoadingSearch(true);
+    try {
+      const response = await fetch(
+        `http://192.168.15.11:8080/funcionarios/pesquisar?nome=${searchQuery}`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.json();
+      if (response.ok) {
+        setFuncionarios(data);
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    } finally {
+      setLoadingSearch(false);
+    }
+  };
+
+  const handleSearchQueryChange = (query) => {
+    setSearchQuery(query);
+    if (query.length === 0) {
+      fetchTodosFuncionarios(); // Volta para a lista inicial quando o campo é limpo
+    } else {
+      fetchFuncionariosByName(); // Realiza a pesquisa quando há texto
+    }
+  };
 
   if (loading) {
     return (
@@ -125,14 +121,12 @@ export default function Funcionarios({ navigation }) {
     );
   }
 
-  const data = new Date(usuario.data_criacao);
-  // Opções para formatar a data
+  const data = new Date(usuario?.data_criacao);
   const opcoes = {
     day: "numeric",
     month: "long",
     year: "numeric",
   };
-  // Formata a data
   const dataFormatada = data.toLocaleDateString("pt-BR", opcoes);
 
   return (
@@ -161,8 +155,9 @@ export default function Funcionarios({ navigation }) {
         <View style={estilos.pesquisar}>
           <Searchbar
             placeholder="Pesquisar funcionário"
-            onChangeText={setSearchQuery}
+            onChangeText={handleSearchQueryChange}
             value={searchQuery}
+            loading={loadingSearch}
           />
         </View>
 
@@ -180,7 +175,9 @@ export default function Funcionarios({ navigation }) {
                 </View>
               ))
             ) : (
-              <Text>Nenhum funcionário encontrado.</Text>
+              <Text style={estilos.naoEncontrado}>
+                Este funcionário não foi encontrado.
+              </Text>
             )}
           </View>
         </ScrollView>
@@ -215,27 +212,6 @@ const estilos = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-
-  imagem: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-
-  avatarContainer: {
-    width: 150,
-    height: 150,
-    borderColor: "white",
-    borderRadius: 85,
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "5%",
-    position: "relative",
-  },
-  avatarContainer: {
-    position: "relative",
-  },
   avatarPerfil: {
     width: 42,
     height: 42,
@@ -246,13 +222,9 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  pesquisar: {
+    padding: 20,
   },
-
   linhaHorizontal: {
     height: 2,
     backgroundColor: "white",
@@ -261,16 +233,13 @@ const estilos = StyleSheet.create({
   scrollContainer: {
     backgroundColor: "#f8f8f8",
   },
-  pesquisar: {
-    padding: 20,
-  },
   viewFuncionarios: {
     backgroundColor: "#ff7938",
   },
   viewFuncionario: {
     margin: 6,
     backgroundColor: "#fff",
-    padding: 14,
+    padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 10,
@@ -279,5 +248,17 @@ const estilos = StyleSheet.create({
     fontSize: 15,
     fontWeight: "bold",
     color: "#636360",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  naoEncontrado: {
+    padding: 20,
+    textAlign: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 20,
   },
 });

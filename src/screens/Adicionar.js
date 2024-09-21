@@ -4,24 +4,20 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
+  TouchableOpacity,
   Text,
+  Alert,
   ScrollView,
+  TextInput,
   Pressable,
 } from "react-native";
 import { Avatar, List } from "react-native-paper";
-import {
-  AlignLeft,
-  UserPlus,
-  UserMinus,
-  ChevronRight,
-  Users,
-} from "lucide-react-native";
+import { AlignLeft, Camera } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
-import Atualizar from "./Atualizar";
 
-export default function Perfil({ navigation }) {
+export default function Adicionar({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -97,6 +93,16 @@ export default function Perfil({ navigation }) {
     );
   }
 
+  const data = new Date(usuario.data_criacao);
+  // Opções para formatar a data
+  const opcoes = {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  };
+  // Formata a data
+  const dataFormatada = data.toLocaleDateString("pt-BR", opcoes);
+
   return (
     <>
       <View style={estilos.container}>
@@ -109,7 +115,7 @@ export default function Perfil({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Perfil do Usuário</Text>
+            <Text style={estilos.menuTexto}>Editar Perfil</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}
@@ -122,82 +128,97 @@ export default function Perfil({ navigation }) {
 
           <View style={estilos.imagem}>
             <View style={estilos.avatarContainer}>
-              {image ? (
-                <Avatar.Image
-                  size={150}
-                  source={{ uri: image }}
-                  alt="Foto do perfil"
-                />
-              ) : (
-                <Avatar.Image
-                  source={require("./../../assets/images/perfil.jpg")}
-                  alt="Foto do perfil padrão"
-                  style={estilos.avatarImage}
-                />
-              )}
+              <Avatar.Image
+                size={150}
+                source={
+                  image
+                    ? { uri: image }
+                    : require("./../../assets/images/icon.png")
+                }
+                alt="Foto do perfil"
+                style={estilos.avatarImage}
+              />
+              <TouchableOpacity onPress={pickImage} style={estilos.cameraIcon}>
+                <Camera size={30} color="#ff7938" />
+              </TouchableOpacity>
             </View>
-
-            <Text style={{ color: "white", fontSize: 17, fontWeight: "bold" }}>
-              {usuario ? usuario.nome : "Visitante"}
-            </Text>
-
-            <Text style={{ color: "white", fontSize: 14, marginTop: 4 }}>
+            <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
               @{usuario ? usuario.tipo : "Desconhecido"}
             </Text>
-            <Pressable
-              style={estilos.botao}
-              onPress={() =>
-                navigation.navigate("HomeScreen", { screen: "Atualizar" })
-              }
-            >
-              <Text style={estilos.textoEditar}>Editar Perfil</Text>
-            </Pressable>
           </View>
         </View>
 
-        <View style={estilos.viewDados}>
-          <ScrollView contentContainerStyle={estilos.scrollContainer}>
-            <View style={estilos.viewOpcoes}>
-              <Users color="#ff7938" />
-              <Pressable
-                style={estilos.botaoOpcoes}
-                onPress={() => {
-                  navigation.navigate("HomeScreen", { screen: "Funcionarios" });
-                }}
-              >
-                <Text>Funcionários</Text>
-                <ChevronRight color="#ff7938" />
-              </Pressable>
+        <View style={estilos.linhaHorizontal} />
+
+        <ScrollView contentContainerStyle={estilos.scrollContainer}>
+          <View style={estilos.viewInfo}>
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Nome Completo</Text>
+              <TextInput style={estilos.input} value={usuario.nome} />
             </View>
 
-            <View style={estilos.linhahorizontal} />
-
-            <View style={estilos.viewOpcoes}>
-              <UserPlus color="#ff7938" />
-              <Pressable
-                style={estilos.botaoOpcoes}
-                onPress={() => {
-                  navigation.navigate("HomeScreen", { screen: "Adicionar" });
-                }}
-              >
-                <Text>Adicionar Funcionário</Text>
-                <ChevronRight color="#ff7938" />
-              </Pressable>
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
+              <TextInput style={estilos.input} value={usuario.email} />
             </View>
 
-            <View style={estilos.linhahorizontal} />
-
-            <View style={estilos.viewOpcoes}>
-              <UserMinus color="#ff7938" />
-              <Pressable style={estilos.botaoOpcoes}>
-                <Text>Deletar Funcionário</Text>
-                <ChevronRight color="#ff7938" />
-              </Pressable>
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Celular</Text>
+              <TextInput style={estilos.input} value={usuario.celular} />
             </View>
 
-            <View style={estilos.linhahorizontal} />
-          </ScrollView>
-        </View>
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Senha</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.senha}
+                secureTextEntry={true}
+                maxLength={15}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Data de Nascimento</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.data_nascimento}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Nacionalidade</Text>
+              <TextInput style={estilos.input} value={usuario.nacionalidade} />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Empresa</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.empresa}
+                editable={false}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Cargo</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.funcao}
+                editable={false}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Pressable style={estilos.botao}>
+                <Text style={estilos.textoBotao}>Atualizar</Text>
+              </Pressable>
+            </View>
+          </View>
+
+          <View style={estilos.viewCriacao}>
+            <Text style={estilos.criacao}>Ingressou {dataFormatada}</Text>
+          </View>
+        </ScrollView>
       </View>
     </>
   );
@@ -214,7 +235,7 @@ const estilos = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
-    marginBottom: "0%",
+    marginBottom: "6%",
     marginTop: "4%",
   },
   cabecalho: {
@@ -242,26 +263,23 @@ const estilos = StyleSheet.create({
   },
 
   viewInfo: {
-    alignItems: "flex-start",
-
-    borderRadius: 10,
-    padding: 6,
-    marginBottom: "5%",
+    padding: 16,
+    backgroundColor: "#ff7938",
   },
 
   avatarContainer: {
-    width: 130,
-    height: 130,
-    borderWidth: 2,
+    width: 150,
+    height: 150,
     borderColor: "white",
-    borderRadius: 85, // metade do tamanho da view para garantir que a borda seja redonda
-    overflow: "hidden", // garantir que o conteúdo da view se ajuste dentro da borda arredondada
+    borderRadius: 85,
+    overflow: "hidden",
     alignItems: "center",
     justifyContent: "center",
     marginBottom: "5%",
+    position: "relative",
   },
-  avatarImage: {
-    borderRadius: 47, // metade do tamanho da imagem
+  avatarContainer: {
+    position: "relative",
   },
   avatarPerfil: {
     width: 42,
@@ -273,110 +291,75 @@ const estilos = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  avatarImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
+
   botao: {
     marginTop: 16,
     backgroundColor: "#ff7938",
-    padding: 10,
-    borderRadius: 20,
-    borderWidth: 0.8,
-    borderColor: "white",
-    width: "45%",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
+    padding: 9,
+    borderRadius: 30,
+    borderWidth: 1.5,
+    borderColor: "#e8eefc",
+    width: "100%",
+    elevation: 3,
   },
-  textoEditar: {
+  textoBotao: {
     color: "white",
-    textAlign: "center",
     fontWeight: "bold",
+    paddingBottom: 12,
+    fontSize: 17,
+    textAlign: "center",
+  },
+  textoInfo: {
+    color: "white",
+    fontWeight: "bold",
+    padding: 6,
+    paddingBottom: 12,
+    fontSize: 17,
+  },
+  viewDados: {
+    paddingTop: 20,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  viewDados: {
-    flex: 1,
-    marginTop: 30,
-    backgroundColor: "#f8f8f8",
-    margin: "0%",
-    padding: "0%",
-  },
-  lista: {
-    borderBottomWidth: 1,
-    borderColor: "#c2bbba",
-    backgroundColor: "#f8f8f8",
-  },
-
-  infoPessoais: {
-    margin: "0%",
-    padding: "0%",
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-
-  seccao: {
-    flexDirection: "row",
-
-    justifyContent: "space-between",
-  },
 
   input: {
     borderWidth: 1,
     padding: 8,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-    borderRadius: 10,
-    marginVertical: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    width: "70%",
-  },
-  botoes: {
-    width: "70%",
-    padding: 8,
-    borderRadius: 8,
-    marginVertical: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    alignItems: "center",
-  },
-  textoBotao: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "white",
-  },
-  viewInputs: {
+    borderColor: "#e8eefc",
+    borderRadius: 20,
+    backgroundColor: "#e8eefc",
     width: "100%",
-    alignContent: "flex-start",
-    borderWidth: 0.5,
-    borderColor: "rgba(0, 0, 0, 0.2)",
+    color: "black",
   },
-  listItem: {
-    margin: "0%",
-    padding: "0%",
-    paddingLeft: 0,
-    paddingRight: 0,
+  viewCriacao: {
+    backgroundColor: "#ff7938",
+    paddingTop: 25,
+    paddingBottom: 6,
+  },
+  criacao: {
+    color: "white",
+    fontSize: 10,
+    padding: 6,
+  },
+  linhaHorizontal: {
+    height: 2,
+    backgroundColor: "white",
+    marginVertical: 4,
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",
   },
-  viewOpcoes: {
-    padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  botaoOpcoes: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    width: "91%",
-  },
-  linhahorizontal: {
-    margin: 11,
-    height: 0.7,
-    backgroundColor: "gray",
-    marginVertical: 6,
+
+  avatarImage: {},
+  cameraIcon: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "#ffff",
+    borderRadius: 20,
+    padding: 5,
   },
 });

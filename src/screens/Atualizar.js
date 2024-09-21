@@ -236,6 +236,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
     marginBottom: "6%",
+    marginTop: "4%",
   },
   cabecalho: {
     flexDirection: "row",

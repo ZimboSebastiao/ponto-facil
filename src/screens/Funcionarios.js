@@ -11,7 +11,7 @@ import {
   TextInput,
   Pressable,
 } from "react-native";
-import { Avatar, List } from "react-native-paper";
+import { Avatar, Searchbar } from "react-native-paper";
 import { AlignLeft, Camera } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,6 +21,7 @@ export default function Funcionarios({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = React.useState("");
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -125,10 +126,13 @@ export default function Funcionarios({ navigation }) {
               />
             </View>
           </View>
-
-          <View>
-            <Text>Pesquisar</Text>
-          </View>
+        </View>
+        <View style={estilos.pesquisar}>
+          <Searchbar
+            placeholder="Pesquisar"
+            onChangeText={setSearchQuery}
+            value={searchQuery}
+          />
         </View>
 
         <View style={estilos.linhaHorizontal} />
@@ -155,6 +159,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
     marginBottom: "6%",
+    marginTop: "4%",
   },
   cabecalho: {
     flexDirection: "row",
@@ -213,5 +218,8 @@ const estilos = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",
+  },
+  pesquisar: {
+    padding: 20,
   },
 });

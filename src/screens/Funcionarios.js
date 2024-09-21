@@ -74,7 +74,7 @@ export default function Funcionarios({ navigation }) {
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log("Dados do usuário recuperados:", usuarioData); // Logar os dados do usuário recuperados
+        console.log("Dados do usuário recuperados:", usuarioData);
         setUsuario(usuarioData);
       } else {
         console.log("Nenhum dado de usuário encontrado no AsyncStorage");
@@ -115,7 +115,7 @@ export default function Funcionarios({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Editar Perfil</Text>
+            <Text style={estilos.menuTexto}>Funcionários</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}
@@ -126,97 +126,16 @@ export default function Funcionarios({ navigation }) {
             </View>
           </View>
 
-          <View style={estilos.imagem}>
-            <View style={estilos.avatarContainer}>
-              <Avatar.Image
-                size={150}
-                source={
-                  image
-                    ? { uri: image }
-                    : require("./../../assets/images/icon.png")
-                }
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
-              />
-              <TouchableOpacity onPress={pickImage} style={estilos.cameraIcon}>
-                <Camera size={30} color="#ff7938" />
-              </TouchableOpacity>
-            </View>
-            <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
-              @{usuario ? usuario.tipo : "Desconhecido"}
-            </Text>
+          <View>
+            <Text>Pesquisar</Text>
           </View>
         </View>
 
         <View style={estilos.linhaHorizontal} />
 
         <ScrollView contentContainerStyle={estilos.scrollContainer}>
-          <View style={estilos.viewInfo}>
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Nome Completo</Text>
-              <TextInput style={estilos.input} value={usuario.nome} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
-              <TextInput style={estilos.input} value={usuario.email} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Celular</Text>
-              <TextInput style={estilos.input} value={usuario.celular} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Senha</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.senha}
-                secureTextEntry={true}
-                maxLength={15}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Data de Nascimento</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.data_nascimento}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Nacionalidade</Text>
-              <TextInput style={estilos.input} value={usuario.nacionalidade} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Empresa</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.empresa}
-                editable={false}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Cargo</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.funcao}
-                editable={false}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Pressable style={estilos.botao}>
-                <Text style={estilos.textoBotao}>Atualizar</Text>
-              </Pressable>
-            </View>
-          </View>
-
-          <View style={estilos.viewCriacao}>
-            <Text style={estilos.criacao}>Ingressou {dataFormatada}</Text>
+          <View>
+            <Text>Lista de funcionarios</Text>
           </View>
         </ScrollView>
       </View>
@@ -256,16 +175,6 @@ const estilos = StyleSheet.create({
     marginTop: 20,
   },
 
-  texto: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-
-  viewInfo: {
-    padding: 16,
-    backgroundColor: "#ff7938",
-  },
-
   avatarContainer: {
     width: 150,
     height: 150,
@@ -291,58 +200,12 @@ const estilos = StyleSheet.create({
     justifyContent: "center",
   },
 
-  botao: {
-    marginTop: 16,
-    backgroundColor: "#ff7938",
-    padding: 9,
-    borderRadius: 30,
-    borderWidth: 1.5,
-    borderColor: "#e8eefc",
-    width: "100%",
-    elevation: 3,
-  },
-  textoBotao: {
-    color: "white",
-    fontWeight: "bold",
-    paddingBottom: 12,
-    fontSize: 17,
-    textAlign: "center",
-  },
-  textoInfo: {
-    color: "white",
-    fontWeight: "bold",
-    padding: 6,
-    paddingBottom: 12,
-    fontSize: 17,
-  },
-  viewDados: {
-    paddingTop: 20,
-  },
   loadingContainer: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
 
-  input: {
-    borderWidth: 1,
-    padding: 8,
-    borderColor: "#e8eefc",
-    borderRadius: 20,
-    backgroundColor: "#e8eefc",
-    width: "100%",
-    color: "black",
-  },
-  viewCriacao: {
-    backgroundColor: "#ff7938",
-    paddingTop: 25,
-    paddingBottom: 6,
-  },
-  criacao: {
-    color: "white",
-    fontSize: 10,
-    padding: 6,
-  },
   linhaHorizontal: {
     height: 2,
     backgroundColor: "white",
@@ -350,15 +213,5 @@ const estilos = StyleSheet.create({
   },
   scrollContainer: {
     backgroundColor: "#f8f8f8",
-  },
-
-  avatarImage: {},
-  cameraIcon: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    backgroundColor: "#ffff",
-    borderRadius: 20,
-    padding: 5,
   },
 });

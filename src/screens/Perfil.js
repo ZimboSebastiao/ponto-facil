@@ -159,7 +159,12 @@ export default function Perfil({ navigation }) {
           <ScrollView contentContainerStyle={estilos.scrollContainer}>
             <View style={estilos.viewOpcoes}>
               <Users color="#ff7938" />
-              <Pressable style={estilos.botaoOpcoes}>
+              <Pressable
+                style={estilos.botaoOpcoes}
+                onPress={() => {
+                  navigation.navigate("HomeScreen", { screen: "Funcionarios" });
+                }}
+              >
                 <Text>Funcionários</Text>
                 <ChevronRight color="#ff7938" />
               </Pressable>

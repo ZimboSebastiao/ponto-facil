@@ -115,7 +115,7 @@ export default function Adicionar({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Editar Perfil</Text>
+            <Text style={estilos.menuTexto}>Adicionar Funcianário</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}
@@ -125,98 +125,34 @@ export default function Adicionar({ navigation }) {
               />
             </View>
           </View>
-
-          <View style={estilos.imagem}>
-            <View style={estilos.avatarContainer}>
-              <Avatar.Image
-                size={150}
-                source={
-                  image
-                    ? { uri: image }
-                    : require("./../../assets/images/icon.png")
-                }
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
-              />
-              <TouchableOpacity onPress={pickImage} style={estilos.cameraIcon}>
-                <Camera size={30} color="#ff7938" />
-              </TouchableOpacity>
-            </View>
-            <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
-              @{usuario ? usuario.tipo : "Desconhecido"}
-            </Text>
-          </View>
         </View>
-
-        <View style={estilos.linhaHorizontal} />
 
         <ScrollView contentContainerStyle={estilos.scrollContainer}>
           <View style={estilos.viewInfo}>
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Nome Completo</Text>
-              <TextInput style={estilos.input} value={usuario.nome} />
+              <TextInput style={estilos.input} />
             </View>
 
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
-              <TextInput style={estilos.input} value={usuario.email} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Celular</Text>
-              <TextInput style={estilos.input} value={usuario.celular} />
+              <TextInput style={estilos.input} />
             </View>
 
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Senha</Text>
               <TextInput
                 style={estilos.input}
-                value={usuario.senha}
                 secureTextEntry={true}
-                maxLength={15}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Data de Nascimento</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.data_nascimento}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Nacionalidade</Text>
-              <TextInput style={estilos.input} value={usuario.nacionalidade} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Empresa</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.empresa}
-                editable={false}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Cargo</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.funcao}
-                editable={false}
+                maxLength={10}
               />
             </View>
 
             <View style={estilos.viewDados}>
               <Pressable style={estilos.botao}>
-                <Text style={estilos.textoBotao}>Atualizar</Text>
+                <Text style={estilos.textoBotao}>Adicionar</Text>
               </Pressable>
             </View>
-          </View>
-
-          <View style={estilos.viewCriacao}>
-            <Text style={estilos.criacao}>Ingressou {dataFormatada}</Text>
           </View>
         </ScrollView>
       </View>

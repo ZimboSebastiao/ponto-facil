@@ -16,6 +16,7 @@ import Atualizar from "./src/screens/Atualizar";
 import Logout from "./src/components/Logout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FileText, LogOut, House, UserRound } from "lucide-react-native";
+import Funcionarios from "./src/screens/Funcionarios";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -67,6 +68,15 @@ function HomeScreen() {
       <Drawer.Screen
         name="Atualizar"
         component={Atualizar}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <Drawer.Screen
+        name="Funcionarios"
+        component={Funcionarios}
         options={{
           headerShown: false,
           drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,

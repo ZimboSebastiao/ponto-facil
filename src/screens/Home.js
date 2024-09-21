@@ -136,6 +136,7 @@ export default function Home({ navigation }) {
 
   // Função Marcar Ponto
   const marcarPonto = async () => {
+    setLoading(true);
     const agora = new Date();
     const horas = String(agora.getHours()).padStart(2, "0");
     const minutos = String(agora.getMinutes()).padStart(2, "0");
@@ -151,6 +152,7 @@ export default function Home({ navigation }) {
 
     if (!usuario) {
       Alert.alert("Erro", "Usuário não encontrado");
+      setLoading(false);
       return;
     }
 
@@ -160,6 +162,7 @@ export default function Home({ navigation }) {
 
       if (!token) {
         console.error("Token não encontrado!");
+        setLoading(false);
         return;
       }
 
@@ -218,6 +221,9 @@ export default function Home({ navigation }) {
                 .toString()
                 .padStart(2, "0")}/${agora.getFullYear()}`
             );
+
+            // Atualiza os registros após marcar ponto
+            await obterRegistrosDiaAtual();
           }
         } else if (!registrosDiaAtual.intervalo) {
           // Marcar ponto de intervalo
@@ -250,6 +256,9 @@ export default function Home({ navigation }) {
                         "Registro",
                         `Intervalo marcado com sucesso: ${horaAtual}`
                       );
+
+                      // Atualiza os registros após marcar ponto
+                      await obterRegistrosDiaAtual();
                     }
                   } catch (error) {
                     if (error.response) {
@@ -296,6 +305,9 @@ export default function Home({ navigation }) {
                         "Registro",
                         `Fim de intervalo marcado com sucesso: ${horaAtual}`
                       );
+
+                      // Atualiza os registros após marcar ponto
+                      await obterRegistrosDiaAtual();
                     }
                   } catch (error) {
                     if (error.response) {
@@ -345,6 +357,9 @@ export default function Home({ navigation }) {
                         "Registro",
                         `Ponto de saída marcado com sucesso: ${horaAtual}`
                       );
+
+                      // Atualiza os registros após marcar ponto
+                      await obterRegistrosDiaAtual();
                     }
                   } catch (error) {
                     if (error.response) {
@@ -373,6 +388,8 @@ export default function Home({ navigation }) {
       } else {
         console.log("Erro ao marcar ponto:", error);
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -692,8 +709,6 @@ export default function Home({ navigation }) {
               </Text>
             </Pressable>
           </View>
-
-          <View></View>
         </SafeAreaView>
       </ScrollView>
     </>

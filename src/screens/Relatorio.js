@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { BarChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -191,6 +193,17 @@ export default function Relatorio({ navigation }) {
     },
   };
 
+  const chartData = [
+    {
+      name: "Page A",
+      uv: 4000,
+    },
+    {
+      name: "Page B",
+      uv: 4100,
+    },
+  ];
+
   if (loading) {
     return (
       <View style={estilos.loadingContainer}>
@@ -235,7 +248,7 @@ export default function Relatorio({ navigation }) {
             },
             {
               value: "pendentes",
-              label: "Pendentes",
+              label: "Frequência",
               style: estilos.buttonStyle,
               checkedColor: "white",
               uncheckedColor: "#C8C8C8",
@@ -331,6 +344,26 @@ export default function Relatorio({ navigation }) {
         {value === "pendentes" && (
           <View style={estilos.informacoes}>
             <Text>Informações Pendentes</Text>
+            <BarChart
+              data={{
+                labels: chartData.map((item) => item.name),
+                datasets: [
+                  {
+                    data: chartData.map((item) => item.uv),
+                  },
+                ],
+              }}
+              width={Dimensions.get("window").width - 32}
+              height={280}
+              yAxisLabel="$"
+              chartConfig={{
+                backgroundGradientFrom: "#F4F4F4",
+                backgroundGradientTo: "#F4F4F4",
+                color: (opacity = 8) => `rgba(255, 121, 56, ${opacity})`,
+                barPercentage: 1.5,
+              }}
+              style={estilos.grafico}
+            />
           </View>
         )}
       </PaperProvider>
@@ -414,5 +447,8 @@ const estilos = StyleSheet.create({
   viewLoc: {
     color: "#818582",
     marginTop: 6,
+  },
+  grafico: {
+    marginVertical: 16,
   },
 });

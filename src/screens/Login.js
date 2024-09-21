@@ -17,6 +17,8 @@ export default function Login({ navigation }) {
   const [senha, setSenha] = useState("");
 
   const login = async () => {
+    console.log("oiii");
+
     if (!email || !senha) {
       Alert.alert("Atenção!", "Preencha e-mail e senha!");
       return;
@@ -104,7 +106,9 @@ export default function Login({ navigation }) {
               <Text style={estilos.textoBotaoRecuperar}></Text>
             </Pressable>
             <Pressable style={estilos.botoes} onPress={login}>
-              <Text style={estilos.textoBotao}>Entrar</Text>
+              <Text lo style={estilos.textoBotao}>
+                Entrar
+              </Text>
             </Pressable>
           </View>
         </View>

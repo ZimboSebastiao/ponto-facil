@@ -18,6 +18,8 @@ O aplicativo foi desenvolvido em React Native com funcionalidades de login, home
   <img src="assets/images/user.jpg" alt="Perfil" style="width: 23%; height: auto;">
   <img src="assets/images/editar.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
   <img src="assets/images/editarp.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
+  <img src="assets/images/adicionar.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
+  <img src="assets/images/funcionarios.jpg" alt="Editar Perfil" style="width: 23%; height: auto;">
 </div>
 
 ## Instalação

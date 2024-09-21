@@ -115,7 +115,7 @@ export default function Adicionar({ navigation }) {
               h="$6"
               color="white"
             />
-            <Text style={estilos.menuTexto}>Adicionar Funcianário</Text>
+            <Text style={estilos.menuTexto}>Adicionar Funcionário</Text>
             <View style={estilos.avatarPerfil}>
               <Avatar.Image
                 size={40}

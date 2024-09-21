@@ -12,7 +12,7 @@ import {
   Pressable,
 } from "react-native";
 import { Avatar, Searchbar } from "react-native-paper";
-import { AlignLeft, Camera } from "lucide-react-native";
+import { AlignLeft, UserRound } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -22,6 +22,7 @@ export default function Funcionarios({ navigation }) {
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = React.useState("");
+  const [funcionarios, setFuncionarios] = useState([]);
 
   const pickImage = async () => {
     console.log("Selecionando imagem...");
@@ -86,6 +87,36 @@ export default function Funcionarios({ navigation }) {
     obterUsuario();
   }, []);
 
+  useEffect(() => {
+    const fetchFuncionarios = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(
+          "http://192.168.15.11:8080/funcionarios/listar",
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${await AsyncStorage.getItem("token")}`, // Adapte conforme o nome do seu token
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        const data = await response.json();
+        if (response.ok) {
+          setFuncionarios(data);
+        } else {
+          console.error("Erro ao buscar funcionários:", data);
+        }
+      } catch (error) {
+        console.error("Erro na requisição:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFuncionarios();
+  }, []);
+
   if (loading) {
     return (
       <View style={estilos.loadingContainer}>
@@ -129,7 +160,7 @@ export default function Funcionarios({ navigation }) {
         </View>
         <View style={estilos.pesquisar}>
           <Searchbar
-            placeholder="Pesquisar"
+            placeholder="Pesquisar funcionário"
             onChangeText={setSearchQuery}
             value={searchQuery}
           />
@@ -138,8 +169,19 @@ export default function Funcionarios({ navigation }) {
         <View style={estilos.linhaHorizontal} />
 
         <ScrollView contentContainerStyle={estilos.scrollContainer}>
-          <View>
-            <Text>Lista de funcionarios</Text>
+          <View style={estilos.viewFuncionarios}>
+            {funcionarios.length > 0 ? (
+              funcionarios.map((funcionario) => (
+                <View style={estilos.viewFuncionario} key={funcionario.id}>
+                  <Text style={estilos.textoFuncionario} key={funcionario.id}>
+                    {funcionario.nome}
+                  </Text>
+                  <UserRound size={23} color="#ff7938" />
+                </View>
+              ))
+            ) : (
+              <Text>Nenhum funcionário encontrado.</Text>
+            )}
           </View>
         </ScrollView>
       </View>
@@ -221,5 +263,21 @@ const estilos = StyleSheet.create({
   },
   pesquisar: {
     padding: 20,
+  },
+  viewFuncionarios: {
+    backgroundColor: "#ff7938",
+  },
+  viewFuncionario: {
+    margin: 6,
+    backgroundColor: "#fff",
+    padding: 14,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    borderRadius: 10,
+  },
+  textoFuncionario: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#636360",
   },
 });

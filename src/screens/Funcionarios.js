@@ -174,7 +174,7 @@ export default function Funcionarios({ navigation }) {
               ))
             ) : (
               <Text style={estilos.naoEncontrado}>
-                Este funcionário não foi encontrado.
+                Nenhum funcionário foi encontrado.
               </Text>
             )}
           </View>
@@ -195,7 +195,7 @@ const estilos = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
-    marginBottom: "9%",
+    marginBottom: "6%",
     marginTop: "4%",
   },
   cabecalho: {
@@ -223,23 +223,24 @@ const estilos = StyleSheet.create({
   pesquisar: {
     padding: 20,
   },
-
+  linhaHorizontal: {
+    height: 2,
+    backgroundColor: "white",
+    marginVertical: 4,
+  },
   scrollContainer: {
-    backgroundColor: "#FFFF",
+    backgroundColor: "#f8f8f8",
   },
   viewFuncionarios: {
-    backgroundColor: "#FFFF",
-    marginTop: 20,
-    marginBottom: 10,
+    backgroundColor: "#ff7938",
   },
   viewFuncionario: {
-    margin: 8,
-    backgroundColor: "#ededed",
+    margin: 6,
+    backgroundColor: "#e8eefc",
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 10,
-    marginTop: 10,
   },
   textoFuncionario: {
     fontSize: 15,

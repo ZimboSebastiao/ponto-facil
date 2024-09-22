@@ -224,7 +224,7 @@ export default function Deletar({ navigation }) {
               ))
             ) : (
               <Text style={estilos.naoEncontrado}>
-                Este funcionário não foi encontrado.
+                Nenhum funcionário foi encontrado.
               </Text>
             )}
           </View>

@@ -276,7 +276,7 @@ const estilos = StyleSheet.create({
   },
 
   textoInfo: {
-    color: "black",
+    color: "#727273",
     fontWeight: "bold",
     padding: 6,
     paddingBottom: 12,
@@ -294,9 +294,9 @@ const estilos = StyleSheet.create({
   input: {
     borderWidth: 1,
     padding: 12,
-    borderColor: "#e8eefc",
+    borderColor: "#ededed",
     borderRadius: 10,
-    backgroundColor: "#e8eefc",
+    backgroundColor: "#ededed",
     width: "100%",
     color: "gray",
   },

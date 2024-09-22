@@ -9,6 +9,7 @@ import {
   ScrollView,
   TextInput,
   Pressable,
+  Alert,
 } from "react-native";
 import { Avatar } from "react-native-paper";
 import { Camera, ChevronLeft } from "lucide-react-native";
@@ -20,9 +21,14 @@ export default function Atualizar({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [celular, setCelular] = useState("");
+  const [senha, setSenha] = useState("");
+  const [dataNascimento, setDataNascimento] = useState("");
+  const [nacionalidade, setNacionalidade] = useState("");
 
   const pickImage = async () => {
-    console.log("Selecionando imagem...");
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -30,24 +36,18 @@ export default function Atualizar({ navigation }) {
       quality: 1,
     });
 
-    console.log("Resultado:", result);
-
     if (
       !result.cancelled &&
       result.assets &&
       result.assets.length > 0 &&
       result.assets[0].uri
     ) {
-      console.log("Imagem selecionada:", result.assets[0].uri);
       setImage(result.assets[0].uri);
-      // Armazena a URI da imagem selecionada no AsyncStorage
       try {
         await AsyncStorage.setItem("profileImageUri", result.assets[0].uri);
       } catch (error) {
         console.log("Erro ao salvar a URI da imagem no AsyncStorage:", error);
       }
-    } else {
-      console.log("URI da imagem é inválida.");
     }
   };
 
@@ -73,10 +73,13 @@ export default function Atualizar({ navigation }) {
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log("Dados do usuário recuperados:", usuarioData); // Logar os dados do usuário recuperados
         setUsuario(usuarioData);
-      } else {
-        console.log("Nenhum dado de usuário encontrado no AsyncStorage");
+        setNome(usuarioData.nome);
+        setEmail(usuarioData.email);
+        setCelular(usuarioData.celular);
+        setSenha(usuarioData.senha);
+        setDataNascimento(usuarioData.data_nascimento);
+        setNacionalidade(usuarioData.nacionalidade);
       }
       setLoading(false);
     };
@@ -91,6 +94,41 @@ export default function Atualizar({ navigation }) {
       </View>
     );
   }
+
+  const atualizarUsuario = async () => {
+    try {
+      const response = await fetch(
+        `http://192.168.15.11:8080/usuarios/${usuario.id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nome,
+            email,
+            celular,
+            senha,
+            data_nascimento: dataNascimento,
+            nacionalidade,
+          }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
+        Alert.alert("Sucesso", "Dados atualizados com sucesso!");
+        navigation.navigate("Perfil");
+      } else {
+        Alert.alert("Erro", data.error || "Erro ao atualizar dados");
+      }
+    } catch (error) {
+      console.log("Erro durante a requisição:", error);
+      Alert.alert("Erro", "Ocorreu um erro ao tentar atualizar os dados.");
+    }
+  };
 
   const data = new Date(usuario.data_criacao);
   // Opções para formatar a data
@@ -122,18 +160,12 @@ export default function Atualizar({ navigation }) {
               />
             </View>
           </View>
-
           <View style={estilos.imagem}>
             <View style={estilos.avatarContainer}>
               <Avatar.Image
                 size={150}
-                source={
-                  image
-                    ? { uri: image }
-                    : require("./../../assets/images/icon.png")
-                }
+                source={image ? { uri: image } : null}
                 alt="Foto do perfil"
-                style={estilos.avatarImage}
               />
               <TouchableOpacity onPress={pickImage} style={estilos.cameraIcon}>
                 <Camera size={30} color="#ff7938" />
@@ -144,69 +176,61 @@ export default function Atualizar({ navigation }) {
             </Text>
           </View>
         </View>
-
         <View style={estilos.linhaHorizontal} />
-
         <ScrollView contentContainerStyle={estilos.scrollContainer}>
           <View style={estilos.viewInfo}>
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Nome Completo</Text>
-              <TextInput style={estilos.input} value={usuario.nome} />
+              <TextInput
+                style={estilos.input}
+                value={nome}
+                onChangeText={(text) => setNome(text)}
+              />
             </View>
-
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
-              <TextInput style={estilos.input} value={usuario.email} />
+              <TextInput
+                style={estilos.input}
+                value={email}
+                onChangeText={(text) => setEmail(text)}
+              />
             </View>
-
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Celular</Text>
-              <TextInput style={estilos.input} value={usuario.celular} />
+              <TextInput
+                style={estilos.input}
+                value={celular}
+                onChangeText={(text) => setCelular(text)}
+              />
             </View>
-
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Senha</Text>
               <TextInput
                 style={estilos.input}
-                value={usuario.senha}
+                value={senha}
                 secureTextEntry={true}
-                maxLength={15}
+                onChangeText={(text) => setSenha(text)}
+                maxLength={10}
               />
             </View>
-
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Data de Nascimento</Text>
               <TextInput
                 style={estilos.input}
-                value={usuario.data_nascimento}
+                value={dataNascimento}
+                onChangeText={(text) => setDataNascimento(text)}
               />
             </View>
-
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Nacionalidade</Text>
-              <TextInput style={estilos.input} value={usuario.nacionalidade} />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Empresa</Text>
               <TextInput
                 style={estilos.input}
-                value={usuario.empresa}
-                editable={false}
+                value={nacionalidade}
+                onChangeText={(text) => setNacionalidade(text)}
               />
             </View>
-
             <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Cargo</Text>
-              <TextInput
-                style={estilos.input}
-                value={usuario.funcao}
-                editable={false}
-              />
-            </View>
-
-            <View style={estilos.viewDados}>
-              <Pressable style={estilos.botao}>
+              <Pressable style={estilos.botao} onPress={atualizarUsuario}>
                 <Text style={estilos.textoBotao}>Atualizar</Text>
               </Pressable>
             </View>
@@ -220,7 +244,6 @@ export default function Atualizar({ navigation }) {
     </>
   );
 }
-
 const estilos = StyleSheet.create({
   container: {
     flex: 1,

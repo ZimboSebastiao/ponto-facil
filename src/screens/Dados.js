@@ -95,41 +95,6 @@ export default function Dados({ navigation }) {
     );
   }
 
-  const atualizarUsuario = async () => {
-    try {
-      const response = await fetch(
-        `http://192.168.15.11:8080/usuarios/${usuario.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nome,
-            email,
-            celular,
-            senha,
-            data_nascimento: dataNascimento,
-            nacionalidade,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        Alert.alert("Sucesso", "Dados atualizados com sucesso!");
-        navigation.navigate("Perfil");
-      } else {
-        Alert.alert("Erro", data.error || "Erro ao atualizar dados");
-      }
-    } catch (error) {
-      console.log("Erro durante a requisição:", error);
-      Alert.alert("Erro", "Ocorreu um erro ao tentar atualizar os dados.");
-    }
-  };
-
   const data = new Date(usuario.data_criacao);
   // Opções para formatar a data
   const opcoes = {
@@ -172,6 +137,9 @@ export default function Dados({ navigation }) {
               </TouchableOpacity>
             </View>
             <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
+              {usuario ? usuario.funcao : "Desconhecido"}
+            </Text>
+            <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
               @{usuario ? usuario.tipo : "Desconhecido"}
             </Text>
           </View>
@@ -181,44 +149,27 @@ export default function Dados({ navigation }) {
           <View style={estilos.viewInfo}>
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Nome Completo</Text>
-              <TextInput
-                style={estilos.input}
-                value={nome}
-                onChangeText={(text) => setNome(text)}
-              />
+              <TextInput style={estilos.input} value={nome} editable={false} />
             </View>
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
-              <TextInput
-                style={estilos.input}
-                value={email}
-                onChangeText={(text) => setEmail(text)}
-              />
+              <TextInput style={estilos.input} value={email} editable={false} />
             </View>
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Celular</Text>
               <TextInput
                 style={estilos.input}
                 value={celular}
-                onChangeText={(text) => setCelular(text)}
+                editable={false}
               />
             </View>
-            <View style={estilos.viewDados}>
-              <Text style={estilos.textoInfo}>Senha</Text>
-              <TextInput
-                style={estilos.input}
-                value={senha}
-                secureTextEntry={true}
-                onChangeText={(text) => setSenha(text)}
-                maxLength={10}
-              />
-            </View>
+
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Data de Nascimento</Text>
               <TextInput
                 style={estilos.input}
                 value={dataNascimento}
-                onChangeText={(text) => setDataNascimento(text)}
+                editable={false}
               />
             </View>
             <View style={estilos.viewDados}>
@@ -226,13 +177,25 @@ export default function Dados({ navigation }) {
               <TextInput
                 style={estilos.input}
                 value={nacionalidade}
-                onChangeText={(text) => setNacionalidade(text)}
+                editable={false}
               />
             </View>
             <View style={estilos.viewDados}>
-              <Pressable style={estilos.botao} onPress={atualizarUsuario}>
-                <Text style={estilos.textoBotao}>Atualizar</Text>
-              </Pressable>
+              <Text style={estilos.textoInfo}>Empresa</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.empresa}
+                editable={false}
+              />
+            </View>
+
+            <View style={estilos.viewDados}>
+              <Text style={estilos.textoInfo}>Cargo</Text>
+              <TextInput
+                style={estilos.input}
+                value={usuario.funcao}
+                editable={false}
+              />
             </View>
           </View>
 
@@ -284,7 +247,7 @@ const estilos = StyleSheet.create({
 
   viewInfo: {
     padding: 16,
-    backgroundColor: "#ff7938",
+    backgroundColor: "white",
   },
 
   avatarContainer: {
@@ -312,25 +275,8 @@ const estilos = StyleSheet.create({
     justifyContent: "center",
   },
 
-  botao: {
-    marginTop: 16,
-    backgroundColor: "#ff7938",
-    padding: 9,
-    borderRadius: 30,
-    borderWidth: 1.5,
-    borderColor: "#e8eefc",
-    width: "100%",
-    elevation: 3,
-  },
-  textoBotao: {
-    color: "white",
-    fontWeight: "bold",
-    paddingBottom: 12,
-    fontSize: 17,
-    textAlign: "center",
-  },
   textoInfo: {
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     padding: 6,
     paddingBottom: 12,
@@ -347,30 +293,26 @@ const estilos = StyleSheet.create({
 
   input: {
     borderWidth: 1,
-    padding: 8,
+    padding: 12,
     borderColor: "#e8eefc",
-    borderRadius: 20,
+    borderRadius: 10,
     backgroundColor: "#e8eefc",
     width: "100%",
-    color: "black",
+    color: "gray",
   },
   viewCriacao: {
-    backgroundColor: "#ff7938",
+    backgroundColor: "white",
     paddingTop: 25,
     paddingBottom: 6,
   },
   criacao: {
-    color: "white",
+    color: "gray",
     fontSize: 10,
     padding: 6,
   },
-  linhaHorizontal: {
-    height: 2,
-    backgroundColor: "white",
-    marginVertical: 4,
-  },
+
   scrollContainer: {
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "white",
   },
 
   avatarImage: {},

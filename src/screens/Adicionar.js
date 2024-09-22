@@ -151,6 +151,7 @@ export default function Adicionar({ navigation }) {
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Nome Completo</Text>
               <TextInput
+                placeholder="Nome Completo"
                 style={estilos.input}
                 value={nome}
                 onChangeText={(text) => setNome(text)} // Atualiza o estado do nome
@@ -160,6 +161,7 @@ export default function Adicionar({ navigation }) {
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
               <TextInput
+                placeholder="E-mail"
                 style={estilos.input}
                 value={email}
                 onChangeText={(text) => setEmail(text)} // Atualiza o estado do e-mail
@@ -169,6 +171,7 @@ export default function Adicionar({ navigation }) {
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Senha</Text>
               <TextInput
+                placeholder="Senha"
                 style={estilos.input}
                 secureTextEntry={true}
                 maxLength={10}

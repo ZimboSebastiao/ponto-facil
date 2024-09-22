@@ -75,9 +75,6 @@ export default function Home({ navigation }) {
         longitude: localizacaoAtual.coords.longitude,
       });
 
-      // Verificar a estrutura do objeto de endereço retornado
-      // console.log(enderecoReverso);
-
       // Construir o endereço a partir das informações retornadas
       let enderecoFormatado = "";
       if (enderecoReverso && enderecoReverso.length > 0) {
@@ -539,6 +536,17 @@ export default function Home({ navigation }) {
     obterRegistrosDiaAtual();
   }, []);
 
+  const obterSaudacao = () => {
+    const horaAtual = new Date().getHours();
+    if (horaAtual < 12) {
+      return "Bom dia";
+    } else if (horaAtual < 18) {
+      return "Boa tarde";
+    } else {
+      return "Boa noite";
+    }
+  };
+
   if (loading) {
     return (
       <View style={estilos.loadingContainer}>
@@ -561,7 +569,7 @@ export default function Home({ navigation }) {
                 color="white"
               />
               <Text style={estilos.menuTexto}>
-                Olá, {usuario ? usuario.nome : "Visitante"}
+                {obterSaudacao()}, {usuario ? usuario.nome : "Visitante"}
               </Text>
 
               <View style={estilos.avatarPerfil}>

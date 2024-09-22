@@ -8,7 +8,7 @@ import {
   Text,
 } from "react-native";
 import { Avatar, Searchbar } from "react-native-paper";
-import { AlignLeft, UserRound, ChevronLeft } from "lucide-react-native";
+import { Trash2, ChevronLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -169,7 +169,7 @@ export default function Deletar({ navigation }) {
                   <Text style={estilos.textoFuncionario} key={funcionario.id}>
                     {funcionario.nome}
                   </Text>
-                  <UserRound size={23} color="#ff7938" />
+                  <Trash2 size={26} color="red" />
                 </View>
               ))
             ) : (

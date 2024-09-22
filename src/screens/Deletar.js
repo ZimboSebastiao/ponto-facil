@@ -185,12 +185,20 @@ export default function Deletar({ navigation }) {
             />
             <Text style={estilos.menuTexto}> Deletar Funcionários</Text>
             <View style={estilos.avatarPerfil}>
-              <Avatar.Image
-                size={40}
-                source={image ? { uri: image } : null}
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
-              />
+              {image ? (
+                <Avatar.Image
+                  size={40}
+                  source={image ? { uri: image } : null}
+                  alt="Foto do perfil"
+                  style={estilos.avatarImage}
+                />
+              ) : (
+                <Avatar.Image
+                  size={40}
+                  source={require("./../../assets/images/perfil.jpg")}
+                  alt="Foto do perfil padrão"
+                />
+              )}
             </View>
           </View>
         </View>

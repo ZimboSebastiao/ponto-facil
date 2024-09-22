@@ -79,12 +79,19 @@ export default function UsuarioAvatar() {
     <View style={estilos.container}>
       <View style={estilos.imagem}>
         <View style={estilos.avatarContainer}>
-          <Avatar.Image
-            size={120}
-            source={image ? { uri: image } : null}
-            style={estilos.avatarImage}
-            alt="Foto do perfil"
-          />
+          {image ? (
+            <Avatar.Image
+              size={150}
+              source={{ uri: image }}
+              alt="Foto do perfil"
+            />
+          ) : (
+            <Avatar.Image
+              size={150}
+              source={require("./../../assets/images/perfil.jpg")}
+              alt="Foto do perfil padrão"
+            />
+          )}
         </View>
 
         <View style={estilos.viewInfo}>

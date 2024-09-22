@@ -224,13 +224,21 @@ export default function Relatorio({ navigation }) {
         />
 
         <Text style={estilos.menuTexto}>Seus registros</Text>
-        <View style={estilos.avatarContainer}>
-          <Avatar.Image
-            size={40}
-            source={image ? { uri: image } : null}
-            alt="Foto do perfil"
-            style={estilos.avatarImage}
-          />
+        <View style={estilos.avatarPerfil}>
+          {image ? (
+            <Avatar.Image
+              size={40}
+              source={image ? { uri: image } : null}
+              alt="Foto do perfil"
+              style={estilos.avatarImage}
+            />
+          ) : (
+            <Avatar.Image
+              size={40}
+              source={require("./../../assets/images/perfil.jpg")}
+              alt="Foto do perfil padrão"
+            />
+          )}
         </View>
       </View>
 

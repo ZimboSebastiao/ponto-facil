@@ -111,12 +111,20 @@ export default function Perfil({ navigation }) {
             />
             <Text style={estilos.menuTexto}>Perfil do Usuário</Text>
             <View style={estilos.avatarPerfil}>
-              <Avatar.Image
-                size={40}
-                source={image ? { uri: image } : null}
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
-              />
+              {image ? (
+                <Avatar.Image
+                  size={40}
+                  source={image ? { uri: image } : null}
+                  alt="Foto do perfil"
+                  style={estilos.avatarImage}
+                />
+              ) : (
+                <Avatar.Image
+                  size={40}
+                  source={require("./../../assets/images/perfil.jpg")}
+                  alt="Foto do perfil padrão"
+                />
+              )}
             </View>
           </View>
 
@@ -130,9 +138,9 @@ export default function Perfil({ navigation }) {
                 />
               ) : (
                 <Avatar.Image
+                  size={150}
                   source={require("./../../assets/images/perfil.jpg")}
                   alt="Foto do perfil padrão"
-                  style={estilos.avatarImage}
                 />
               )}
             </View>

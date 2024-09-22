@@ -141,12 +141,20 @@ export default function Funcionarios({ navigation }) {
             />
             <Text style={estilos.menuTexto}>Funcionários</Text>
             <View style={estilos.avatarPerfil}>
-              <Avatar.Image
-                size={40}
-                source={image ? { uri: image } : null}
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
-              />
+              {image ? (
+                <Avatar.Image
+                  size={40}
+                  source={image ? { uri: image } : null}
+                  alt="Foto do perfil"
+                  style={estilos.avatarImage}
+                />
+              ) : (
+                <Avatar.Image
+                  size={40}
+                  source={require("./../../assets/images/perfil.jpg")}
+                  alt="Foto do perfil padrão"
+                />
+              )}
             </View>
           </View>
         </View>
@@ -196,7 +204,7 @@ const estilos = StyleSheet.create({
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
     marginBottom: "6%",
-    marginTop: "4%",
+    marginTop: "8%",
   },
   cabecalho: {
     flexDirection: "row",
@@ -235,12 +243,13 @@ const estilos = StyleSheet.create({
     backgroundColor: "#ff7938",
   },
   viewFuncionario: {
-    margin: 6,
+    margin: 16,
     backgroundColor: "#e8eefc",
-    padding: 16,
+    padding: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 10,
+    marginBottom: 15,
   },
   textoFuncionario: {
     fontSize: 15,

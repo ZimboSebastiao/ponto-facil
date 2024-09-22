@@ -117,25 +117,39 @@ export default function Dados({ navigation }) {
             />
             <Text style={estilos.menuTexto}>Dados Pessoais</Text>
             <View style={estilos.avatarPerfil}>
-              <Avatar.Image
-                size={40}
-                source={image ? { uri: image } : null}
-                alt="Foto do perfil"
-                style={estilos.avatarImage}
-              />
+              {image ? (
+                <Avatar.Image
+                  size={40}
+                  source={image ? { uri: image } : null}
+                  alt="Foto do perfil"
+                  style={estilos.avatarImage}
+                />
+              ) : (
+                <Avatar.Image
+                  size={40}
+                  source={require("./../../assets/images/perfil.jpg")}
+                  alt="Foto do perfil padrão"
+                />
+              )}
             </View>
           </View>
           <View style={estilos.imagem}>
             <View style={estilos.avatarContainer}>
-              <Avatar.Image
-                size={150}
-                source={image ? { uri: image } : null}
-                alt="Foto do perfil"
-              />
-              <TouchableOpacity onPress={pickImage} style={estilos.cameraIcon}>
-                <Camera size={30} color="#ff7938" />
-              </TouchableOpacity>
+              {image ? (
+                <Avatar.Image
+                  size={150}
+                  source={{ uri: image }}
+                  alt="Foto do perfil"
+                />
+              ) : (
+                <Avatar.Image
+                  size={150}
+                  source={require("./../../assets/images/perfil.jpg")}
+                  alt="Foto do perfil padrão"
+                />
+              )}
             </View>
+
             <Text style={{ color: "white", fontSize: 16, marginTop: 6 }}>
               {usuario ? usuario.funcao : "Desconhecido"}
             </Text>

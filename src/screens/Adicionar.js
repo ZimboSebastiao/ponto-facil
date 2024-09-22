@@ -4,7 +4,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
-  TouchableOpacity,
   Text,
   Alert,
   ScrollView,
@@ -12,7 +11,7 @@ import {
   Pressable,
 } from "react-native";
 import { Avatar, List } from "react-native-paper";
-import { AlignLeft, Camera } from "lucide-react-native";
+import { ChevronLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -108,11 +107,9 @@ export default function Adicionar({ navigation }) {
       <View style={estilos.container}>
         <View style={estilos.menu}>
           <View style={estilos.cabecalho}>
-            <AlignLeft
-              onPress={() => navigation.openDrawer()}
-              m="$3"
-              w="$10"
-              h="$6"
+            <ChevronLeft
+              onPress={() => navigation.navigate("Perfil")}
+              size={30}
               color="white"
             />
             <Text style={estilos.menuTexto}>Adicionar Funcionário</Text>
@@ -167,7 +164,7 @@ const estilos = StyleSheet.create({
   },
   menu: {
     marginRight: 10,
-    padding: 25,
+    padding: 15,
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",

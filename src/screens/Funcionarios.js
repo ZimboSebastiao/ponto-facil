@@ -8,7 +8,7 @@ import {
   Text,
 } from "react-native";
 import { Avatar, Searchbar } from "react-native-paper";
-import { AlignLeft, UserRound } from "lucide-react-native";
+import { AlignLeft, UserRound, ChevronLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
@@ -134,12 +134,10 @@ export default function Funcionarios({ navigation }) {
       <View style={estilos.container}>
         <View style={estilos.menu}>
           <View style={estilos.cabecalho}>
-            <AlignLeft
-              onPress={() => navigation.openDrawer()}
-              m="$3"
-              w="$10"
-              h="$6"
+            <ChevronLeft
+              onPress={() => navigation.navigate("Perfil")}
               color="white"
+              size={30}
             />
             <Text style={estilos.menuTexto}>Funcionários</Text>
             <View style={estilos.avatarPerfil}>
@@ -193,7 +191,7 @@ const estilos = StyleSheet.create({
   },
   menu: {
     marginRight: 10,
-    padding: 25,
+    padding: 15,
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",

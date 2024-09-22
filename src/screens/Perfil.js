@@ -189,7 +189,12 @@ export default function Perfil({ navigation }) {
 
             <View style={estilos.viewOpcoes}>
               <UserMinus color="#ff7938" />
-              <Pressable style={estilos.botaoOpcoes}>
+              <Pressable
+                style={estilos.botaoOpcoes}
+                onPress={() => {
+                  navigation.navigate("HomeScreen", { screen: "Deletar" });
+                }}
+              >
                 <Text>Deletar Funcionário</Text>
                 <ChevronRight color="#ff7938" />
               </Pressable>

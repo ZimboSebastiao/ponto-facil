@@ -6,6 +6,7 @@ import {
   View,
   ScrollView,
   Text,
+  Alert,
 } from "react-native";
 import { Avatar, Searchbar } from "react-native-paper";
 import { Trash2, ChevronLeft } from "lucide-react-native";
@@ -77,6 +78,49 @@ export default function Deletar({ navigation }) {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Função para deletar um funcionário
+  const deletarFuncionario = async (id) => {
+    try {
+      const response = await fetch(
+        `http://192.168.15.11:8080/funcionarios/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (response.ok) {
+        Alert.alert("Sucesso", "Funcionário deletado com sucesso.");
+        fetchTodosFuncionarios(); // Atualiza a lista após deletar
+      } else {
+        Alert.alert("Erro", "Não foi possível deletar o funcionário.");
+      }
+    } catch (error) {
+      console.error("Erro ao deletar funcionário:", error);
+    }
+  };
+
+  // Alerta de confirmação para deletar funcionário
+  const confirmarDelecao = (id, nome) => {
+    Alert.alert(
+      "Confirmação",
+      `Tem certeza que deseja deletar ${nome}?`,
+      [
+        {
+          text: "Cancelar",
+          style: "cancel",
+        },
+        {
+          text: "Confirmar",
+          onPress: () => deletarFuncionario(id),
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   // Função para buscar funcionários pelo nome
@@ -169,7 +213,13 @@ export default function Deletar({ navigation }) {
                   <Text style={estilos.textoFuncionario} key={funcionario.id}>
                     {funcionario.nome}
                   </Text>
-                  <Trash2 size={26} color="red" />
+                  <Trash2
+                    size={26}
+                    color="red"
+                    onPress={() =>
+                      confirmarDelecao(funcionario.id, funcionario.nome)
+                    }
+                  />
                 </View>
               ))
             ) : (

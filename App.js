@@ -19,6 +19,7 @@ import { FileText, LogOut, House, UserRound } from "lucide-react-native";
 import Funcionarios from "./src/screens/Funcionarios";
 import Adicionar from "./src/screens/Adicionar";
 import Deletar from "./src/screens/Deletar";
+import Dados from "./src/screens/Dados";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -97,6 +98,15 @@ function HomeScreen() {
       <Drawer.Screen
         name="Deletar"
         component={Deletar}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,
+          drawerItemStyle: { display: "none" },
+        }}
+      />
+      <Drawer.Screen
+        name="Dados"
+        component={Dados}
         options={{
           headerShown: false,
           drawerIcon: () => <UserRound color="#ff7938" m="$0" w="$8" h="$6" />,

@@ -15,11 +15,11 @@ import {
   UserMinus,
   ChevronRight,
   Users,
+  User,
 } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { CheckAuth } from "../components/CheckAuth";
-import Atualizar from "./Atualizar";
 
 export default function Perfil({ navigation }) {
   const [image, setImage] = useState(null);
@@ -157,6 +157,20 @@ export default function Perfil({ navigation }) {
 
         <View style={estilos.viewDados}>
           <ScrollView contentContainerStyle={estilos.scrollContainer}>
+            <View style={estilos.viewOpcoes}>
+              <User color="#ff7938" />
+              <Pressable
+                style={estilos.botaoOpcoes}
+                onPress={() => {
+                  navigation.navigate("HomeScreen", { screen: "Dados" });
+                }}
+              >
+                <Text>Dados Pessoais</Text>
+                <ChevronRight color="#ff7938" />
+              </Pressable>
+            </View>
+
+            <View style={estilos.linhahorizontal} />
             <View style={estilos.viewOpcoes}>
               <Users color="#ff7938" />
               <Pressable

@@ -195,7 +195,7 @@ const estilos = StyleSheet.create({
     width: "100%",
     backgroundColor: "#ff7938",
     paddingBottom: "0%",
-    marginBottom: "6%",
+    marginBottom: "9%",
     marginTop: "4%",
   },
   cabecalho: {
@@ -223,24 +223,23 @@ const estilos = StyleSheet.create({
   pesquisar: {
     padding: 20,
   },
-  linhaHorizontal: {
-    height: 2,
-    backgroundColor: "white",
-    marginVertical: 4,
-  },
+
   scrollContainer: {
-    backgroundColor: "#f8f8f8",
+    backgroundColor: "#FFFF",
   },
   viewFuncionarios: {
-    backgroundColor: "#ff7938",
+    backgroundColor: "#FFFF",
+    marginTop: 20,
+    marginBottom: 10,
   },
   viewFuncionario: {
-    margin: 6,
-    backgroundColor: "#fff",
+    margin: 8,
+    backgroundColor: "#ededed",
     padding: 16,
     flexDirection: "row",
     justifyContent: "space-between",
     borderRadius: 10,
+    marginTop: 10,
   },
   textoFuncionario: {
     fontSize: 15,

@@ -10,7 +10,7 @@ import {
   TextInput,
   Pressable,
 } from "react-native";
-import { Avatar, List } from "react-native-paper";
+import { Avatar } from "react-native-paper";
 import { ChevronLeft } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,8 +21,11 @@ export default function Adicionar({ navigation }) {
   const [usuario, setUsuario] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  const [nome, setNome] = useState(""); // Estado para armazenar o nome
+  const [email, setEmail] = useState(""); // Estado para armazenar o e-mail
+  const [senha, setSenha] = useState(""); // Estado para armazenar a senha
+
   const pickImage = async () => {
-    console.log("Selecionando imagem...");
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -30,24 +33,18 @@ export default function Adicionar({ navigation }) {
       quality: 1,
     });
 
-    console.log("Resultado:", result);
-
     if (
       !result.cancelled &&
       result.assets &&
       result.assets.length > 0 &&
       result.assets[0].uri
     ) {
-      console.log("Imagem selecionada:", result.assets[0].uri);
       setImage(result.assets[0].uri);
-      // Armazena a URI da imagem selecionada no AsyncStorage
       try {
         await AsyncStorage.setItem("profileImageUri", result.assets[0].uri);
       } catch (error) {
         console.log("Erro ao salvar a URI da imagem no AsyncStorage:", error);
       }
-    } else {
-      console.log("URI da imagem é inválida.");
     }
   };
 
@@ -73,10 +70,7 @@ export default function Adicionar({ navigation }) {
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log("Dados do usuário recuperados:", usuarioData); // Logar os dados do usuário recuperados
         setUsuario(usuarioData);
-      } else {
-        console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
       setLoading(false);
     };
@@ -92,15 +86,43 @@ export default function Adicionar({ navigation }) {
     );
   }
 
-  const data = new Date(usuario.data_criacao);
-  // Opções para formatar a data
-  const opcoes = {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
+  const validarFormulario = async () => {
+    if (!nome || !email || !senha) {
+      Alert.alert("Erro", "Todos os campos são obrigatórios.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://192.168.15.11:8080/funcionarios", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${await AsyncStorage.getItem("token")}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: nome,
+          email: email,
+          senha: senha,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.status === 201) {
+        Alert.alert("Sucesso", "Funcionário adicionado com sucesso!");
+        setNome("");
+        setEmail("");
+        setSenha("");
+      } else {
+        Alert.alert("Erro", data.error || "Erro ao adicionar funcionário");
+        console.log("Erro ao adicionar funcionário:", data.error);
+      }
+    } catch (error) {
+      console.log("Erro durante a requisição:", error);
+
+      Alert.alert("Erro", "Ocorreu um erro ao tentar adicionar o funcionário.");
+    }
   };
-  // Formata a data
-  const dataFormatada = data.toLocaleDateString("pt-BR", opcoes);
 
   return (
     <>
@@ -128,12 +150,20 @@ export default function Adicionar({ navigation }) {
           <View style={estilos.viewInfo}>
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Nome Completo</Text>
-              <TextInput style={estilos.input} />
+              <TextInput
+                style={estilos.input}
+                value={nome}
+                onChangeText={(text) => setNome(text)} // Atualiza o estado do nome
+              />
             </View>
 
             <View style={estilos.viewDados}>
               <Text style={estilos.textoInfo}>Endereço de E-mail</Text>
-              <TextInput style={estilos.input} />
+              <TextInput
+                style={estilos.input}
+                value={email}
+                onChangeText={(text) => setEmail(text)} // Atualiza o estado do e-mail
+              />
             </View>
 
             <View style={estilos.viewDados}>
@@ -142,11 +172,13 @@ export default function Adicionar({ navigation }) {
                 style={estilos.input}
                 secureTextEntry={true}
                 maxLength={10}
+                value={senha}
+                onChangeText={(text) => setSenha(text)} // Atualiza o estado da senha
               />
             </View>
 
             <View style={estilos.viewDados}>
-              <Pressable style={estilos.botao}>
+              <Pressable style={estilos.botao} onPress={validarFormulario}>
                 <Text style={estilos.textoBotao}>Adicionar</Text>
               </Pressable>
             </View>
@@ -156,7 +188,6 @@ export default function Adicionar({ navigation }) {
     </>
   );
 }
-
 const estilos = StyleSheet.create({
   container: {
     flex: 1,

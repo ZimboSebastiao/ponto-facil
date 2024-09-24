@@ -22,8 +22,7 @@ import {
   House,
   UserRound,
   GitPullRequest,
-  BadgeHelp,
-  CircleHelp,
+  Bell,
   HelpCircle,
 } from "lucide-react-native";
 import Funcionarios from "./src/screens/Funcionarios";
@@ -33,6 +32,7 @@ import Dados from "./src/screens/Dados";
 import Solicitacao from "./src/screens/Solicitacao";
 import Atividade from "./src/screens/Atividade";
 import Duvidas from "./src/screens/Duvidas";
+import Notificacao from "./src/screens/Notificacao";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -70,6 +70,14 @@ function HomeScreen() {
         options={{
           headerShown: false,
           drawerIcon: () => <FileClock color="#ff7938" m="$0" w="$8" h="$6" />,
+        }}
+      />
+      <Drawer.Screen
+        name="Notificações"
+        component={Notificacao}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <Bell color="#ff7938" m="$0" w="$8" h="$6" />,
         }}
       />
       <Drawer.Screen

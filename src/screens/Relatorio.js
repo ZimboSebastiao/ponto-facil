@@ -352,26 +352,6 @@ export default function Relatorio({ navigation }) {
         {value === "pendentes" && (
           <View style={estilos.informacoes}>
             <Text>Informações Pendentes</Text>
-            <BarChart
-              data={{
-                labels: chartData.map((item) => item.name),
-                datasets: [
-                  {
-                    data: chartData.map((item) => item.uv),
-                  },
-                ],
-              }}
-              width={Dimensions.get("window").width - 32}
-              height={280}
-              yAxisLabel="$"
-              chartConfig={{
-                backgroundGradientFrom: "#F4F4F4",
-                backgroundGradientTo: "#F4F4F4",
-                color: (opacity = 8) => `rgba(255, 121, 56, ${opacity})`,
-                barPercentage: 1.5,
-              }}
-              style={estilos.grafico}
-            />
           </View>
         )}
       </PaperProvider>

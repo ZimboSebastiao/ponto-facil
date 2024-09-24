@@ -15,11 +15,24 @@ import Relatorio from "./src/screens/Relatorio";
 import Atualizar from "./src/screens/Atualizar";
 import Logout from "./src/components/Logout";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FileText, LogOut, House, UserRound } from "lucide-react-native";
+import {
+  CircleFadingPlus,
+  FileClock,
+  LogOut,
+  House,
+  UserRound,
+  GitPullRequest,
+  BadgeHelp,
+  CircleHelp,
+  HelpCircle,
+} from "lucide-react-native";
 import Funcionarios from "./src/screens/Funcionarios";
 import Adicionar from "./src/screens/Adicionar";
 import Deletar from "./src/screens/Deletar";
 import Dados from "./src/screens/Dados";
+import Solicitacao from "./src/screens/Solicitacao";
+import Atividade from "./src/screens/Atividade";
+import Duvidas from "./src/screens/Duvidas";
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -56,7 +69,35 @@ function HomeScreen() {
         component={Relatorio}
         options={{
           headerShown: false,
-          drawerIcon: () => <FileText color="#ff7938" m="$0" w="$8" h="$6" />,
+          drawerIcon: () => <FileClock color="#ff7938" m="$0" w="$8" h="$6" />,
+        }}
+      />
+      <Drawer.Screen
+        name="Solicitações"
+        component={Solicitacao}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <GitPullRequest color="#ff7938" m="$0" w="$8" h="$6" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Atividades"
+        component={Atividade}
+        options={{
+          headerShown: false,
+          drawerIcon: () => (
+            <CircleFadingPlus color="#ff7938" m="$0" w="$8" h="$6" />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Dúvidas Frequentes"
+        component={Duvidas}
+        options={{
+          headerShown: false,
+          drawerIcon: () => <HelpCircle color="#ff7938" m="$0" w="$8" h="$6" />,
         }}
       />
       <Drawer.Screen

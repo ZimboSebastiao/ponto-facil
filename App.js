@@ -52,7 +52,7 @@ function HomeScreen() {
         }}
       />
       <Drawer.Screen
-        name="Relatório"
+        name="Pontos Registrados"
         component={Relatorio}
         options={{
           headerShown: false,

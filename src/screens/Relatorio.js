@@ -16,7 +16,15 @@ import {
   Card,
   Text,
 } from "react-native-paper";
-import { AlignLeft, Clock, MapPinned } from "lucide-react-native";
+import {
+  AlignLeft,
+  Clock,
+  MapPinned,
+  BriefcaseBusiness,
+  Target,
+  Crosshair,
+  ClockArrowUp,
+} from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -362,28 +370,28 @@ export default function Relatorio({ navigation }) {
                   population: parseFloat(frequencia.totalMensal),
                   color: "#f415ac",
                   legendFontColor: "#7F7F7F",
-                  legendFontSize: 14,
+                  legendFontSize: 12,
                 },
                 {
                   name: "Semanal",
                   population: parseFloat(frequencia.totalSemanal),
                   color: "#ff7c01",
                   legendFontColor: "#7F7F7F",
-                  legendFontSize: 14,
+                  legendFontSize: 12,
                 },
                 {
                   name: "Horas Extras",
                   population: parseFloat(frequencia.totalHorasExtras),
                   color: "#ffffff",
                   legendFontColor: "#7F7F7F",
-                  legendFontSize: 14,
+                  legendFontSize: 12,
                 },
                 {
                   name: "Dias Trabalhados",
                   population: frequencia.diasTrabalhados || 0,
                   color: "#1b0738",
                   legendFontColor: "#7F7F7F",
-                  legendFontSize: 14,
+                  legendFontSize: 12,
                 },
               ]}
               width={Dimensions.get("window").width - 16}
@@ -405,16 +413,45 @@ export default function Relatorio({ navigation }) {
               accessor="population"
               backgroundColor="transparent"
               paddingLeft="0"
-              absolute //for the absolute number remove if you want percentage
+              // absolute //for the absolute number remove if you want percentage
             />
-            {frequencia && (
-              <View style={estilos.informacoes}>
-                <Text>Total Semanal: {frequencia.totalSemanal}</Text>
-                <Text>Total Mensal: {frequencia.totalMensal}</Text>
-                <Text>Total Horas Extras: {frequencia.totalHorasExtras}</Text>
-                <Text>Dias Trabalhados: {frequencia.diasTrabalhados}</Text>
-              </View>
-            )}
+            <View style={estilos.resumo}>
+              <Text style={estilos.resumoTitulo}>Resumo de Frequência</Text>
+              {frequencia && (
+                <View style={estilos.resumoItem}>
+                  <View style={estilos.itens}>
+                    <View style={estilos.textoItem}>
+                      <Target color="#26aceb" />
+                      <Text> Total Mensal</Text>
+                    </View>
+                    <Text>{frequencia.totalMensal}</Text>
+                  </View>
+
+                  <View style={estilos.itens}>
+                    <View style={estilos.textoItem}>
+                      <Crosshair color="#ffb60c" />
+                      <Text> Total Semanal</Text>
+                    </View>
+                    <Text>{frequencia.totalSemanal}</Text>
+                  </View>
+
+                  <View style={estilos.itens}>
+                    <View style={estilos.textoItem}>
+                      <ClockArrowUp color="#6fc83b" />
+                      <Text> Total Horas Extras</Text>
+                    </View>
+                    <Text>{frequencia.totalHorasExtras}</Text>
+                  </View>
+                  <View style={estilos.itens}>
+                    <View style={estilos.textoItem}>
+                      <BriefcaseBusiness color="#944cf5" />
+                      <Text> Dias Trabalhados</Text>
+                    </View>
+                    <Text>{frequencia.diasTrabalhados} dias</Text>
+                  </View>
+                </View>
+              )}
+            </View>
           </View>
         )}
       </PaperProvider>
@@ -501,5 +538,29 @@ const estilos = StyleSheet.create({
   },
   grafico: {
     marginVertical: 16,
+  },
+  resumo: {
+    padding: 10,
+    marginVertical: 50,
+  },
+  resumoTitulo: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1b0738",
+  },
+  resumoItem: {
+    padding: 0,
+    marginVertical: 20,
+  },
+  itens: {
+    marginVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 6,
+  },
+  textoItem: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
 });

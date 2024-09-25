@@ -113,6 +113,7 @@ export default function Relatorio({ navigation }) {
   const [value, setValue] = useState("historico");
   const [histo, setHisto] = useState("sete");
   const [registros, setRegistros] = useState([]);
+  const [registrosQuinzeDias, setRegistrosQuinzeDias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [frequencia, setFrequencia] = useState(null);
 
@@ -190,6 +191,26 @@ export default function Relatorio({ navigation }) {
       };
 
       fetchRegistros();
+    }
+  }, [histo, usuario]);
+
+  // Buscar registros dos últimos 15 dias
+  useEffect(() => {
+    if (histo === "quinze" && usuario) {
+      const fetchRegistrosQuinzeDias = async () => {
+        try {
+          const data = await fetchWithToken(
+            `${API_URL}/registros/ultimos-15-dias`,
+            {}
+          );
+          console.log("Dados dos últimos 15 dias:", data); // Verifique os dados aqui
+          setRegistrosQuinzeDias(data);
+        } catch (error) {
+          console.error("Erro ao buscar registros:", error.message);
+        }
+      };
+
+      fetchRegistrosQuinzeDias();
     }
   }, [histo, usuario]);
 
@@ -349,9 +370,46 @@ export default function Relatorio({ navigation }) {
               </ScrollView>
             )}
             {histo === "quinze" && (
-              <View style={estilos.informacoes}>
-                <Text>Informações dos últimos 15 dias</Text>
-              </View>
+              <ScrollView style={estilos.scrollView}>
+                <View style={estilos.informacoes}>
+                  {registrosQuinzeDias.length > 0 ? (
+                    registrosQuinzeDias.map((item) => (
+                      <Card key={item.id} style={estilos.card}>
+                        <Card.Content>
+                          <View style={estilos.viewEntrada}>
+                            <Text style={estilos.viewTipo}>
+                              {item.tipo_registro}
+                            </Text>
+                            <Text style={estilos.viewTipo}>
+                              {new Date(item.data_hora).toLocaleDateString()}
+                            </Text>
+                          </View>
+                          <Text style={estilos.viewData}>
+                            <Clock size={13} color="#818582" />{" "}
+                            {new Date(item.data_hora).toLocaleTimeString(
+                              "pt-BR",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                              }
+                            )}
+                          </Text>
+
+                          <Text style={estilos.viewLoc}>
+                            <MapPinned size={13} color="#818582" />{" "}
+                            {item.localizacao}
+                          </Text>
+                        </Card.Content>
+                      </Card>
+                    ))
+                  ) : (
+                    <Text style={estilos.noDataText}>
+                      Nenhum registro encontrado.
+                    </Text>
+                  )}
+                </View>
+              </ScrollView>
             )}
             {histo === "personalizado" && (
               <View style={estilos.informacoes}>

@@ -360,14 +360,14 @@ export default function Relatorio({ navigation }) {
                 {
                   name: "Mensal",
                   population: parseFloat(frequencia.totalMensal),
-                  color: "rgba(131, 167, 234, 1)",
+                  color: "#f415ac",
                   legendFontColor: "#7F7F7F",
                   legendFontSize: 14,
                 },
                 {
                   name: "Semanal",
                   population: parseFloat(frequencia.totalSemanal),
-                  color: "#F00",
+                  color: "#ff7c01",
                   legendFontColor: "#7F7F7F",
                   legendFontSize: 14,
                 },
@@ -381,7 +381,7 @@ export default function Relatorio({ navigation }) {
                 {
                   name: "Dias Trabalhados",
                   population: frequencia.diasTrabalhados || 0,
-                  color: "rgb(0, 0, 255)",
+                  color: "#1b0738",
                   legendFontColor: "#7F7F7F",
                   legendFontSize: 14,
                 },

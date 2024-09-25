@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BarChart } from "react-native-chart-kit";
+import { PieChart, ProgressChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
 import {
   ActivityIndicator,
@@ -106,6 +106,7 @@ export default function Relatorio({ navigation }) {
   const [histo, setHisto] = useState("sete");
   const [registros, setRegistros] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [frequencia, setFrequencia] = useState(null);
 
   // Função para selecionar a imagem
   const pickImage = async () => {
@@ -184,6 +185,20 @@ export default function Relatorio({ navigation }) {
     }
   }, [histo, usuario]);
 
+  // Obter dados da frequência
+  useEffect(() => {
+    const obterFrequencia = async () => {
+      try {
+        const data = await fetchWithToken(`${API_URL}/frequencia`, {});
+        setFrequencia(data);
+        console.log("Dados da frequência:", data);
+      } catch (error) {
+        console.error("Erro ao buscar dados da frequência:", error.message);
+      }
+    };
+
+    obterFrequencia();
+  }, [usuario]);
   const theme = {
     ...DefaultTheme,
     colors: {
@@ -192,17 +207,6 @@ export default function Relatorio({ navigation }) {
       secondaryContainer: "rgba(255, 121, 56, 0.8)",
     },
   };
-
-  const chartData = [
-    {
-      name: "Page A",
-      uv: 4000,
-    },
-    {
-      name: "Page B",
-      uv: 4100,
-    },
-  ];
 
   if (loading) {
     return (
@@ -351,7 +355,66 @@ export default function Relatorio({ navigation }) {
 
         {value === "pendentes" && (
           <View style={estilos.informacoes}>
-            <Text>Informações Pendentes</Text>
+            <PieChart
+              data={[
+                {
+                  name: "Mensal",
+                  population: parseFloat(frequencia.totalMensal),
+                  color: "rgba(131, 167, 234, 1)",
+                  legendFontColor: "#7F7F7F",
+                  legendFontSize: 14,
+                },
+                {
+                  name: "Semanal",
+                  population: parseFloat(frequencia.totalSemanal),
+                  color: "#F00",
+                  legendFontColor: "#7F7F7F",
+                  legendFontSize: 14,
+                },
+                {
+                  name: "Horas Extras",
+                  population: parseFloat(frequencia.totalHorasExtras),
+                  color: "#ffffff",
+                  legendFontColor: "#7F7F7F",
+                  legendFontSize: 14,
+                },
+                {
+                  name: "Dias Trabalhados",
+                  population: frequencia.diasTrabalhados || 0,
+                  color: "rgb(0, 0, 255)",
+                  legendFontColor: "#7F7F7F",
+                  legendFontSize: 14,
+                },
+              ]}
+              width={Dimensions.get("window").width - 16}
+              height={220}
+              chartConfig={{
+                backgroundColor: "#1cc910",
+                backgroundGradientFrom: "#eff3ff",
+                backgroundGradientTo: "#efefef",
+                decimalPlaces: 2,
+                color: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
+                style: {
+                  borderRadius: 16,
+                },
+              }}
+              style={{
+                marginVertical: 8,
+                borderRadius: 16,
+              }}
+              accessor="population"
+              backgroundColor="transparent"
+              paddingLeft="0"
+              absolute //for the absolute number remove if you want percentage
+            />
+            {frequencia && (
+              <View style={estilos.informacoes}>
+                <Text>Total Semanal: {frequencia.totalSemanal}</Text>
+                <Text>Total Mensal: {frequencia.totalMensal}</Text>
+                <Text>Total Horas Extras: {frequencia.totalHorasExtras}</Text>
+                <Text>Dias Trabalhados: {frequencia.diasTrabalhados}</Text>
+              </View>
+            )}
           </View>
         )}
       </PaperProvider>

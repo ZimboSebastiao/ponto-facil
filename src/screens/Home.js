@@ -569,7 +569,8 @@ export default function Home({ navigation }) {
                 color="white"
               />
               <Text style={estilos.menuTexto}>
-                {obterSaudacao()}, {usuario ? usuario.nome : "Visitante"}
+                {obterSaudacao()},{" "}
+                {usuario ? usuario.nome.split(" ")[0] : "Visitante"}
               </Text>
 
               <View style={estilos.avatarPerfil}>

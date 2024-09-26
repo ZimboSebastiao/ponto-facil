@@ -254,11 +254,11 @@ export default function Solicitacao({ navigation }) {
                     onDismiss={hideModal}
                     contentContainerStyle={containerStyle}
                   >
-                    <View>
+                    <View style={estilos.novaSolicitacao}>
                       <Text style={estilos.tituloSolicitacao}>
                         Nova Solicitação
                       </Text>
-                      <X />
+                      <X color="gray" />
                     </View>
                     <View style={estilos.linhahorizontal} />
                   </Modal>
@@ -361,5 +361,10 @@ const estilos = StyleSheet.create({
   tituloSolicitacao: {
     fontWeight: "bold",
     fontSize: 19,
+  },
+  novaSolicitacao: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
 });

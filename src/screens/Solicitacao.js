@@ -16,15 +16,7 @@ import {
   Card,
   Text,
 } from "react-native-paper";
-import {
-  AlignLeft,
-  Clock,
-  MapPinned,
-  BriefcaseBusiness,
-  Target,
-  Crosshair,
-  ClockArrowUp,
-} from "lucide-react-native";
+import { AlignLeft, Clock } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -240,15 +232,19 @@ export default function Solicitacao({ navigation }) {
           ]}
         />
         {value === "pendentes" && (
-          <>
-            <Text>Teste pendentes</Text>
-          </>
+          <ScrollView style={estilos.scrollView}>
+            <View style={estilos.informacoes}>
+              <Text>Teste pendentes</Text>
+            </View>
+          </ScrollView>
         )}
 
         {value === "aprovados" && (
-          <View style={estilos.informacoes}>
-            <Text>Teste</Text>
-          </View>
+          <ScrollView style={estilos.scrollView}>
+            <View style={estilos.informacoes}>
+              <Text>Teste</Text>
+            </View>
+          </ScrollView>
         )}
       </PaperProvider>
     </SafeAreaView>
@@ -302,62 +298,8 @@ const estilos = StyleSheet.create({
   informacoes: {
     padding: 13,
   },
-  botoesHisto: {
-    borderColor: "#ff7938",
-    borderBottomWidth: 3,
-    marginTop: 20,
-    marginBottom: 15,
-  },
-  card: {
-    margin: 5,
-    borderRadius: 10,
-    backgroundColor: "#f5f7f7",
-  },
+
   scrollView: {
     flex: 1,
-  },
-  viewTipo: {
-    fontSize: 15,
-    color: "#ff7938",
-    fontWeight: "bold",
-    marginBottom: 6,
-  },
-  viewEntrada: {
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
-  },
-  viewData: {
-    color: "#818582",
-  },
-  viewLoc: {
-    color: "#818582",
-    marginTop: 6,
-  },
-  grafico: {
-    marginVertical: 16,
-  },
-  resumo: {
-    padding: 10,
-    marginVertical: 50,
-  },
-  resumoTitulo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#1b0738",
-  },
-  resumoItem: {
-    padding: 0,
-    marginVertical: 20,
-  },
-  itens: {
-    marginVertical: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: 6,
-  },
-  textoItem: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
   },
 });

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, ProgressChart } from "react-native-chart-kit";
-import { Dimensions } from "react-native";
+import { Dimensions, Pressable } from "react-native";
 import {
   ActivityIndicator,
   StyleSheet,
@@ -234,7 +234,12 @@ export default function Solicitacao({ navigation }) {
         {value === "pendentes" && (
           <ScrollView style={estilos.scrollView}>
             <View style={estilos.informacoes}>
-              <Text>Teste pendentes</Text>
+              <View style={estilos.viewSolicitacao}>
+                <Pressable style={estilos.botaoSolicitacao}>
+                  <Clock color="#ffff" />
+                  <Text style={estilos.textoSolicitacao}>Nova Solicitação</Text>
+                </Pressable>
+              </View>
             </View>
           </ScrollView>
         )}
@@ -301,5 +306,22 @@ const estilos = StyleSheet.create({
 
   scrollView: {
     flex: 1,
+  },
+  viewSolicitacao: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 16,
+  },
+  botaoSolicitacao: {
+    backgroundColor: "#ff7938",
+    padding: 8,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "50%",
+    borderRadius: 8,
+  },
+  textoSolicitacao: {
+    color: "#ffff",
+    fontSize: 15,
   },
 });

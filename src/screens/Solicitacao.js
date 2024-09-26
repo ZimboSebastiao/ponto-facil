@@ -18,7 +18,7 @@ import {
   Modal,
   Portal,
 } from "react-native-paper";
-import { AlignLeft, Clock } from "lucide-react-native";
+import { AlignLeft, Clock, X } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
@@ -254,7 +254,12 @@ export default function Solicitacao({ navigation }) {
                     onDismiss={hideModal}
                     contentContainerStyle={containerStyle}
                   >
-                    <Text>Nova Solicitação</Text>
+                    <View>
+                      <Text style={estilos.tituloSolicitacao}>
+                        Nova Solicitação
+                      </Text>
+                      <X />
+                    </View>
                     <View style={estilos.linhahorizontal} />
                   </Modal>
                 </Portal>
@@ -355,5 +360,6 @@ const estilos = StyleSheet.create({
   },
   tituloSolicitacao: {
     fontWeight: "bold",
+    fontSize: 19,
   },
 });

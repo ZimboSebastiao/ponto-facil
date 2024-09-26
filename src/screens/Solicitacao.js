@@ -384,6 +384,7 @@ const estilos = StyleSheet.create({
   tituloSolicitacao: {
     fontWeight: "bold",
     fontSize: 19,
+    color: "#525151",
   },
   novaSolicitacao: {
     flexDirection: "row",

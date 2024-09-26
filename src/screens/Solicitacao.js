@@ -314,7 +314,7 @@ const estilos = StyleSheet.create({
   },
   botaoSolicitacao: {
     backgroundColor: "#ff7938",
-    padding: 8,
+    padding: 12,
     flexDirection: "row",
     justifyContent: "space-around",
     width: "50%",

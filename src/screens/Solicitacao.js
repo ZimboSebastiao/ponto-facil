@@ -111,7 +111,12 @@ export default function Solicitacao({ navigation }) {
   // Configuração do Modal
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
-  const containerStyle = { backgroundColor: "white", padding: 20, margin: 15 };
+  const containerStyle = {
+    backgroundColor: "white",
+    padding: 20,
+    margin: 15,
+    borderRadius: 10,
+  };
 
   // Função para selecionar a imagem
   const pickImage = async () => {
@@ -249,9 +254,8 @@ export default function Solicitacao({ navigation }) {
                     onDismiss={hideModal}
                     contentContainerStyle={containerStyle}
                   >
-                    <Text>
-                      Example Modal. Click outside this area to dismiss.
-                    </Text>
+                    <Text>Nova Solicitação</Text>
+                    <View style={estilos.linhahorizontal} />
                   </Modal>
                 </Portal>
                 <Pressable onPress={showModal} style={estilos.botaoSolicitacao}>
@@ -342,5 +346,14 @@ const estilos = StyleSheet.create({
   textoSolicitacao: {
     color: "#ffff",
     fontSize: 15,
+  },
+  linhahorizontal: {
+    margin: 0,
+    height: 0.8,
+    backgroundColor: "gray",
+    marginVertical: 17,
+  },
+  tituloSolicitacao: {
+    fontWeight: "bold",
   },
 });

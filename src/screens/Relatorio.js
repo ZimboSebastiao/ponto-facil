@@ -535,7 +535,6 @@ const estilos = StyleSheet.create({
     padding: 30,
     width: "100%",
     backgroundColor: "#ff7938",
-    marginTop: "4%",
   },
   menuTexto: {
     fontSize: 18,

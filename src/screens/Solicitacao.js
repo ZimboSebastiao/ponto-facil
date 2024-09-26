@@ -22,6 +22,7 @@ import { AlignLeft, Clock, X } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
+import { Picker } from "@react-native-picker/picker";
 import { CheckAuth } from "../components/CheckAuth";
 
 const API_URL = "http://192.168.15.11:8080";
@@ -107,6 +108,7 @@ export default function Solicitacao({ navigation }) {
   const [value, setValue] = useState("pendentes");
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = React.useState(false);
+  const [selectedValue, setSelectedValue] = useState("");
 
   // Configuração do Modal
   const showModal = () => setVisible(true);
@@ -261,6 +263,22 @@ export default function Solicitacao({ navigation }) {
                       <X color="gray" />
                     </View>
                     <View style={estilos.linhahorizontal} />
+
+                    <Picker
+                      selectedValue={selectedValue}
+                      style={estilos.dropdownSolicitacao}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setSelectedValue(itemValue)
+                      }
+                    >
+                      <Picker.Item label="" value="" />
+                      <Picker.Item label="JavaScript" value="javascript" />
+                      <Picker.Item label="Python" value="python" />
+                      <Picker.Item label="C#" value="csharp" />
+                    </Picker>
+                    <Text style={estilos.result}>
+                      Selecionado: {selectedValue}
+                    </Text>
                   </Modal>
                 </Portal>
                 <Pressable onPress={showModal} style={estilos.botaoSolicitacao}>
@@ -302,7 +320,6 @@ const estilos = StyleSheet.create({
     padding: 30,
     width: "100%",
     backgroundColor: "#ff7938",
-    marginTop: "4%",
   },
   menuTexto: {
     fontSize: 18,
@@ -367,4 +384,6 @@ const estilos = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+
+  dropdownSolicitacao: {},
 });

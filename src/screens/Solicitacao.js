@@ -1,33 +1,120 @@
-import * as React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { PieChart, ProgressChart } from "react-native-chart-kit";
+import { Dimensions } from "react-native";
 import {
   ActivityIndicator,
   StyleSheet,
   View,
-  Text,
+  SafeAreaView,
   ScrollView,
-  Pressable,
 } from "react-native";
-import { Avatar, List } from "react-native-paper";
+import {
+  Avatar,
+  SegmentedButtons,
+  Provider as PaperProvider,
+  DefaultTheme,
+  Card,
+  Text,
+} from "react-native-paper";
 import {
   AlignLeft,
-  UserPlus,
-  UserMinus,
-  ChevronRight,
-  Users,
-  User,
+  Clock,
+  MapPinned,
+  BriefcaseBusiness,
+  Target,
+  Crosshair,
+  ClockArrowUp,
 } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios from "axios";
 import { CheckAuth } from "../components/CheckAuth";
+
+const API_URL = "http://192.168.15.11:8080";
+
+const getToken = async () => {
+  const token = await AsyncStorage.getItem("token");
+  const tokenExpiration = await AsyncStorage.getItem("tokenExpiration");
+  const now = new Date();
+
+  if (token && tokenExpiration && new Date(tokenExpiration) > now) {
+    return token;
+  } else {
+    // Token expired or not present, handle refresh or redirect to login
+    return null;
+  }
+};
+
+const refreshToken = async () => {
+  try {
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      throw new Error("No refresh token available.");
+    }
+
+    const response = await axios.post(`${API_URL}/refresh-token`, {
+      refreshToken,
+    });
+    const { token, expiresIn } = response.data;
+
+    await AsyncStorage.setItem("token", token);
+    const expirationDate = new Date();
+    expirationDate.setSeconds(expirationDate.getSeconds() + expiresIn);
+    await AsyncStorage.setItem("tokenExpiration", expirationDate.toISOString());
+
+    return token;
+  } catch (error) {
+    console.error("Erro ao atualizar o token:", error);
+    // Redirecionar para a tela de login ou tratar a falha
+    return null;
+  }
+};
+
+const verifyStoredTokens = async () => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    const refreshToken = await AsyncStorage.getItem("refreshToken");
+    const tokenExpiration = await AsyncStorage.getItem("tokenExpiration");
+
+    console.log("Token:", token);
+    console.log("Refresh Token:", refreshToken);
+    console.log("Token Expiration:", tokenExpiration);
+  } catch (error) {
+    console.error("Erro ao verificar tokens armazenados:", error);
+  }
+};
+
+verifyStoredTokens();
+
+const fetchWithToken = async (url, config) => {
+  let token = await getToken();
+  if (!token) {
+    token = await refreshToken();
+    if (!token) {
+      // Redirecionar para a tela de login ou tratar a falha
+      throw new Error("Não foi possível obter um token válido.");
+    }
+  }
+
+  const response = await axios.get(url, {
+    ...config,
+    headers: {
+      ...config.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
 
 export default function Solicitacao({ navigation }) {
   const [image, setImage] = useState(null);
   const [usuario, setUsuario] = useState(null);
+  const [value, setValue] = useState("pendentes");
   const [loading, setLoading] = useState(true);
 
+  // Função para selecionar a imagem
   const pickImage = async () => {
-    console.log("Selecionando imagem...");
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
@@ -35,29 +122,25 @@ export default function Solicitacao({ navigation }) {
       quality: 1,
     });
 
-    console.log("Resultado:", result);
-
     if (
       !result.cancelled &&
       result.assets &&
       result.assets.length > 0 &&
       result.assets[0].uri
     ) {
-      console.log("Imagem selecionada:", result.assets[0].uri);
       setImage(result.assets[0].uri);
-      // Armazena a URI da imagem selecionada no AsyncStorage
       try {
         await AsyncStorage.setItem("profileImageUri", result.assets[0].uri);
       } catch (error) {
         console.log("Erro ao salvar a URI da imagem no AsyncStorage:", error);
       }
-    } else {
-      console.log("URI da imagem é inválida.");
     }
   };
 
+  // Carregar a URI da imagem do perfil
   useEffect(() => {
     CheckAuth(navigation);
+
     const loadProfileImageUri = async () => {
       try {
         const uri = await AsyncStorage.getItem("profileImageUri");
@@ -72,22 +155,30 @@ export default function Solicitacao({ navigation }) {
     loadProfileImageUri();
   }, []);
 
+  // Obter dados do usuário
   useEffect(() => {
     const obterUsuario = async () => {
       setLoading(true);
       const usuarioJSON = await AsyncStorage.getItem("usuario");
       if (usuarioJSON) {
         const usuarioData = JSON.parse(usuarioJSON);
-        console.log("Dados do usuário recuperados:", usuarioData); // Logar os dados do usuário recuperados
+        console.log("Dados do usuário recuperados:", usuarioData);
         setUsuario(usuarioData);
-      } else {
-        console.log("Nenhum dado de usuário encontrado no AsyncStorage");
       }
       setLoading(false);
     };
 
     obterUsuario();
   }, []);
+
+  const theme = {
+    ...DefaultTheme,
+    colors: {
+      ...DefaultTheme.colors,
+      primary: "green",
+      secondaryContainer: "rgba(255, 121, 56, 0.8)",
+    },
+  };
 
   if (loading) {
     return (
@@ -98,108 +189,104 @@ export default function Solicitacao({ navigation }) {
   }
 
   return (
-    <>
-      <View style={estilos.container}>
-        <View style={estilos.menu}>
-          <View style={estilos.cabecalho}>
-            <AlignLeft
-              onPress={() => navigation.openDrawer()}
-              m="$3"
-              w="$10"
-              h="$6"
-              color="white"
-            />
-            <Text style={estilos.menuTexto}>Solicitações de Ajustes</Text>
-            <View style={estilos.avatarPerfil}>
-              {image ? (
-                <Avatar.Image
-                  size={40}
-                  source={image ? { uri: image } : null}
-                  alt="Foto do perfil"
-                  style={estilos.avatarImage}
-                />
-              ) : (
-                <Avatar.Image
-                  size={40}
-                  source={require("./../../assets/images/perfil.jpg")}
-                  alt="Foto do perfil padrão"
-                />
-              )}
-            </View>
-          </View>
-        </View>
+    <SafeAreaView style={estilos.container}>
+      <View style={estilos.menu}>
+        <AlignLeft
+          onPress={() => navigation.openDrawer()}
+          m="$3"
+          w="$10"
+          h="$6"
+          color="white"
+        />
 
-        <View style={estilos.viewDados}>
-          <ScrollView
-            contentContainerStyle={estilos.scrollContainer}
-          ></ScrollView>
+        <Text style={estilos.menuTexto}>Solicitações de Ajustes</Text>
+        <View style={estilos.avatarPerfil}>
+          {image ? (
+            <Avatar.Image
+              size={40}
+              source={image ? { uri: image } : null}
+              alt="Foto do perfil"
+              style={estilos.avatarImage}
+            />
+          ) : (
+            <Avatar.Image
+              size={40}
+              source={require("./../../assets/images/perfil.jpg")}
+              alt="Foto do perfil padrão"
+            />
+          )}
         </View>
       </View>
-    </>
+
+      <PaperProvider theme={theme}>
+        <SegmentedButtons
+          value={value}
+          onValueChange={(newValue) => setValue(newValue)}
+          buttons={[
+            {
+              value: "pendentes",
+              label: "Pendentes",
+              style: estilos.buttonStyle,
+              checkedColor: "white",
+              uncheckedColor: "#C8C8C8",
+            },
+            {
+              value: "aprovados",
+              label: "Aprovados",
+              style: estilos.buttonStyle,
+              checkedColor: "white",
+              uncheckedColor: "#C8C8C8",
+            },
+          ]}
+        />
+        {value === "pendentes" && (
+          <>
+            <Text>Teste pendentes</Text>
+          </>
+        )}
+
+        {value === "aprovados" && (
+          <View style={estilos.informacoes}>
+            <Text>Teste</Text>
+          </View>
+        )}
+      </PaperProvider>
+    </SafeAreaView>
   );
 }
 
 const estilos = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ff7938",
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+
   menu: {
-    marginRight: 10,
-    padding: 25,
-    width: "100%",
-    backgroundColor: "#ff7938",
-    paddingBottom: "0%",
-    marginBottom: "0%",
-    marginTop: "4%",
-  },
-  cabecalho: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 0,
-    margin: 0,
+    marginRight: 10,
+    padding: 30,
+    width: "100%",
+    backgroundColor: "#ff7938",
+    marginTop: "4%",
   },
   menuTexto: {
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
   },
-
-  imagem: {
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 20,
-  },
-
-  texto: {
-    fontWeight: "bold",
-    fontSize: 16,
-  },
-
-  viewInfo: {
-    alignItems: "flex-start",
-
-    borderRadius: 10,
-    padding: 6,
-    marginBottom: "5%",
-  },
-
-  avatarContainer: {
-    width: 130,
-    height: 130,
-    borderWidth: 2,
+  buttonStyle: {
+    borderRadius: 0,
+    borderWidth: 1,
     borderColor: "white",
-    borderRadius: 85, // metade do tamanho da view para garantir que a borda seja redonda
-    overflow: "hidden", // garantir que o conteúdo da view se ajuste dentro da borda arredondada
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: "5%",
+    paddingBottom: 7,
   },
-  avatarImage: {
-    borderRadius: 47, // metade do tamanho da imagem
-  },
-  avatarPerfil: {
+  avatarContainer: {
     width: 42,
     height: 42,
     borderWidth: 1,
@@ -207,112 +294,70 @@ const estilos = StyleSheet.create({
     borderRadius: 65,
     overflow: "hidden",
     alignItems: "center",
-    justifyContent: "center",
   },
   avatarImage: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-  },
-  botao: {
-    marginTop: 16,
-    backgroundColor: "#ff7938",
-    padding: 10,
-    borderRadius: 20,
-    borderWidth: 0.8,
+    borderWidth: 1,
     borderColor: "white",
-    width: "45%",
-    flexDirection: "row",
-    justifyContent: "space-evenly",
   },
-  textoEditar: {
-    color: "white",
-    textAlign: "center",
-    fontWeight: "bold",
+  informacoes: {
+    padding: 13,
   },
-  loadingContainer: {
+  botoesHisto: {
+    borderColor: "#ff7938",
+    borderBottomWidth: 3,
+    marginTop: 20,
+    marginBottom: 15,
+  },
+  card: {
+    margin: 5,
+    borderRadius: 10,
+    backgroundColor: "#f5f7f7",
+  },
+  scrollView: {
     flex: 1,
+  },
+  viewTipo: {
+    fontSize: 15,
+    color: "#ff7938",
+    fontWeight: "bold",
+    marginBottom: 6,
+  },
+  viewEntrada: {
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+  },
+  viewData: {
+    color: "#818582",
+  },
+  viewLoc: {
+    color: "#818582",
+    marginTop: 6,
+  },
+  grafico: {
+    marginVertical: 16,
+  },
+  resumo: {
+    padding: 10,
+    marginVertical: 50,
+  },
+  resumoTitulo: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#1b0738",
+  },
+  resumoItem: {
+    padding: 0,
+    marginVertical: 20,
+  },
+  itens: {
+    marginVertical: 10,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 6,
+  },
+  textoItem: {
+    flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-  },
-  viewDados: {
-    flex: 1,
-    marginTop: 30,
-    backgroundColor: "#f8f8f8",
-    margin: "0%",
-    padding: "0%",
-  },
-  lista: {
-    borderBottomWidth: 1,
-    borderColor: "#c2bbba",
-    backgroundColor: "#f8f8f8",
-  },
-
-  infoPessoais: {
-    margin: "0%",
-    padding: "0%",
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-
-  seccao: {
-    flexDirection: "row",
-
-    justifyContent: "space-between",
-  },
-
-  input: {
-    borderWidth: 1,
-    padding: 8,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-    borderRadius: 10,
-    marginVertical: 10,
-    backgroundColor: "rgba(0, 0, 0, 0.2)",
-    width: "70%",
-  },
-  botoes: {
-    width: "70%",
-    padding: 8,
-    borderRadius: 8,
-    marginVertical: 20,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    alignItems: "center",
-  },
-  textoBotao: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "white",
-  },
-  viewInputs: {
-    width: "100%",
-    alignContent: "flex-start",
-    borderWidth: 0.5,
-    borderColor: "rgba(0, 0, 0, 0.2)",
-  },
-  listItem: {
-    margin: "0%",
-    padding: "0%",
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  scrollContainer: {
-    backgroundColor: "#f8f8f8",
-  },
-  viewOpcoes: {
-    padding: 16,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  botaoOpcoes: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-end",
-    width: "91%",
-  },
-  linhahorizontal: {
-    margin: 11,
-    height: 0.7,
-    backgroundColor: "gray",
-    marginVertical: 6,
   },
 });

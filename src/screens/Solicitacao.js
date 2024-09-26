@@ -15,6 +15,8 @@ import {
   DefaultTheme,
   Card,
   Text,
+  Modal,
+  Portal,
 } from "react-native-paper";
 import { AlignLeft, Clock } from "lucide-react-native";
 import * as ImagePicker from "expo-image-picker";
@@ -104,6 +106,12 @@ export default function Solicitacao({ navigation }) {
   const [usuario, setUsuario] = useState(null);
   const [value, setValue] = useState("pendentes");
   const [loading, setLoading] = useState(true);
+  const [visible, setVisible] = React.useState(false);
+
+  // Configuração do Modal
+  const showModal = () => setVisible(true);
+  const hideModal = () => setVisible(false);
+  const containerStyle = { backgroundColor: "white", padding: 20, margin: 15 };
 
   // Função para selecionar a imagem
   const pickImage = async () => {
@@ -235,7 +243,18 @@ export default function Solicitacao({ navigation }) {
           <ScrollView style={estilos.scrollView}>
             <View style={estilos.informacoes}>
               <View style={estilos.viewSolicitacao}>
-                <Pressable style={estilos.botaoSolicitacao}>
+                <Portal>
+                  <Modal
+                    visible={visible}
+                    onDismiss={hideModal}
+                    contentContainerStyle={containerStyle}
+                  >
+                    <Text>
+                      Example Modal. Click outside this area to dismiss.
+                    </Text>
+                  </Modal>
+                </Portal>
+                <Pressable onPress={showModal} style={estilos.botaoSolicitacao}>
                   <Clock color="#ffff" />
                   <Text style={estilos.textoSolicitacao}>Nova Solicitação</Text>
                 </Pressable>

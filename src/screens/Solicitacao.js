@@ -123,7 +123,7 @@ export default function Solicitacao({ navigation }) {
   // Configuração do Dropdown Select
 
   const placeholder = {
-    label: "Justificativa",
+    label: "Selecione uma opção",
     value: null,
   };
 
@@ -276,15 +276,6 @@ export default function Solicitacao({ navigation }) {
                       <X color="gray" />
                     </View>
                     <View style={estilos.linhahorizontal} />
-                    <View style={estilos.dropdownWrapper}>
-                      <RNPickerSelect
-                        placeholder={placeholder}
-                        items={options}
-                        onValueChange={(value) => setSelectedValue(value)}
-                        value={selectedValue}
-                        style={estilos}
-                      />
-                    </View>
                   </Modal>
                 </Portal>
                 <Pressable onPress={showModal} style={estilos.botaoSolicitacao}>
@@ -390,18 +381,5 @@ const estilos = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-  },
-
-  dropdownWrapper: {
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#dbd9da",
-    backgroundColor: "#dbd9da",
-    padding: 0,
-    width: "60%",
-  },
-  placeholder: {
-    color: "#9EA0A4",
-    fontSize: 16,
   },
 });
